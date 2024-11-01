@@ -32,8 +32,8 @@
 Clone dự án từ GitHub:
 
 ```bash
-git clone https://github.com/dangkhoa2004/my-vue-admin.git
-cd vue-pure-admin-CineBoo
+(https://github.com/dangkhoa2004/frontend-cineboo.git
+cd frontend-cineboo
 npm install
 npm install axios@^1.7.7
 npm install js-cookie@^3.0.5
