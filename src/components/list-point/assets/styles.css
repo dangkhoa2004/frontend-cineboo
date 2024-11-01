@@ -1,0 +1,22 @@
+#map {
+    width: 100%;
+    height: 766px;
+    box-shadow: 2px 0 24px var(--shadow-color);
+    border-radius: 15px;
+    z-index: 0;
+    cursor: default;
+}
+
+.checkin-button {
+    position: absolute;
+    bottom: 10%;
+    left: 58%;
+    transform: translateX(-50%);
+    background-color: var(--first-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}

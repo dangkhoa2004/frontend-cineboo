@@ -1,0 +1,11 @@
+.all-settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.setting-for {
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

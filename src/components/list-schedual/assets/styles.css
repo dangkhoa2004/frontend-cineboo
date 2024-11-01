@@ -1,0 +1,189 @@
+.schedual-list-calendar {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 20px rgba(203, 205, 211, 0.5);
+}
+
+.schedual-list-split-date {
+    border: none;
+    height: 5px;
+    background-color: var(--first-color);
+    margin: 15px;
+}
+
+.schedual-list-see-month {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    a {
+        color: var(--first-color);
+    }
+}
+
+.schedual-list-date-display {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.schedual-list-day {
+    font-size: 60px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.schedual-list-details {
+    color: gray;
+    text-align: left;
+}
+
+.schedual-list-weekday {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.schedual-list-month-year {
+    font-size: 16px;
+    color: #666;
+}
+
+.schedual-list-calendar-days ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.schedual-list-calendar-days li {
+    font-size: 14px;
+    text-align: center;
+    width: 40px;
+    transition: ease 0.5s;
+}
+
+.today {
+    color: var(--first-color);
+}
+
+.active {
+    background-color: var(--first-color);
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.schedual-list-calendar-days li:hover {
+    cursor: pointer;
+    border-radius: 8px;
+    color: white;
+    background-color: var(--first-color);
+    padding: 5px;
+}
+
+.schedual-list-container {
+    margin-top: 35px;
+}
+
+.schedual-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.schedual-list-sort-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.schedual-list-timeline {
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.schedual-list-timeline-item {
+    display: flex;
+    gap: 20px;
+}
+
+.schedual-list-time {
+    color: gray;
+    font-weight: bold;
+    width: 50px;
+    text-align: right;
+    font-size: 14px;
+}
+
+.schedual-list-event-card {
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+    transition: 1s;
+}
+
+.schedual-list-event-card:hover {
+    border: none;
+    cursor: pointer;
+}
+
+.schedual-list-event-card.schedual-list-orange {
+    background-color: var(--first-color);
+    color: white;
+}
+
+.schedual-list-event-card.schedual-list-grey {
+    background-color: rgb(185, 185, 185);
+}
+
+.schedual-list-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.schedual-list-event-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.schedual-list-event-type {
+    font-size: 12px;
+    color: white;
+}
+
+.schedual-list-event-details {
+    margin-top: 10px;
+}
+
+.schedual-list-location {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: white;
+}
+
+.schedual-list-location i {
+    margin-right: 5px;
+}
+
+.schedual-list-person {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.schedual-list-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+}

@@ -1,0 +1,99 @@
+.jobs-container {
+    box-shadow: 2px 0 24px var(--shadow-color);
+    padding: 30px;
+    border-radius: 15px;
+    min-height: 766px;
+}
+
+.jobs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jobs-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.jobs-search-bar input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 250px;
+}
+
+.jobs-filters {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.jobs-filter {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.jobs-filter.jobs-active {
+    background-color: var(--first-color);
+    color: white;
+}
+
+.jobs-project-list {
+    margin-top: 30px;
+}
+
+.jobs-project-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.jobs-project-info h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.jobs-project-info .jobs-status {
+    font-size: 14px;
+}
+
+.jobs-status.jobs-complete {
+    color: green;
+}
+
+.jobs-status.jobs-incomplete {
+    color: red;
+}
+
+.jobs-project-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.jobs-project-meta .jobs-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.jobs-project-meta .jobs-priority {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.jobs-priority.jobs-low {
+    color: rgb(197, 197, 44);
+}
+
+.jobs-priority.jobs-high {
+    color: red;
+}

@@ -1,0 +1,91 @@
+
+.not-found-404 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+}
+
+.not-found-404 h1 {
+    font-family: 'VT323', monospace;
+    font-size: 80px;
+    text-align: center;
+    color: white;
+}
+
+
+.not-found-404 {
+    overflow: hidden;
+    height: 100vh;
+    background-color: black;
+}
+
+.error-container {
+    text-align: center;
+    font-size: 180px;
+    font-weight: 800;
+    margin: 20px 15px;
+}
+
+.error-container>span {
+    display: inline-block;
+    line-height: 0.7;
+    position: relative;
+    color: #a06abf;
+    /* Màu cam nhạt */
+}
+
+.error-container>span {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+
+.error-container>span:nth-of-type(1) {
+    color: #d1f2a5;
+    /* Màu xanh nhạt */
+    animation: colordancing 4s infinite;
+}
+
+.error-container>span:nth-of-type(3) {
+    color: #a06abf;
+    /* Màu tím */
+    animation: colordancing2 4s infinite;
+}
+
+.error-container>span:nth-of-type(2) {
+    width: 120px;
+    height: 120px;
+    border-radius: 999px;
+}
+
+.error-container>span:nth-of-type(2):before,
+.error-container>span:nth-of-type(2):after {
+    border-radius: 0%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    border-radius: 999px;
+    box-shadow: inset 30px 0 0 rgba(128, 0, 128, 0.4),
+        inset 0 30px 0 rgba(128, 0, 128, 0.4),
+        inset -30px 0 0 rgba(75, 0, 130, 0.4),
+        inset 0 -30px 0 rgba(148, 0, 211, 0.4);
+    animation: shadowsdancing 4s infinite;
+}
+
+.error-container>span:nth-of-type(2):before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.screen-reader-text {
+    position: absolute;
+    top: -9999em;
+    left: -9999em;
+}

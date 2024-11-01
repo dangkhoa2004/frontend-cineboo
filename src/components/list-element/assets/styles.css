@@ -1,0 +1,36 @@
+.color-picker-container {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.color-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+}
+
+.color-input {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.color-input:hover,
+.color-input:focus {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-input::-webkit-color-swatch {
+    border-radius: 8px;
+    border: none;
+}

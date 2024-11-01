@@ -1,0 +1,170 @@
+.extend_header {
+    background-color: black;
+}
+
+.body-container-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
+
+.movie-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+    background-color: black;
+}
+
+.movie-container .movie-forms {
+    display: flex;
+    align-items: center;
+    height: 440px;
+    width: 200%;
+    transition: height 0.2s ease;
+}
+
+.movie-container .movie-form {
+    width: 50%;
+    padding: 30px;
+    background-color: #fff;
+    transition: margin-left 0.18s ease;
+}
+
+.movie-container.active .login {
+    margin-left: -50%;
+    opacity: 0;
+    transition: margin-left 0.18s ease, opacity 0.15s ease;
+}
+
+.movie-container .signup {
+    opacity: 0;
+    transition: opacity 0.09s ease;
+}
+
+.movie-container.active .signup {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.movie-container.active .movie-forms {
+    height: 600px;
+}
+
+.movie-container .movie-form .movie-title {
+    position: relative;
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.movie-form .movie-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 30px;
+    background-color: var(--first-color);
+    border-radius: 25px;
+}
+
+.movie-form .movie-input-field {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.movie-input-field input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.movie-input-field input:is(:focus, :valid) {
+    border-bottom-color: var(--first-color);
+}
+
+.movie-input-field i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 23px;
+    transition: all 0.2s ease;
+}
+
+.movie-input-field input:is(:focus, :valid)~i {
+    color: var(--first-color);
+}
+
+.movie-input-field i.icon {
+    left: 0;
+}
+
+.movie-input-field i.showHidePw {
+    right: 0;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.movie-form .movie-checkbox-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.movie-checkbox-text .movie-checkbox-content {
+    display: flex;
+    align-items: center;
+}
+
+.movie-checkbox-content input {
+    margin-right: 10px;
+    accent-color: var(--first-color);
+}
+
+.movie-form .movie-text {
+    color: #333;
+    font-size: 14px;
+}
+
+.movie-form a.movie-text {
+    color: var(--first-color);
+    text-decoration: none;
+}
+
+.movie-form a:hover {
+    text-decoration: none;
+}
+
+.movie-form .movie-button input {
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background-color: var(--first-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.movie-button input:hover {
+    background-color: var(--first-color);
+}
+
+.movie-form .movie-login-signup {
+    margin-top: 30px;
+    text-align: center;
+}

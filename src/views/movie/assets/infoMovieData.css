@@ -1,0 +1,109 @@
+
+.booking-background {
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-content {
+    color: var(--first-color);
+    position: relative;
+    padding: 20px;
+}
+
+.booking-container {
+    display: flex;
+    gap: 20px;
+}
+
+.booking-movie-poster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.booking-movie-poster img {
+    width: 300px;
+    border-radius: 10px;
+}
+
+.booking-movie-poster .btn {
+    position: absolute;
+    border-radius: 5px;
+    bottom: 15px;
+}
+
+.booking-movie-info {
+    width: 650px;
+}
+
+.booking-movie-info h1 {
+    color: white;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: calc(1em / 8);
+    padding: calc(--stroke-width / 2);
+    -webkit-text-stroke-color: transparent;
+    -webkit-text-stroke-width: calc(1em / 16);
+    margin-bottom: 10px;
+}
+
+.booking-movie-meta {
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+.booking-movie-meta span {
+    padding: 3.5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.booking-movie-details {
+    margin-top: 15px;
+}
+
+.booking-movie-details p {
+    padding: 15px;
+}
+
+.booking-movie-details span {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+    background-color: var(--purple);
+    border-radius: 5px;
+}
+
+.booking-movie-description {
+    padding: 10px;
+    background-color: none;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.booking-movie-description h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.schedule-container {
+    padding-top: 20px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--purple);
+    padding-bottom: 10px;
+}
+
+.booking-movie-description h2 {
+    padding-bottom: 10px;
+    font-size: 26px;
+    margin: 0;
+}

@@ -1,0 +1,57 @@
+/* Header */
+.message-list-app {
+    border-radius: 1rem;
+    box-shadow: 0 2px 24px var(--shadow-color);
+    height: 84vh;
+}
+
+.message-list-header {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Danh sách trò chuyện */
+.message-list-chat-list {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.message-list-chat-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    position: relative;
+}
+
+.message-list-avatar {
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    margin-right: 1.5rem;
+}
+
+.message-list-chat-info {
+    flex-grow: 1;
+}
+
+.message-list-chat-name {
+    font-weight: bold;
+}
+
+.message-list-chat-message {
+    color: #888;
+}
+
+.message-list-chat-notification {
+    font-size: 18px;
+    background-color: var(--first-color);
+    color: white;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

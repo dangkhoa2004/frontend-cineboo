@@ -1,0 +1,108 @@
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap";
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+  --header-height: 3.5rem;
+  --first-color: #9053e0;
+  --title-color: black;
+  --first-color-color: black;
+  --body-color: white;
+  --text-color: white;
+  --shadow-color: hsla(228, 80%, 4%, .1);
+  --body-font: "Inter", sans-serif;
+  --normal-font-size: .938rem;
+  --smaller-font-size: .75rem;
+  --tiny-font-size: .75rem;
+  --font-regular: 400;
+  --font-semi-bold: 600;
+  --z-tooltip: 10;
+  --z-fixed: 100;
+}
+
+/*=============== BASE ===============*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  background-color: var(--body-color);
+  color: var(--first-color-color);
+  transition: background-color .4s;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  all: unset;
+}
+
+.container {
+  margin-inline: 1.5rem;
+}
+
+/* SHOW-SIDEBAR */
+.show-sidebar {
+  left: 0;
+}
+
+/* ACTIVE-LINK */
+.active-link {
+  color: var(--first-color);
+}
+
+.active-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 20px;
+  background-color: var(--first-color);
+}
+
+/* .hidden {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all .5s ease-out
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0)
+} */
+
+.btn {
+  border-radius: 5px;
+  cursor: pointer;
+  padding: .75rem 1.5rem;
+  background: var(--first-color);
+  color: var(--text-color);
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  position: relative;
+  transition: color .25s 1s
+}
+
+.btn a {
+  text-decoration: none;
+  color: var(--text-color);
+  background-color: var;
+  cursor: pointer;
+}
