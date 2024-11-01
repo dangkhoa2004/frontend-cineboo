@@ -1,22 +1,22 @@
 <template>
-    <div class="all-settings">
-        <div class="setting-for">
-            <h3>{{ $t('message.appsetting') }}:</h3>
-            <listSetting />
-        </div>
-        <div class="setting-for">
-            <h3>{{ $t('message.statussetting') }}:</h3>
-            <CssManager />
-        </div>
-        <div class="setting-for">
-            <h3>{{ $t('message.statussetting') }}:</h3>
-            <listPopup />
-        </div>
-        <div class="setting-for">
-            <h3>{{ $t('message.performance') }}:</h3>
-            <listPerformance />
-        </div>
+<div class="all-settings">
+    <div class="setting-for">
+        <h3>{{ $t('message.appsetting') }}:</h3>
+        <listSetting />
     </div>
+    <div class="setting-for">
+        <h3>{{ $t('message.statussetting') }}:</h3>
+        <CssManager />
+    </div>
+    <div class="setting-for">
+        <h3>{{ $t('message.statussetting') }}:</h3>
+        <listPopup />
+    </div>
+    <div class="setting-for">
+        <h3>{{ $t('message.performance') }}:</h3>
+        <listPerformance />
+    </div>
+</div>
 </template>
 
 <script lang="ts">

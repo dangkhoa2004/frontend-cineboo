@@ -16,10 +16,10 @@
         <chooseScheduleData_component />
 
         <!-- Component choose seat -->
-        <chooseSeatData_component />
+        <!-- <chooseSeatData_component /> -->
 
         <!-- Component infomation -->
-        <choosePaymentData_component />
+        <!-- <choosePaymentData_component />  -->
       </div>
     </div>
   </div>

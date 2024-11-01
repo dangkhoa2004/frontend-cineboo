@@ -1,6 +1,4 @@
-<template>
-    đây là thông tin user
-</template>
+<template>đây là thông tin user</template>
 
 <script lang="ts">
 export default {

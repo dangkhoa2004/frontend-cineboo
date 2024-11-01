@@ -1,7 +1,7 @@
 // moviePageData.ts
 import { ref, onMounted, onUnmounted } from "vue";
 import { fetchMovies } from "@/api/movie";
-import { Movie } from "@/type"; // Adjust the import path as necessary
+import { Movie } from "@/type";
 
 export function useMoviePageData() {
   const movies = ref<Movie[]>([]);

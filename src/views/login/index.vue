@@ -1,13 +1,13 @@
 <template>
-  <div style="overflow: hidden">
-    <div id="stars"></div>
-    <!-- Header -->
-    <onlyPageHeader_component />
-    <!-- MOVIE DATA LIST -->
-    <loginPageInput_component />
-    <!-- Footer -->
-    <onlyPageFooter_component />
-  </div>
+<div style="overflow: hidden">
+  <div id="stars"></div>
+  <!-- Header -->
+  <onlyPageHeader_component />
+  <!-- MOVIE DATA LIST -->
+  <loginPageInput_component />
+  <!-- Footer -->
+  <onlyPageFooter_component />
+</div>
 </template>
 
 <script>

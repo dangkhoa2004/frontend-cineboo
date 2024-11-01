@@ -1,32 +1,27 @@
 <template>
-  <div id="stars"></div>
-  <!-- Header -->
-  <homePageHeader_page />
-  <!-- Booking Form Section -->
-  <homePageBooking_component />
-  <!-- Hot Movie Section -->
-  <homePageHotMovie_component />
-  <div id="stars"></div>
-  <div id="stars2"></div>
-  <div id="stars3"></div>
-  <!-- Movies Section -->
-  <homePageMovieSection_component />
-  <!-- Theater Section -->
-  <homePageTheater_component />
-  <!-- Banner Section -->
-  <homePageBanner_component />
-  <!-- Explore Section -->
-  <homePageExplore_component />
-  <!-- Footer -->
-  <homePageFooter_component />
-  <div
-    class="scroll-to-top"
-    id="scrollToTop"
-    @click="scrollToTop"
-    :class="{ show: isScrollButtonVisible }"
-  >
-    <span class="fas fa-arrow-up"></span>
-  </div>
+<div id="stars"></div>
+<!-- Header -->
+<homePageHeader_page />
+<!-- Booking Form Section -->
+<homePageBooking_component />
+<!-- Hot Movie Section -->
+<homePageHotMovie_component />
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
+<!-- Movies Section -->
+<homePageMovieSection_component />
+<!-- Theater Section -->
+<homePageTheater_component />
+<!-- Banner Section -->
+<homePageBanner_component />
+<!-- Explore Section -->
+<homePageExplore_component />
+<!-- Footer -->
+<homePageFooter_component />
+<div class="scroll-to-top" id="scrollToTop" @click="scrollToTop" :class="{ show: isScrollButtonVisible }">
+  <span class="fas fa-arrow-up"></span>
+</div>
 </template>
 
 <script lang="ts">

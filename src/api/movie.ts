@@ -3,66 +3,107 @@ import axios from 'axios';
 import { Movie } from '@/type';
 import { apiClient } from './api';
 
+// Fetch all movies
 export const fetchMovies = async (params = {}): Promise<Movie[]> => {
     try {
         const response = await apiClient.get('/phim/get', { params });
-        return response.data; // Trả về dữ liệu
+        return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('API: [Lỗi khi xử lý dữ liệu phim]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
-        throw error; // Ném lại lỗi để xử lý ở nơi gọi
-    }
-};
-
-
-export const fetchMovieById = async (id: string) => {
-    try {
-        const dataToSend = { id }; // Ví dụ gửi ID
-        const response = await apiClient.post(`api/movie/${id}`, { data: dataToSend });
-        return response.data;
-    } catch (error) {
-        console.error('API [Lỗi khi xử lý dữ liệu]:', error);
         throw error;
     }
 };
 
-// Hàm để lấy lịch chiếu phim theo ID phim
-export const fetchShowtimesByMovieId = async (movieId: string) => {
-    const response = await apiClient.get(`api/movie/${movieId}/showtimes`);
-    return response.data;
-};
-
-// Hàm để lấy lịch chiếu phim theo ID phim cho nhiều ngày
-export const fetchShowtimesByMovieIdForWeek = async (movieId: string) => {
-    const response = await apiClient.get(`api/movie/${movieId}/showtimes/week`);
-    return response.data; // Giả sử API trả về dữ liệu cho nhiều ngày
-};
-
-// Hàm để lấy danh sách ghế theo ID suất chiếu
-export const fetchSeatsByShowtimeId = async (showtimeId: string) => {
-    const response = await apiClient.get(`api/showtime/${showtimeId}/seats`);
-    return response.data; // Giả sử API trả về dữ liệu ghế
-};
-
-export const fetchMovieNow = async () => {
+// Fetch a movie by ID
+export const fetchMovieById = async (id: string): Promise<Movie> => {
     try {
-        const response = await apiClient.get(`api/movie/now`);
+        const response = await apiClient.get(`/phim/find/${id}`);
         return response.data;
     } catch (error) {
-        console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error);
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error;
     }
 };
 
-export const fetchMovieFuture = async () => {
+// Fetch showtimes by movie ID
+export const fetchShowtimesByMovieId = async (movieId: string): Promise<any> => {
     try {
-        const response = await apiClient.get(`api/movie/future`);
+        const response = await apiClient.get(`/api/movie/${movieId}/showtimes`);
         return response.data;
     } catch (error) {
-        console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error);
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+
+// Fetch showtimes by movie ID for a week
+export const fetchShowtimesByMovieIdForWeek = async (movieId: string): Promise<any> => {
+    try {
+        const response = await apiClient.get(`/api/movie/${movieId}/showtimes/week`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+
+// Fetch seats by showtime ID
+export const fetchSeatsByShowtimeId = async (showtimeId: string): Promise<any> => {
+    try {
+        const response = await apiClient.get(`/api/showtime/${showtimeId}/seats`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+
+// Fetch movies showing now
+export const fetchMovieNow = async (): Promise<Movie[]> => {
+    try {
+        const response = await apiClient.get('/api/movie/now');
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+
+// Fetch movies coming in the future
+export const fetchMovieFuture = async (): Promise<Movie[]> => {
+    try {
+        const response = await apiClient.get('/api/movie/future');
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error;
     }
 };

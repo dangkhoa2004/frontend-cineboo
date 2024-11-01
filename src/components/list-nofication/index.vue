@@ -1,8 +1,7 @@
 <template>
-    <div>đây là thông báo</div>
+<div>đây là thông báo</div>
 </template>
 <script>
-// import mainjs from './assets/script.js';
 export default {
     name: 'Layout',
     mounted() {

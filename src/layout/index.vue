@@ -1,15 +1,15 @@
 <template>
-  <div class="layout">
-    <layout-header />
-    <!-- Static header -->
-    <div class="layout-body">
-      <layout-sidebar />
-      <!-- Static sidebar -->
-      <layout-content>
-        <router-view />
-      </layout-content>
-    </div>
+<div class="layout">
+  <layout-header />
+  <!-- Static header -->
+  <div class="layout-body">
+    <layout-sidebar />
+    <!-- Static sidebar -->
+    <layout-content>
+      <router-view />
+    </layout-content>
   </div>
+</div>
 </template>
 
 <script>

@@ -1,24 +1,24 @@
 <template>
-  <div class="invoice-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Mã hóa đơn</th>
-          <th>Ngày lập</th>
-          <th>Tổng tiền</th>
-          <th>Trạng thái</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="invoice in invoices" :key="invoice.id">
-          <td>{{ invoice.id }}</td>
-          <td>{{ invoice.date }}</td>
-          <td>{{ invoice.total }}</td>
-          <td>{{ invoice.status }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="invoice-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Mã hóa đơn</th>
+        <th>Ngày lập</th>
+        <th>Tổng tiền</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="invoice in invoices" :key="invoice.id">
+        <td>{{ invoice.id }}</td>
+        <td>{{ invoice.date }}</td>
+        <td>{{ invoice.total }}</td>
+        <td>{{ invoice.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </template>
 
 <script>

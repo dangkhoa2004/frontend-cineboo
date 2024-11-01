@@ -8,7 +8,6 @@ import 'leaflet/dist/leaflet.css';
 
 import { i18nPlugin } from './plugins/i18nPlugin';
 import * as directives from '@/directives';
-import effects from '@/assets/effects'
 
 const app = createApp(App);
 
@@ -21,6 +20,3 @@ Object.keys(directives).forEach(key => {
 
 // Sử dụng router và i18n
 app.use(router).use(i18nPlugin).mount('#app');
-
-// Gọi hàm effects
-effects();

@@ -1,8 +1,8 @@
 <template>
-    <div class="color-picker-container">
-        <label for="color-input" class="color-label">Thay đổi màu chủ đạo:</label>
-        <input id="color-input" type="color" v-model="color" @input="changeColor" class="color-input">
-    </div>
+<div class="color-picker-container">
+    <label for="color-input" class="color-label">Thay đổi màu chủ đạo:</label>
+    <input id="color-input" type="color" v-model="color" @input="changeColor" class="color-input">
+</div>
 </template>
 
 <script>

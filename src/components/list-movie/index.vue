@@ -1,24 +1,24 @@
 <template>
-  <div class="movie-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Mã phim</th>
-          <th>Tên phim</th>
-          <th>Ngày phát hành</th>
-          <th>Thể loại</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="movie in movies" :key="movie.id">
-          <td>{{ movie.id }}</td>
-          <td>{{ movie.title }}</td>
-          <td>{{ movie.releaseDate }}</td>
-          <td>{{ movie.genre }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="movie-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Mã phim</th>
+        <th>Tên phim</th>
+        <th>Ngày phát hành</th>
+        <th>Thể loại</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="movie in movies" :key="movie.id">
+        <td>{{ movie.id }}</td>
+        <td>{{ movie.title }}</td>
+        <td>{{ movie.releaseDate }}</td>
+        <td>{{ movie.genre }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </template>
 
 <script>

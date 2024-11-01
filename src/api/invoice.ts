@@ -1,44 +1,32 @@
-import { apiClient } from './api.ts';
-import axios from 'axios'; // Đảm bảo import axios
+import { apiClient } from './api';
+import axios from 'axios'; // Ensure Axios is imported
 
 export const fetchInvoices = async () => {
     try {
         const dataToSend = { /* dữ liệu cần gửi */ };
-        const response = await apiClient.post('api/Invoice/list', { data: dataToSend });
+        const response = await apiClient.post('api/Invoice/list', dataToSend);
         return response.data;
     } catch (error) {
-        console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error);
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error;
     }
 };
 
 export const fetchInvoiceById = async (id: string) => {
     try {
-        const dataToSend = { id }; // Ví dụ gửi ID
-        const response = await apiClient.post(`api/Invoice/${id}`, { data: dataToSend });
+        const dataToSend = { id };
+        const response = await apiClient.post(`api/Invoice/${id}`, dataToSend);
         return response.data;
     } catch (error) {
-        console.error('API [Lỗi khi xử lý dữ liệu]:', error);
-        throw error;
-    }
-};
-
-export const fetchInvoiceNow = async () => {
-    try {
-        const response = await apiClient.get(`api/Invoice/now`);
-        return response.data;
-    } catch (error) {
-        console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error);
-        throw error;
-    }
-};
-
-export const fetchInvoiceFuture = async () => {
-    try {
-        const response = await apiClient.get(`api/Invoice/future`);
-        return response.data;
-    } catch (error) {
-        console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error);
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error;
     }
 };
