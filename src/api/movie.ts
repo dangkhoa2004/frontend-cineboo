@@ -1,15 +1,22 @@
+// api/movie.ts
 import axios from 'axios';
+import { Movie } from '@/type';
 import { apiClient } from './api';
 
-export const fetchMovies = async (params = {}) => {
+export const fetchMovies = async (params = {}): Promise<Movie[]> => {
     try {
         const response = await apiClient.get('/phim/get', { params });
         return response.data; // Trả về dữ liệu
     } catch (error) {
-        console.error('API: [Lỗi khi xử lý dữ liệu phim]', error.response ? error.response.data : error);
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu phim]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error; // Ném lại lỗi để xử lý ở nơi gọi
     }
 };
+
 
 export const fetchMovieById = async (id: string) => {
     try {

@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { i18nPlugin } from './plugins/i18nPlugin';
 import * as directives from '@/directives';
-import effects from '@/assets/effects.ts'; // Đảm bảo đường dẫn này đúng
+import effects from '@/assets/effects'
 
 const app = createApp(App);
 

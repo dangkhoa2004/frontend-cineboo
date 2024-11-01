@@ -1,9 +1,10 @@
 // moviePageData.ts
 import { ref, onMounted, onUnmounted } from "vue";
-import { fetchMovies } from "@/api/movie.ts";
+import { fetchMovies } from "@/api/movie";
+import { Movie } from "@/type"; // Adjust the import path as necessary
 
 export function useMoviePageData() {
-  const movies = ref([]);
+  const movies = ref<Movie[]>([]);
   const isScrollButtonVisible = ref(false);
 
   const loadMovies = async () => {

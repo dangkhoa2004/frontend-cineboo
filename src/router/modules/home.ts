@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
 import Layout from "@/layout/index.vue";
-import homeChildrenRoutes from "../children-router/homeChildrenRoutes.ts";
+import homeChildrenRoutes from "../children-router/homeChildrenRoutes";
 
 const homeRoutes: RouteRecordRaw[] = [
   {

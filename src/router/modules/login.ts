@@ -1,6 +1,6 @@
-/* login.ts*/
+/* login.ts */
 import { RouteRecordRaw } from "vue-router";
-import { authService } from "@/api/authService.ts";
+import { authService , logout} from "@/api/authService";
 
 const authRoutes: RouteRecordRaw[] = [
     {
@@ -12,9 +12,10 @@ const authRoutes: RouteRecordRaw[] = [
         path: '/dang-xuat',
         name: 'Logout',
         beforeEnter: (to, _from, next) => {
-            authService.logout();
+            logout();
             next('/dang-nhap');
         },
+        redirect: '/dang-nhap'
     },
 ];
 

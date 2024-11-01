@@ -9,7 +9,7 @@ const bookingChildrenRoutes: RouteRecordRaw[] = [
   {
     path: "test",
     name: "test-danh-sach-phim",
-    // component: () => import('@/test.vue'),
+    component: () => import('@/test.vue'),
   },
   {
     path: ":id",
