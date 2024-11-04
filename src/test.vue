@@ -19,22 +19,17 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import { fetchMovies } from "@/api/movie";
-import { Movie } from "@/type";
 
 export default defineComponent({
   setup() {
-    const phimList = ref<Movie[]>([]);
-    
-    const loadMovies = async () => {
+    const phimList = ref<any[]>([]);
+
+    onMounted(async () => {
       try {
         phimList.value = await fetchMovies();
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
-    };
-
-    onMounted(() => {
-      loadMovies();
     });
 
     return {

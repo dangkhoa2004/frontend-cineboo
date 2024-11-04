@@ -1,10 +1,9 @@
 // api/movie.ts
 import axios from 'axios';
-import { Movie } from '@/type';
 import { apiClient } from './api';
 
 // Fetch all movies
-export const fetchMovies = async (params = {}): Promise<Movie[]> => {
+export const fetchMovies = async (params: Record<string, any> = {}) => {
     try {
         const response = await apiClient.get('/phim/get', { params });
         return response.data;
@@ -19,7 +18,7 @@ export const fetchMovies = async (params = {}): Promise<Movie[]> => {
 };
 
 // Fetch a movie by ID
-export const fetchMovieById = async (id: string): Promise<Movie> => {
+export const fetchMovieById = async (id: string) => {
     try {
         const response = await apiClient.get(`/phim/find/${id}`);
         return response.data;
@@ -34,7 +33,7 @@ export const fetchMovieById = async (id: string): Promise<Movie> => {
 };
 
 // Fetch showtimes by movie ID
-export const fetchShowtimesByMovieId = async (movieId: string): Promise<any> => {
+export const fetchShowtimesByMovieId = async (movieId: string) => {
     try {
         const response = await apiClient.get(`/api/movie/${movieId}/showtimes`);
         return response.data;
@@ -49,7 +48,7 @@ export const fetchShowtimesByMovieId = async (movieId: string): Promise<any> => 
 };
 
 // Fetch showtimes by movie ID for a week
-export const fetchShowtimesByMovieIdForWeek = async (movieId: string): Promise<any> => {
+export const fetchShowtimesByMovieIdForWeek = async (movieId: string) => {
     try {
         const response = await apiClient.get(`/api/movie/${movieId}/showtimes/week`);
         return response.data;
@@ -64,7 +63,7 @@ export const fetchShowtimesByMovieIdForWeek = async (movieId: string): Promise<a
 };
 
 // Fetch seats by showtime ID
-export const fetchSeatsByShowtimeId = async (showtimeId: string): Promise<any> => {
+export const fetchSeatsByShowtimeId = async (showtimeId: string) => {
     try {
         const response = await apiClient.get(`/api/showtime/${showtimeId}/seats`);
         return response.data;
@@ -79,7 +78,7 @@ export const fetchSeatsByShowtimeId = async (showtimeId: string): Promise<any> =
 };
 
 // Fetch movies showing now
-export const fetchMovieNow = async (): Promise<Movie[]> => {
+export const fetchMovieNow = async () => {
     try {
         const response = await apiClient.get('/api/movie/now');
         return response.data;
@@ -94,7 +93,7 @@ export const fetchMovieNow = async (): Promise<Movie[]> => {
 };
 
 // Fetch movies coming in the future
-export const fetchMovieFuture = async (): Promise<Movie[]> => {
+export const fetchMovieFuture = async () => {
     try {
         const response = await apiClient.get('/api/movie/future');
         return response.data;
@@ -107,3 +106,11 @@ export const fetchMovieFuture = async (): Promise<Movie[]> => {
         throw error;
     }
 };
+export async function deleteMovieById(movieId: string) {
+    const response = await fetch(`movies/${movieId}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        throw new Error('Không thể xoá phim');
+    }
+}

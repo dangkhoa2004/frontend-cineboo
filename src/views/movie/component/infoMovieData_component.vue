@@ -19,7 +19,7 @@
         <div class="booking-movie-details">
           <p><strong>Quốc gia:</strong> <span>{{ movie.quocGia }}</span></p>
           <p><strong>Thể loại:</strong> <span>{{ genres }}</span></p>
-          <p><strong>Đạo diễn:</strong> <span>{{ movie.director }}</span></p>
+          <p><strong>Đạo diễn:</strong> <span>{{ movie.dienVien }}</span></p>
           <p><strong>Diễn viên:</strong> <span>{{ movie.dienVien }}</span></p>
         </div>
       </div>
@@ -31,20 +31,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { fetchMovieById } from "@/api/movie";
-import { Movie } from "@/type";
 
 export default {
   name: "BookingMovieInfo",
   setup() {
     const route = useRoute();
-    const movie = ref<Movie | null>(null);
-    const genres = ref<string>("");
+    const movie = ref(null);
+    const genres = ref("");
 
-    const fetchMovieData = async (movieId: string) => {
+    const fetchMovieData = async (movieId) => {
       try {
         const data = await fetchMovieById(movieId);
         movie.value = data;
@@ -59,7 +58,7 @@ export default {
     };
 
     onMounted(() => {
-      const movieId = route.params.id as string;
+      const movieId = route.params.id;
       if (movieId) {
         fetchMovieData(movieId);
       } else {

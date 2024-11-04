@@ -11,7 +11,7 @@
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "types": ["node", "leaflet"],
+    // "types": ["node"],
     "forceConsistentCasingInFileNames": true,
     "lib": ["DOM", "ESNext"]
   },

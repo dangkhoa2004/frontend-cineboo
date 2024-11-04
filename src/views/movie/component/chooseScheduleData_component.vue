@@ -52,7 +52,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ref, onMounted } from "vue";
 import { fetchShowtimesByMovieIdForWeek, fetchSeatsByShowtimeId } from "@/api/movie";
 
@@ -65,7 +65,7 @@ export default {
     const selectedMovieId = ref(""); // ID của phim được truyền vào
     const currentDate = new Date().toISOString().split("T")[0]; // Ngày hiện tại
 
-    const fetchShowtimes = async (movieId: string, date: string) => {
+    const fetchShowtimes = async (movieId, date) => {
       selectedMovieId.value = movieId;
       try {
         const response = await fetchShowtimesByMovieIdForWeek(movieId);
@@ -76,7 +76,7 @@ export default {
       }
     };
 
-    const fetchSeats = async (showtimeId: string) => {
+    const fetchSeats = async (showtimeId) => {
       try {
         const seatsData = await fetchSeatsByShowtimeId(showtimeId); // Gọi hàm fetch ghế
         // Bạn có thể thực hiện các thao tác cần thiết với dữ liệu ghế
@@ -86,20 +86,20 @@ export default {
       }
     };
 
-    const bookTicket = (theaterId: string, showtime: string) => {
+    const bookTicket = (theaterId, showtime) => {
       // Giả sử bạn đã có cách để lấy showtimeId từ theaterId và showtime
       const showtimeId = `${theaterId}-${showtime}`; // Ví dụ, bạn cần định nghĩa cách này
       fetchSeats(showtimeId); // Fetch ghế sau khi đặt vé
     };
 
     // Hàm định dạng ngày tháng
-    const formatDate = (date: string) => {
+    const formatDate = (date) => {
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       return new Date(date).toLocaleDateString("vi-VN", options);
     };
 
     // Hàm lấy ngày trong tuần
-    const getDayOfWeek = (date: string) => {
+    const getDayOfWeek = (date) => {
       const dayNames = [
         "Chủ Nhật",
         "Thứ Hai",

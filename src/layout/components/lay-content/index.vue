@@ -1,7 +1,6 @@
 <template>
     <!--=============== MAIN ===============-->
     <main class="main container" id="main">
-        <router-view name="listJob" />
-        <router-view name="listSchedule" />
+        <router-view name="listComponent" />
     </main>
 </template>
