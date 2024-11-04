@@ -23,7 +23,7 @@
 <script setup lang="ts" >
 import {  ref, onMounted } from "vue";
 import { fetchMovies } from "./api/movie"
-let phimList = ref([]);
+const phimList = ref<any[]>([]);
 onMounted(async()=>{
   phimList.value= await fetchMovies();
 })
