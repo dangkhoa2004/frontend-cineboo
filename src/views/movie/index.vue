@@ -10,28 +10,25 @@
     </div>
     <div class="movie-content">
       <div class="movie-grid-container section">
-        <template v-if="movies.length">
-          <movieCardData_component
-            v-for="(movie, index) in movies"
-            :key="index"
-            :movieImage="movie.anhPhim"
-            :movieTitle="movie.tenPhim"
-            :movieDescription="movie.noiDungMoTa"
-            :movieRating="movie.danhGia || 'Chưa đánh giá'"
-            :movieVotes="movie.luotXem || 0"
-            :movieCast="movie.dienVien"
-            :movieReleaseYear="movie.nam"
-            :movieDuration="movie.thoiLuong"
-            :movieCountry="movie.quocGia"
-            :movieAgeRating="movie.gioiHanDoTuoi.tenDoTuoi"
-            :movieReleaseDate="new Date(movie.ngayRaMat).toLocaleDateString()"
-            :movieTrailer="movie.trailer"
-            :movieId="movie.id"
-          />
-        </template>
-        <template v-else>
-          <div class="no-movies">Không có phim nào đang chiếu.</div>
-        </template>
+        <movieCardData_component
+          v-if="movies.length"
+          v-for="(movie, index) in movies"
+          :key="index"
+          :movieImage="movie.anhPhim"
+          :movieTitle="movie.tenPhim"
+          :movieDescription="movie.noiDungMoTa"
+          :movieRating="movie.danhGia || 'Chưa đánh giá'"
+          :movieVotes="movie.luotXem || 0"
+          :movieCast="movie.dienVien"
+          :movieReleaseYear="movie.nam"
+          :movieDuration="movie.thoiLuong"
+          :movieCountry="movie.quocGia"
+          :movieAgeRating="movie.gioiHanDoTuoi.tenDoTuoi"
+          :movieReleaseDate="new Date(movie.ngayRaMat).toLocaleDateString()"
+          :movieTrailer="movie.trailer"
+          :movieId="movie.id"
+        />
+        <div v-else class="no-movies">Không có phim nào đang chiếu.</div>
       </div>
     </div>
   </div>
@@ -56,21 +53,21 @@ export default {
     const movies = ref<any[]>([]);
     const isScrollButtonVisible = ref(false);
 
+    const handleScroll = () => {
+      isScrollButtonVisible.value = window.scrollY > 100;
+    };
+
     onMounted(async () => {
       try {
         movies.value = await fetchMovies();
       } catch (error) {
         console.error("Component [Lỗi khi xử lý dữ liệu phim]:", error);
       }
-      window.addEventListener("scroll", () => {
-        isScrollButtonVisible.value = window.scrollY > 100;
-      });
+      window.addEventListener("scroll", handleScroll);
     });
 
     onUnmounted(() => {
-      window.removeEventListener("scroll", () => {
-        isScrollButtonVisible.value = window.scrollY > 100;
-      });
+      window.removeEventListener("scroll", handleScroll);
     });
 
     const scrollToTop = () => {

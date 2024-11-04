@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { Method } from 'axios';
 
 // Tạo một client Axios với baseURL và timeout
 const apiClient = axios.create({
@@ -9,20 +9,16 @@ const apiClient = axios.create({
     },
 });
 
-// Interceptor cho request để gắn token vào headers nếu có
-// apiClient.interceptors.request.use(
-//     (config) => {
-//         const token = localStorage.getItem('token');
-//         if (token && config.headers) {
-//             config.headers.Authorization = `Bearer ${token}`;
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         console.error('Interceptor Error:', error);
-//         return Promise.reject(error);
-//     }
-// );
+// Interceptor cho request, không tự động thêm Authorization
+apiClient.interceptors.request.use(
+    (config) => {
+        return config;
+    },
+    (error) => {
+        console.error('Interceptor Error:', error);
+        return Promise.reject(error);
+    }
+);
 
 apiClient.interceptors.response.use(
     (response) => response,
@@ -38,5 +34,16 @@ apiClient.interceptors.response.use(
     }
 );
 
+// Hàm thực hiện request có gắn token khi cần
+const requestWithAuth = (method: Method, url: string, data: any = {}) => {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    return apiClient({
+        method,
+        url,
+        data,
+        headers: { ...headers },
+    });
+};
 
-export { apiClient };
+export { apiClient, requestWithAuth };

@@ -3,9 +3,7 @@ import { apiClient } from './api';
 
 export const fetchMovies = async (params = {}) => {
     try {
-        console.log("kfjekfhekfhe")
         const response = await apiClient.get('/phim/get', { params });
-        console.log(response)
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
