@@ -1,11 +1,11 @@
-// api/movie.ts
 import axios from 'axios';
 import { apiClient } from './api';
 
-// Fetch all movies
-export const fetchMovies = async (params: Record<string, any> = {}) => {
+export const fetchMovies = async (params = {}) => {
     try {
+        console.log("kfjekfhekfhe")
         const response = await apiClient.get('/phim/get', { params });
+        console.log(response)
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -17,7 +17,6 @@ export const fetchMovies = async (params: Record<string, any> = {}) => {
     }
 };
 
-// Fetch a movie by ID
 export const fetchMovieById = async (id: string) => {
     try {
         const response = await apiClient.get(`/phim/find/${id}`);
@@ -32,7 +31,6 @@ export const fetchMovieById = async (id: string) => {
     }
 };
 
-// Fetch showtimes by movie ID
 export const fetchShowtimesByMovieId = async (movieId: string) => {
     try {
         const response = await apiClient.get(`/api/movie/${movieId}/showtimes`);
@@ -47,7 +45,6 @@ export const fetchShowtimesByMovieId = async (movieId: string) => {
     }
 };
 
-// Fetch showtimes by movie ID for a week
 export const fetchShowtimesByMovieIdForWeek = async (movieId: string) => {
     try {
         const response = await apiClient.get(`/api/movie/${movieId}/showtimes/week`);
@@ -62,7 +59,6 @@ export const fetchShowtimesByMovieIdForWeek = async (movieId: string) => {
     }
 };
 
-// Fetch seats by showtime ID
 export const fetchSeatsByShowtimeId = async (showtimeId: string) => {
     try {
         const response = await apiClient.get(`/api/showtime/${showtimeId}/seats`);
@@ -77,7 +73,6 @@ export const fetchSeatsByShowtimeId = async (showtimeId: string) => {
     }
 };
 
-// Fetch movies showing now
 export const fetchMovieNow = async () => {
     try {
         const response = await apiClient.get('/api/movie/now');
@@ -92,7 +87,6 @@ export const fetchMovieNow = async () => {
     }
 };
 
-// Fetch movies coming in the future
 export const fetchMovieFuture = async () => {
     try {
         const response = await apiClient.get('/api/movie/future');
@@ -106,11 +100,19 @@ export const fetchMovieFuture = async () => {
         throw error;
     }
 };
+
 export async function deleteMovieById(movieId: string) {
-    const response = await fetch(`movies/${movieId}`, {
-        method: 'DELETE',
-    });
-    if (!response.ok) {
-        throw new Error('Không thể xoá phim');
+    try {
+        const response = await apiClient.delete(`/movies/${movieId}`);
+        if (!response.status) {
+            throw new Error('Không thể xoá phim');
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xoá phim]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
     }
 }

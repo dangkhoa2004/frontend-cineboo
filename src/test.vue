@@ -12,29 +12,24 @@
       <p>Giới hạn độ tuổi: {{ phim.gioiHanDoTuoi.tenDoTuoi }}</p>
       <p>Ngày ra mắt: {{ new Date(phim.ngayRaMat).toLocaleDateString() }}</p>
       <p>Trailer: <a :href="phim.trailer" target="_blank">Xem Trailer</a></p>
+      <p>Thể loại:
+        <span v-for="theLoai in phim.danhSachTLPhims" :key="theLoai.id">
+          {{ theLoai.theLoaiPhim.tenTheLoai }}<span v-if="!isLastGenre(phim, theLoai)">, </span>
+        </span>      </p>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import { fetchMovies } from "@/api/movie";
+<script setup lang="ts" >
+import {  ref, onMounted } from "vue";
+import { fetchMovies } from "./api/movie"
+let phimList = ref([]);
+onMounted(async()=>{
+  phimList.value= await fetchMovies();
+})
 
-export default defineComponent({
-  setup() {
-    const phimList = ref<any[]>([]);
-
-    onMounted(async () => {
-      try {
-        phimList.value = await fetchMovies();
-      } catch (error) {
-        console.error("Failed to fetch movies:", error);
-      }
-    });
-
-    return {
-      phimList,
+    const isLastGenre = (phim: any, genre: any) => {
+      return phim.danhSachTLPhims.indexOf(genre) === phim.danhSachTLPhims.length - 1;
     };
-  },
-});
+
 </script>
