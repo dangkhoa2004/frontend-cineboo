@@ -1,5 +1,4 @@
 <template>
-  <div id="chon-ghe"></div>
   <div class="schedule-container">
     <div class="schedule-header">
       <h2>CHỌN GHẾ</h2>
@@ -21,34 +20,23 @@
             </div>
             <div class="movie_seat-all-seats">
               <div v-for="(seat, index) in prebookedSeats" :key="index">
-                <input
-                  type="checkbox"
-                  :id="'s' + (index + 1)"
-                  v-model="selectedSeats[index]"
-                  :disabled="seat.booked"
-                />
-                <label
-                  :for="'s' + (index + 1)"
-                  class="movie_seat-seat"
-                  :class="{
-                    booked: seat.booked,
-                    selected: selectedSeats[index],
-                  }"
-                ></label>
+                <input type="checkbox" :id="'S' + (index + 1)" v-model="selectedSeats[index]" :disabled="seat.booked" />
+                <label :for="'S' + (index + 1)" class="movie_seat-seat" :class="{
+                  booked: seat.booked,
+                  selected: selectedSeats[index],
+                }"></label>
               </div>
             </div>
           </div>
         </div>
         <div class="movie_seat-price">
           <div class="movie_seat-total">
-            <span
-              ><span class="movie_seat-count">{{ ticketCount }}</span> Vé</span
-            >
+            <span><span class="movie_seat-count">{{ ticketCount }}</span> Vé</span>
             <span>Ghế: {{ getSelectedSeats().join(", ") }}</span>
-            <div class="movie_seat-amount">Giá: {{ totalAmount }}</div>
+            <div class="movie_seat-amount">Giá: {{ totalAmount }} ₫</div>
           </div>
-          <button class="btn nav_btn draw-border">
-            <a href="#thong-tin">ĐẶT NGAY</a>
+          <button class="btn nav_btn draw-border" @click="handlePayNow">
+            <a id="pay-now">ĐẶT NGAY</a>
           </button>
         </div>
       </div>
@@ -57,41 +45,51 @@
 </template>
 
 <script>
-import { fetchSeatsByShowtimeId } from "@/api/movie"; // Import API
 import EventBus from "@/store/eventBus";
-
 export default {
   data() {
     return {
-      prebookedSeats: [], // Danh sách ghế đã đặt
-      selectedSeats: Array(60).fill(false), // Danh sách ghế đã chọn
+      prebookedSeats: [],
+      selectedSeats: Array(60).fill(false),
       ticketCount: 0,
       totalAmount: 0,
-      showtimeId: null, // ID của suất chiếu
+      showtimeId: this.$route.params.idSuatChieu,
     };
   },
   created() {
-    // Gọi hàm loadSeats nếu showtimeId đã được xác định
     if (this.showtimeId) {
       this.loadSeats(this.showtimeId);
     }
   },
   methods: {
+    handlePayNow() {
+      this.saveSelectedSeats();
+      this.$router.push({ name: 'payment' });
+    },
     async loadSeats(showtimeId) {
       try {
-        const seatsData = await fetchSeatsByShowtimeId(showtimeId);
-        this.prebookedSeats = seatsData.map((seat) => ({ booked: seat.booked })); // Cập nhật ghế đã đặt
+        const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`);
+        const seatsData = await response.json();
+        this.prebookedSeats = seatsData.map((seat) => ({
+          maGhe: seat.maGhe,
+          booked: seat.trangThaiGhe === 1,
+        }));
+        if (seatsData.length > 0) {
+          this.ticketPrice = seatsData[0].giaTien;
+        }
       } catch (error) {
         console.error("Component: [Lỗi khi nạp dữ liệu ghế từ suất chiếu]", error);
       }
     },
     updateTicketCountAndAmount() {
-      this.ticketCount = this.selectedSeats.filter((seat) => seat).length;
       EventBus.ticketCount = this.ticketCount;
-      const ticketPrice = 160000; // Giá vé
-      this.totalAmount = this.ticketCount * ticketPrice;
+      this.ticketCount = this.selectedSeats.filter((seat) => seat).length;
+      this.totalAmount = this.ticketCount * this.ticketPrice;
       EventBus.selectedSeats = this.getSelectedSeats();
+      EventBus.totalAmount = this.totalAmount;
+      EventBus.ticketCount = this.ticketCount;
     },
+
     getSelectedSeats() {
       return this.selectedSeats
         .map((selected, index) => (selected ? `S${index + 1}` : null))
@@ -100,12 +98,18 @@ export default {
   },
   watch: {
     selectedSeats: {
-      handler: function () {
+      handler() {
         this.updateTicketCountAndAmount();
-        EventBus.selectedSeats = this.getSelectedSeats();
       },
       deep: true,
     },
   },
+  beforeRouteUpdate(to, from, next) {
+    this.showtimeId = to.params.idSuatChieu;
+    this.loadSeats(this.showtimeId);
+    next();
+  },
 };
 </script>
+
+<!-- chooseSeatData_component.vue -->

@@ -17,7 +17,9 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
-
+.mobile-logout {
+  display: inline-block;
+}
 .mobile-login {
   display: none;
 }

@@ -57,7 +57,6 @@ npm run serve
 Ứng dụng có các chức năng bảo mật thông qua xác thực người dùng và phân quyền dựa trên vai trò. Các trang quản trị như Admin, Settings và Reports được bảo vệ bằng `meta.requiresAuth` và kiểm tra quyền hạn qua `beforeEnter` để đảm bảo chỉ những người có quyền mới được truy cập.
 
 ## 📁 Cấu trúc thư mục
-
 ```bash
 src/
 ├── api/            # Các thành phần quản lý nạp api

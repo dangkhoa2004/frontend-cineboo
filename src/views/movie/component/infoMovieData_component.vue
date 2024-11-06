@@ -3,8 +3,8 @@
     <div class="booking-container" v-if="movie">
       <div class="booking-movie-poster">
         <img :src="movie.anhPhim" alt="Movie Poster" />
-        <button class="btn nav_btn draw-border">
-          <a href="#lich-chieu">ĐẶT NGAY</a>
+        <button class="btn draw-border">
+          <a>ĐẶT NGAY</a>
         </button>
       </div>
       <div class="booking-movie-info">
@@ -19,7 +19,7 @@
         <div class="booking-movie-details">
           <p><strong>Quốc gia:</strong> <span>{{ movie.quocGia }}</span></p>
           <p><strong>Thể loại:</strong> <span>{{ genres }}</span></p>
-          <p><strong>Đạo diễn:</strong> <span>{{ movie.dienVien }}</span></p>
+          <p><strong>Đạo diễn:</strong> <span>{{ movie.daoDien }}</span></p>
           <p><strong>Diễn viên:</strong> <span>{{ movie.dienVien }}</span></p>
         </div>
       </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { fetchMovieById } from "@/api/movie";
 
@@ -41,17 +41,26 @@ export default {
   setup() {
     const route = useRoute();
     const movie = ref(null);
-    const genres = ref("");
+    const genres = computed(() => {
+      if (movie.value) {
+        return movie.value.danhSachTLPhims
+          .map((item) => item.theLoaiPhim.tenTheLoai)
+          .join(", ");
+      }
+      return "";
+    });
+
+    const formattedReleaseDate = computed(() => {
+      if (movie.value && movie.value.ngayRaMat) {
+        return new Date(movie.value.ngayRaMat).toLocaleDateString();
+      }
+      return "";
+    });
 
     const fetchMovieData = async (movieId) => {
       try {
         const data = await fetchMovieById(movieId);
         movie.value = data;
-
-        // Map genres
-        genres.value = data.danhSachTLPhims
-          .map((item) => item.theLoaiPhim.tenTheLoai)
-          .join(", ");
       } catch (error) {
         console.error("Component [Lỗi khi xử lý dữ liệu]:", error);
       }
@@ -63,13 +72,6 @@ export default {
         fetchMovieData(movieId);
       } else {
         console.error("No movie ID found in route parameters.");
-      }
-    });
-
-    const formattedReleaseDate = ref("");
-    onMounted(() => {
-      if (movie.value) {
-        formattedReleaseDate.value = new Date(movie.value.ngayRaMat).toLocaleDateString();
       }
     });
 

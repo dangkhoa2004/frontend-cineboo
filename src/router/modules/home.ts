@@ -9,8 +9,8 @@ const homeRoutes: RouteRecordRaw[] = [
     component: Layout,
     meta: {
       title: 'Dashboard',
-      // requiresAuth: true,
-      // roles: ['admin'],
+      requiresAuth: true,
+      roles: ['admin'],
     },
     children: homeChildrenRoutes,
   },

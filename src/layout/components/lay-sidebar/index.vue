@@ -22,7 +22,7 @@
               class="sidebar__link"
               active-class="active-link"
             >
-              <i class="ri-calendar-line"></i>
+              <i class="ri-table-line"></i>
               <span>{{ $t("message.invoice_man") }}</span>
             </router-link>
             <router-link
@@ -30,7 +30,7 @@
               class="sidebar__link"
               active-class="active-link"
             >
-              <i class="ri-time-fill"></i>
+              <i class="ri-film-fill"></i>
               <span>{{ $t("message.movie_man") }}</span>
             </router-link>
           </div>
@@ -80,12 +80,27 @@
       </div>
 
       <div class="sidebar__actions">
-        <router-link to="/dang-xuat" class="sidebar__link">
+        <button class="sidebar__link" @click.prevent="logout">
           <i class="ri-door-open-fill"></i>
           <span>{{ $t("message.signout") }}</span>
-        </router-link>
+        </button>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+import { logout as authLogout } from "@/api/authService";
+
+export default {
+  methods: {
+    logout() {
+      authLogout();
+      window.location.reload();
+      this.$router.push('/dang-nhap');
+    }
+  }
+};
+</script>
+
 <style src="./assets/styles.css"></style>

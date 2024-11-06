@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { fetchInvoices } from "@/api/invoice.ts";
+import { fetchInvoices } from "@/api/invoice";
 
 export default {
   data() {

@@ -1,121 +1,109 @@
 <template>
-  <div id="thong-tin">
-    <div class="schedule-container">
-      <div class="schedule-header">
-        <h2>THÔNG TIN</h2>
-        <div class="date-selector"></div>
-      </div>
-      <section class="movie_checkout_content">
-        <div class="movie_checkout_details shadow">
-          <div class="movie_checkout_details__item">
-            <div class="movie_checkout_item__image">
-              <img class="movie_checkout_iphone" :src="movie.imageUrl" alt="" />
-            </div>
-            <div class="movie_checkout_item__details">
-              <div class="movie_checkout_item__title">
-                <h1>{{ movie.title }}</h1>
-              </div>
-              <div class="ticket">
-                <div class="movie-info">
-                  <p>
-                    <strong>{{ theaterName }}</strong> - RẠP {{ room }}
-                  </p>
-                  <p>
-                    Suất: <strong>{{ showtime }}</strong> - {{ showtimeDate }}
-                  </p>
-                </div>
-                <hr class="dotted-line" />
-                <div class="seat-info">
-                  <p>
-                    {{ ticketCount }}x Ghế<span class="price"
-                      >{{ totalticketPrice }} ₫</span
-                    >
-                  </p>
-                  <p>Ghế: {{ getSelectedSeats }}</p>
-                </div>
-                <hr class="dotted-line" />
-                <div class="total-info">
-                  <p>
-                    <strong>Tổng cộng</strong
-                    ><span class="total-price">{{ totalAmount }} ₫</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <infoCustomerData_component />
-        <div class="movie_checkout_container">
-          <div class="movie_checkout_actions">
-            <a href="" class="btn nav_btn draw-border">TIẾP TỤC THANH TOÁN </a>
-          </div>
-        </div>
-      </section>
+<div id="thong-tin">
+  <div class="schedule-container">
+    <div class="schedule-header">
+      <h2>THÔNG TIN</h2>
+      <div class="date-selector"></div>
     </div>
+    <section class="movie_checkout_content">
+      <div class="movie_checkout_details shadow">
+        <div class="movie_checkout_details__item">
+          <div class="movie_checkout_item__image">
+            <img class="movie_checkout_iphone" src="@/assets/img/joker.webp" alt="" />
+          </div>
+          <div class="movie_checkout_item__details">
+            <div class="movie_checkout_item__title">
+              <h1>Joker: Folie à Deux Điên Có Đôi</h1>
+            </div>
+            <div class="ticket">
+              <div class="movie-info">
+                <p><strong>CineBoo Hải Phòng</strong> - RẠP 6</p>
+                <p>Suất: <strong>10:45</strong> - Thứ Sáu, 16/10/2024</p>
+              </div>
+              <hr class="dotted-line" />
+              <div class="seat-info">
+                <!-- Hiển thị số lượng ghế và giá vé -->
+                <p>
+                  {{ ticketCount }}x Ghế
+                  <span class="price">{{ ticketPrice }} ₫</span>
+                </p>
+                <p>Ghế: {{ getSelectedSeats }}</p>
+              </div>
+              <hr class="dotted-line" />
+              <div class="total-info">
+                <!-- Tính tổng tiền -->
+                <p>
+                  <strong>Tổng cộng</strong><span class="total-price">{{ totalAmount }} ₫</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <infoCustomerData_component />
+      <div class="movie_checkout_container">
+        <div class="movie_checkout_actions">
+          <a href="" class="btn nav_btn draw-border">TIẾP TỤC THANH TOÁN</a>
+        </div>
+      </div>
+    </section>
   </div>
+</div>
 </template>
 
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
-import { onMounted, computed, watch } from "vue";
 import EventBus from "@/store/eventBus.ts";
-import { fetchShowtimesByMovieId } from "@/api/movie"; // Nhập hàm fetchShowtimesByMovieId từ API
 
 export default {
   components: { infoCustomerData_component },
   data() {
     return {
-      ticketCount: 0,
-      movie: {
-        title: "",
-        imageUrl: "",
-      },
-      theaterName: "", // Thay thế bằng giá trị thực tế từ API
-      room: "", // Thay thế bằng giá trị thực tế từ API
-      showtime: "", // Thay thế bằng giá trị thực tế từ API
-      showtimeDate: "", // Thay thế bằng giá trị thực tế từ API
+      ticketPrice: 0,  // Giá vé sẽ được tải từ API
     };
   },
   computed: {
+    // Lấy danh sách ghế đã chọn và hiển thị chúng
     getSelectedSeats() {
       return Array.isArray(EventBus.selectedSeats)
         ? EventBus.selectedSeats.join(", ")
         : "";
     },
     totalAmount() {
-      const ticketPrice = 160000;
-      const ticketTotal = EventBus.ticketCount * ticketPrice;
-      return ticketTotal;
+      return EventBus.totalAmount;
     },
-    totalticketPrice() {
-      const ticketPrice = 160000;
-      return this.ticketCount * ticketPrice;
+    ticketCount() {
+      return EventBus.ticketCount;
     },
   },
-  mounted() {
-    const movieId = EventBus.selectedMovieId; // Giả sử bạn lưu ID phim trong EventBus
+  watch: {
+    // Theo dõi sự thay đổi của số lượng ghế và cập nhật ticketCount
+    'EventBus.ticketCount': function (newCount) {
+      this.ticketCount = newCount;
+    },
+    // Cập nhật ticketCount khi danh sách ghế thay đổi
+    'EventBus.selectedSeats': function () {
+      this.ticketCount = EventBus.selectedSeats.length;
+    },
+  },
+  created() {
+    this.loadSeats(); // Nạp giá vé khi component được tạo
+  },
+  methods: {
+    async loadSeats() {
+      try {
+        const showtimeId = this.$route.params.idSuatChieu;
+        const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`);
+        const seatsData = await response.json();
 
-    // Gọi API để lấy thông tin lịch chiếu cho phim
-    fetchShowtimesByMovieId(movieId)
-      .then((showtimeData) => {
-        this.movie.title = showtimeData.movieTitle; // Lưu tên phim từ API
-        this.movie.imageUrl = showtimeData.imageUrl; // Lưu ảnh từ API
-        this.theaterName = showtimeData.theaterName; // Lưu tên rạp từ API
-        this.room = showtimeData.room; // Lưu phòng từ API
-        this.showtime = showtimeData.showtime; // Lưu thời gian suất từ API
-        this.showtimeDate = showtimeData.showtimeDate; // Lưu ngày suất từ API
-      })
-      .catch((error) => {
-        console.error("Component: [Đã xảy ra sự cố khi tải thông tin phim]", error);
-      });
-
-    // Theo dõi ticketCount từ EventBus
-    watch(
-      () => EventBus.ticketCount,
-      (newCount) => {
-        this.ticketCount = newCount;
+        // Nếu dữ liệu ghế có trả về giá vé, thì cập nhật ticketPrice
+        if (seatsData.length > 0) {
+          this.ticketPrice = seatsData[0].giaTien;
+        }
+      } catch (error) {
+        console.error("Lỗi khi nạp dữ liệu ghế từ suất chiếu", error);
       }
-    );
+    },
   },
 };
 </script>

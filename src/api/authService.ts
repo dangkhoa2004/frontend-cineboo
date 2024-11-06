@@ -1,68 +1,74 @@
-// authService.ts
-import { apiClient } from './api'; // Correct import statement
+// api/authService.ts
+import axios from "axios";
+import { resolveDirective } from "vue";
 
 const TOKEN_KEY = "token";
 const USER_INFO_KEY = "userInfo";
 
-interface LoginResponse {
-    token: string;
-    role: string;
+// Hàm sessionStorageUtil để làm việc với sessionStorage
+function sessionStorageUtil() {
+    return {
+        getItem: (key: string) => {
+            const item = sessionStorage.getItem(key);
+            return item ? JSON.parse(item) : null; // Trả về null nếu không có
+        },
+        setItem: (key: string, value: any) => {
+            sessionStorage.setItem(key, JSON.stringify(value));
+        },
+        removeItem: (key: string) => {
+            sessionStorage.removeItem(key);
+        },
+        clear: () => {
+            sessionStorage.clear();
+        }
+    };
 }
 
-export const fetchProfile = async (): Promise<any> => {
+// Lưu token và thông tin người dùng
+export async function login(username: string, password: string) {
     try {
-        const response = await apiClient.get('/api/user/profile'); // Use apiClient for profile fetch
-        return response.data;
-    } catch (error) {
-        console.error('Đã xảy ra sự cố với thao tác tìm nạp:', error);
-        throw error;
-    }
-};
-
-export const authService = {
-    login(username: string, password: string): Promise<LoginResponse> {
-        if (!username || !password) {
-            return Promise.reject('Vui lòng điền vào cả hai trường.');
+        const response = await axios.post("http://localhost:8080/api/user/login", {
+            username,
+            password,
+        });
+        if (response.status === 200) {
+            setToken(response.data.token);
+            setUserInfo(response.data); // Giả sử response.data chứa thông tin người dùng
+            console.log("Đăng nhập thành công:", response.data); // In ra dữ liệu phản hồi
+            return response.data;
+        } else {
+            throw new Error("Đăng nhập thất bại");
         }
-        return apiClient.post<LoginResponse>('/api/user/login', { username, password })
-            .then(response => {
-                const { token, role } = response.data;
-                localStorage.setItem(TOKEN_KEY, token);
-                localStorage.setItem(USER_INFO_KEY, JSON.stringify({ role }));
-                // Set CSRF token if available
-                const csrfToken = document.querySelector('meta[name="csrf-token"]');
-                if (csrfToken) {
-                    apiClient.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken.getAttribute('content') || '';
-                }
-                return response.data;
-            });
-    },
-};
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Đăng nhập thất bại");
+    }
+}
 
-// Other utility functions
-export function getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+export function setUserInfo(userInfo: any): void {
+    sessionStorageUtil().setItem(USER_INFO_KEY, userInfo);
 }
 
 export function setToken(token: string): void {
-    localStorage.setItem(TOKEN_KEY, token);
-}
-
-export function storageLocal(): Storage {
-    return window.localStorage;
+    sessionStorageUtil().setItem(TOKEN_KEY, token);
 }
 
 export function logout(): void {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_INFO_KEY);
+    sessionStorageUtil().removeItem(TOKEN_KEY);
+    sessionStorageUtil().removeItem(USER_INFO_KEY);
 }
 
+// Kiểm tra xem người dùng đã đăng nhập chưa
 export function isLoggedIn(): boolean {
-    const token = getToken();
-    return token !== null;
+    const token = sessionStorageUtil().getItem(TOKEN_KEY);
+    return token !== null; // Nếu có token thì người dùng đã đăng nhập
 }
 
-export function isAuthenticated(): boolean {
-    const token = getToken();
-    return !!token;
+// Lấy thông tin người dùng từ sessionStorage
+export function getUserInfo(): any | null {
+    return sessionStorageUtil().getItem(USER_INFO_KEY); // Trả về thông tin người dùng hoặc null nếu không có
+}
+
+// Kiểm tra xem token đã được lưu chưa
+export function hasToken(): boolean {
+    return sessionStorageUtil().getItem(TOKEN_KEY) !== null; // Trả về true nếu token đã được lưu
 }
