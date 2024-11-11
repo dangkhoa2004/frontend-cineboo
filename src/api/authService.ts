@@ -1,6 +1,5 @@
 // api/authService.ts
 import axios from "axios";
-import { resolveDirective } from "vue";
 
 const TOKEN_KEY = "token";
 const USER_INFO_KEY = "userInfo";
@@ -32,10 +31,15 @@ export async function login(username: string, password: string) {
             password,
         });
         if (response.status === 200) {
-            setToken(response.data.token);
-            setUserInfo(response.data); // Giả sử response.data chứa thông tin người dùng
-            console.log("Đăng nhập thành công:", response.data); // In ra dữ liệu phản hồi
-            return response.data;
+            const data = response.data;
+            setToken(data.token);
+            if (data.hasOwnProperty("khachHang")) {
+                setUserInfo(data.khachHang); // Lưu thông tin khách hàng
+            } else {
+                setUserInfo(data.nhanVien); // Lưu thông tin nhân viên nếu có
+            }
+            console.log("Đăng nhập thành công:", data);
+            return data;
         } else {
             throw new Error("Đăng nhập thất bại");
         }
@@ -43,6 +47,7 @@ export async function login(username: string, password: string) {
         throw new Error(error.response?.data?.message || "Đăng nhập thất bại");
     }
 }
+
 
 export function setUserInfo(userInfo: any): void {
     sessionStorageUtil().setItem(USER_INFO_KEY, userInfo);

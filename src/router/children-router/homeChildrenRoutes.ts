@@ -14,6 +14,13 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path: "thay-doi-thong-tin-hoa-don/:id",
+    name: "thay-doi-thong-tin-hoa-don",
+    components: {
+      listComponent: () => import("@/components/list-invoice/detail.vue"),
+    },
+  },
+  {
     path: "bang-phim",
     name: "bang-phim",
     components: {
