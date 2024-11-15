@@ -1,6 +1,6 @@
 <template>
-<div class="invoice-container">
-  <table>
+<div class="invoice-manager">
+  <table border="1">
     <thead>
       <tr>
         <th>Mã hoá đơn</th>
@@ -35,7 +35,7 @@
             {{ invoice.chiTietHoaDonList.join(', ') }}
           </span>
           <span v-else>
-            < trống >
+            < trống>
           </span>
         </td>
         <td>
@@ -97,5 +97,4 @@ export default {
   },
 };
 </script>
-
-<style src="./assets/styles.css" scoped></style>
+<style src="../assets/styles.css" scoped></style>

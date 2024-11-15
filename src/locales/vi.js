@@ -37,5 +37,9 @@ export default {
     movie_man: "Quản lý phim",
     contact_man: "Quản lý hỗ trợ",
     return_man: "Hoàn vé / Hoàn tiền",
+    voucher_man: "Quản lý Voucher",
+    pttt_man: "Quản lý PTTT",
+    employee_man: "Quản lý nhân viên",
+    customer_man: "Quản lý khách hàng",
   },
 };

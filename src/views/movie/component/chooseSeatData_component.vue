@@ -35,9 +35,6 @@
             <span>Ghế: {{ getSelectedSeats().join(", ") }}</span>
             <div class="movie_seat-amount">Giá: {{ totalAmount }} ₫</div>
           </div>
-          <button class="btn nav_btn draw-border" @click="handlePayNow">
-            <a id="pay-now">ĐẶT NGAY</a>
-          </button>
         </div>
       </div>
     </div>
@@ -62,10 +59,6 @@ export default {
     }
   },
   methods: {
-    handlePayNow() {
-      this.saveSelectedSeats();
-      this.$router.push({ name: 'payment' });
-    },
     async loadSeats(showtimeId) {
       try {
         const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`);

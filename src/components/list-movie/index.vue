@@ -1,6 +1,6 @@
 <template>
-<div class="movie-container">
-  <table>
+<div class="movie-manager">
+  <table border="1">
     <thead>
       <tr>
         <th>Ảnh</th>
@@ -74,5 +74,4 @@ export default {
   },
 };
 </script>
-
-<style src="./assets/styles.css" scoped></style>
+<style src="../assets/styles.css" scoped></style>

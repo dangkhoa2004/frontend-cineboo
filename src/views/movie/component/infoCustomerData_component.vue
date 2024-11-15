@@ -61,19 +61,18 @@
   </template>
   
   <script>
-  import { getUserInfo } from '@/api/authService'; // Đảm bảo import hàm getUserInfo từ authService
+  import { getUserInfo } from '@/api/authService';
   
   export default {
     data() {
       return {
-        userInfo: {} // Khai báo userInfo để lưu thông tin người dùng
+        userInfo: {}
       };
     },
     created() {
       const user = getUserInfo();
-      console.log('User info:', user); // Kiểm tra thông tin người dùng
       if (user) {
-        this.userInfo = { ...user }; // Cập nhật thông tin người dùng vào state
+        this.userInfo = { ...user };
       } else {
         console.log("Không có thông tin người dùng.");
       }

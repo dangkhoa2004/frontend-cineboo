@@ -78,9 +78,15 @@ export default {
     },
   },
   created() {
+    const user = getUserInfo();
+    console.log('User info:', user);
+    if (user) {
+      this.userInfo = { ...user };
+    } else {
+      console.log("Không có thông tin người dùng.");
+    }
     this.loadMovieData();
     this.loadSeats();
-    this.loadUserInfo(); // Load thông tin người dùng khi component được tạo
   },
   methods: {
     // Nạp dữ liệu phim
@@ -108,54 +114,57 @@ export default {
         console.error("Lỗi khi nạp dữ liệu ghế:", error);
       }
     },
-
-    // Tải thông tin người dùng
-    loadUserInfo() {
-      const user = getUserInfo();
-      if (user && user.maKhachHang) {
-        this.userInfo = user; // Cập nhật thông tin người dùng vào state
-        this.customerInfo = user; // Truyền thông tin khách hàng vào component con
-      } else {
-        console.log("Không có thông tin người dùng.");
-        this.$router.push("/login"); // Nếu không có thông tin người dùng, chuyển hướng tới trang đăng nhập
-      }
-    },
-
     // Xử lý thanh toán
+    // Đánh dấu hàm này là async để có thể sử dụng await
     async handlePayment() {
-      if (!this.userInfo || !this.userInfo.maKhachHang) {
-        console.error('Không có thông tin khách hàng');
+      // Lấy danh sách ghế đã chọn từ EventBus
+      const selectedSeatsIndex = EventBus.selectedSeats;
+
+      if (!selectedSeatsIndex || selectedSeatsIndex.length === 0) {
+        console.error("Chưa chọn ghế nào");
+        alert("Vui lòng chọn ghế trước khi thanh toán.");
         return;
       }
 
-      const customerInfo = this.userInfo; // Lấy thông tin từ userInfo đã được cập nhật
+      const customerInfo = this.userInfo;
+      const customerID = customerInfo.maKhachHang || customerInfo.id || customerInfo.maNhanVien;
+      if (!customerID) {
+        console.error("Không xác định được ID khách hàng.");
+        return;
+      }
+
       const movieInfo = this.movieDetails;
-      if (!movieInfo) {
-        console.error('Không có thông tin phim');
+      if (!movieInfo || !movieInfo.id) {
+        console.error("Không có thông tin phim");
         return;
       }
 
       const currentTime = new Date();
-      const formattedTime = format(currentTime, 'yyyy-MM-dd\'T\'HH:mm:ss');
+      const formattedTime = format(currentTime, "yyyy-MM-dd'T'HH:mm:ss");
 
       const invoiceData = {
-        D_KhachHang: customerInfo.maKhachHang, // Mã khách hàng
-        ID_Phim: movieInfo.id, // ID phim
-        ID_PTTT: 1, // ID phương thức thanh toán mặc định là 1
-        MaHoaDon: `HD-${formattedTime.replace(/[-T:]/g, '')}`, // Mã hóa đơn, sử dụng thời gian để tạo mã duy nhất
-        SoLuong: EventBus.ticketCount, // Số lượng vé
-        ThoiGianThanhToan: formattedTime, // Thời gian thanh toán
-        TongSoTien: EventBus.totalAmount // Tổng số tiền
+        khachHangId: customerID,
+        phimId: movieInfo.id,
+        chiTietHoaDonList: selectedSeatsIndex.map(index => ({
+          ghe: `S${index + 1}`
+        })),
+        ID_PTTT: 1,
+        MaHoaDon: `HD-${formattedTime.replace(/[-T:]/g, '')}`,
+        SoLuong: EventBus.ticketCount,
+        ThoiGianThanhToan: formattedTime,
+        TongSoTien: EventBus.totalAmount
       };
 
       try {
-        const invoice = await createInvoice(invoiceData);
+        const invoice = await createInvoice(invoiceData);  // Sử dụng await trong async function
         console.log("Hóa đơn đã được tạo:", invoice);
-        this.$router.push("/thanh-toan"); // Chuyển hướng đến trang thanh toán
+        this.$router.push("/thanh-toan");
       } catch (error) {
         console.error("Lỗi khi tạo hóa đơn:", error);
       }
+
     }
   }
 };
 </script>
+<!-- choosePaymentData_component.vue -->

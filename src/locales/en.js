@@ -37,5 +37,9 @@ export default {
     movie_man: "Manage movies",
     contact_man: "Manage customer",
     return_man: "Refund ticket / Refund money",
+    voucher_man: "Manage voucher",
+    pttt_man: "Manage type of payment",
+    employee_man: "Manage Employee",
+    customer_man: "Manage Customer",
   },
 };
