@@ -77,3 +77,34 @@ export const createInvoice = async (invoiceData: any) => {
         throw error;
     }
 };
+
+/* create-payment-link */
+// export const createInvoiceQr = async (id: string) => {
+//     try {
+//         const response = await apiClient.get(`/payos/create-payment-link/url/${id}`);
+//         if (!response.status) {
+//             throw new Error('Không thể khởi tạo trang thanh toán');
+//         }
+//     } catch (error) {
+//         if (axios.isAxiosError(error)) {
+//             console.error('API: [Lỗi khi xoá hoá đơn]', error.response ? error.response.data : error.message);
+//         } else {
+//             console.error('API: [Lỗi không xác định]', error);
+//         }
+//         throw error;
+//     }
+// };
+// /* Lấy hoá đơn theo id */
+export const createInvoiceQr = async (id: string) => {
+    try {
+        const response = await apiClient.get(`/payos/create-payment-link/url/${id}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};

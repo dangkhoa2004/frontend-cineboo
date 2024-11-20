@@ -43,10 +43,14 @@
         <!-- Payment Method -->
         <div class="card payment-method">
             <h3>Phương thức thanh toán</h3>
-            <div><strong>Mã phương thức thanh toán:</strong> {{ invoice.pttt.maPTTT }}</div>
-            <div><strong>Hình thức:</strong> {{ invoice.pttt.tenPTTT }}</div>
+            <div v-if="invoice.pttt">
+                <div><strong>Mã phương thức thanh toán:</strong> {{ invoice.pttt.maPTTT }}</div>
+                <div><strong>Hình thức:</strong> {{ invoice.pttt.tenPTTT }}</div>
+            </div>
+            <div v-else>
+                <p><strong>Không có phương thức thanh toán</strong></p>
+            </div>
         </div>
-
         <!-- Invoice Information -->
         <div class="card invoice-info">
             <h3>Thông tin hoá đơn</h3>
@@ -64,7 +68,11 @@
             <h3>Chi tiết hoá đơn</h3>
             <div v-if="invoice.chiTietHoaDonList.length > 0">
                 <ul>
-                    <li v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">{{ item }}</li>
+                    <li v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">
+                        <strong>Mã ghế:</strong> {{ item.ghe.maGhe }} <br>
+                        <strong>Giá tiền:</strong> {{ formatCurrency(item.ghe.giaTien) }} <br>
+                        <strong>Phòng chiếu:</strong> {{ item.ghe.phongChieu.maPhong }}
+                    </li>
                 </ul>
             </div>
             <div v-else>

@@ -3,7 +3,10 @@
     <h2>Thông tin phim</h2>
     <div v-if="movie">
         <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
-        <h3>{{ movie.tenPhim }}</h3>
+        <div>
+            <label>Tên phim:</label>
+            <input v-model="movie.tenPhim" />
+        </div>
         <div>
             <label>Mã phim:</label>
             <input v-model="movie.maPhim" />
@@ -71,6 +74,17 @@ export default {
         await this.loadMovie();
     },
     methods: {
+        getGenreIdByName(genreName) {
+            // Implement a way to map genre names to their IDs
+            const genres = [
+                { name: "Action", id: 1 },
+                { name: "Comedy", id: 2 },
+                // Add other genres as needed
+            ];
+
+            const genre = genres.find(g => g.name.toLowerCase() === genreName.toLowerCase());
+            return genre ? genre.id : null; // Return the ID if found, or null if not
+        },
         async loadMovie() {
             const movieId = this.$route.params.id;
             try {
@@ -86,25 +100,23 @@ export default {
             try {
                 const updatedMovie = {
                     ...this.movie,
-                    ngayRaMat: new Date(this.formattedReleaseDate).getTime(),
-                    danhSachTLPhims: this.genresInput.split(',').map(genre => ({
-                        theLoaiPhim: { tenTheLoai: genre.trim() }
+                    ngayRaMat: new Date(this.formattedReleaseDate).toISOString(),
+                    danhSachTLPhims: this.genresInput.split(',').map((genre) => ({
+                        theLoaiPhim: {
+                            id: this.getGenreIdByName(genre.trim())
+                        },
+                        trangThai: 0
                     })),
+                    gioiHanDoTuoi: {
+                        id: this.movie.gioiHanDoTuoi.id
+                    }
                 };
-
                 console.log("Dữ liệu sẽ gửi:", updatedMovie);
-
-                // Call updateMovieById instead of fetch
                 const response = await updateMovieById(this.movie.id, updatedMovie);
-
-                if (!response.ok) {
-                    const errorResponse = await response.json();
-                    console.error("Lỗi từ server:", errorResponse);
-                    alert("Cập nhật thông tin phim thất bại: " + errorResponse.message);
-                    return;
+                console.log("Response từ server:", response);
+                if (response) {
+                    alert("Cập nhật thông tin phim thành công.");
                 }
-
-                alert("Thông tin phim đã được cập nhật thành công!");
             } catch (error) {
                 console.error("Lỗi khi cập nhật phim:", error);
                 alert("Cập nhật thông tin phim thất bại.");
@@ -117,4 +129,4 @@ export default {
 };
 </script>
 
-<style src="./assets/styles.css" scoped></style>
+<!-- <style src="./assets/styles.css" scoped></style> -->

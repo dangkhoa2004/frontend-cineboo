@@ -52,7 +52,7 @@
             <div v-else>
               <p>Không có thông tin khách hàng. Vui lòng đăng nhập để tiếp tục.</p>
               <!-- Hiển thị nút đăng nhập nếu không có thông tin khách hàng -->
-              <router-link to="/login" class="btn">Đăng nhập</router-link>
+              <router-link to="/dang-nhap" class="btn">Đăng nhập</router-link>
             </div>
           </div>
         </div>

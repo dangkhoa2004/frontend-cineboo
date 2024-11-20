@@ -49,7 +49,7 @@
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
-import { createInvoice } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
+import { createInvoice, createInvoiceQr } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { format } from 'date-fns'; // Định dạng ngày giờ
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
 
@@ -62,6 +62,7 @@ export default {
       selectedSeats: [], // Ghế đã chọn
       movieDetails: {}, // Thông tin phim
       userInfo: {}, // Thông tin người dùng
+      idPhongChieu: null,
     };
   },
   computed: {
@@ -109,6 +110,8 @@ export default {
         const seatsData = await response.json();
         if (seatsData.length > 0) {
           this.ticketPrice = seatsData[0].giaTien;
+          // Lưu `id_PhongChieu` từ dữ liệu trả về
+          this.idPhongChieu = seatsData[0].phongChieu.id;
         }
       } catch (error) {
         console.error("Lỗi khi nạp dữ liệu ghế:", error);
@@ -117,7 +120,6 @@ export default {
     // Xử lý thanh toán
     // Đánh dấu hàm này là async để có thể sử dụng await
     async handlePayment() {
-      // Lấy danh sách ghế đã chọn từ EventBus
       const selectedSeatsIndex = EventBus.selectedSeats;
 
       if (!selectedSeatsIndex || selectedSeatsIndex.length === 0) {
@@ -146,7 +148,8 @@ export default {
         khachHangId: customerID,
         phimId: movieInfo.id,
         chiTietHoaDonList: selectedSeatsIndex.map(index => ({
-          ghe: `S${index + 1}`
+          maGhe: `${index}`,
+          id_PhongChieu: this.idPhongChieu
         })),
         ID_PTTT: 1,
         MaHoaDon: `HD-${formattedTime.replace(/[-T:]/g, '')}`,
@@ -154,16 +157,33 @@ export default {
         ThoiGianThanhToan: formattedTime,
         TongSoTien: EventBus.totalAmount
       };
-
       try {
-        const invoice = await createInvoice(invoiceData);  // Sử dụng await trong async function
+        // Tạo hóa đơn
+        const invoice = await createInvoice(invoiceData);
         console.log("Hóa đơn đã được tạo:", invoice);
-        this.$router.push("/thanh-toan");
+        // Lấy id từ kết quả trả về của createInvoice
+        const idHoaDon = invoice.id;
+        if (!idHoaDon) {
+          console.error("Không tìm thấy ID hóa đơn.");
+          return;
+        }
+        // Tạo QR thanh toán
+        try {
+          // const qrData = await createInvoiceQr(idHoaDon);
+          console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
+          if (qrData && qrData.payment) {
+            window.open(qrData.payment, '_blank'); // '_blank' opens in a new tab/window
+          } else {
+            console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
+          }
+        } catch (error) {
+          console.error("Lỗi khi tạo QR thanh toán:", error);
+        }
       } catch (error) {
-        console.error("Lỗi khi tạo hóa đơn:", error);
+        console.error("Lỗi khi tạo hóa đơn hoặc QR thanh toán:", error);
       }
-
     }
+
   }
 };
 </script>
