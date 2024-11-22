@@ -1,6 +1,6 @@
 <template>
 <div class="invoice-manager">
-  <table border="1">
+  <table>
     <thead>
       <tr>
         <th>Mã hoá đơn</th>
@@ -11,7 +11,7 @@
         <th>Tổng tiền</th>
         <th>Thời gian thanh toán</th>
         <th>Trạng thái</th>
-        <th>Chi tiết hoá đơn</th>
+        <!-- <th>Chi tiết hoá đơn</th> -->
         <th>Thao tác</th>
       </tr>
     </thead>
@@ -29,18 +29,16 @@
         <td>
           <span>{{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán" : "Chưa thanh toán" }}</span>
         </td>
-        <td>
-          <!-- Display invoice details or "Chưa có chi tiết" if empty -->
+        <!-- <td>
           <span v-if="invoice.chiTietHoaDonList.length > 0">
             {{ invoice.chiTietHoaDonList.join(', ') }}
           </span>
           <span v-else>
             < trống>
           </span>
-        </td>
+        </td> -->
         <td>
-          <button @click="viewInvoiceDetails(invoice)">Xem chi tiết</button>
-          <button @click="deleteInvoice(invoice.id)">Xoá</button>
+          <button @click="viewInvoiceDetails(invoice)">Xem</button>
         </td>
       </tr>
     </tbody>
@@ -49,7 +47,7 @@
 </template>
 
 <script>
-import { fetchInvoices, deleteInvoiceById } from "@/api/invoice";
+import { fetchInvoices } from "@/api/invoice";
 
 export default {
   data() {
@@ -81,20 +79,7 @@ export default {
     viewInvoiceDetails(invoice) {
       this.$router.push({ name: 'thay-doi-thong-tin-hoa-don', params: { id: invoice.id } });
     },
-    async deleteInvoice(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá hoá đơn này?");
-      if (confirmDelete) {
-        try {
-          await deleteInvoiceById(id);
-          this.invoices = this.invoices.filter(invoice => invoice.id !== id);
-          alert("Hoá đơn đã được xoá thành công.");
-        } catch (error) {
-          console.error("Lỗi khi xoá hoá đơn:", error);
-          alert("Có lỗi xảy ra khi xoá hoá đơn.");
-        }
-      }
-    },
   },
 };
 </script>
-<style src="../assets/styles.css" scoped></style>
+<style src="./assets/styles.css" scoped></style>

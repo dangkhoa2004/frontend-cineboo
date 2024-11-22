@@ -1,6 +1,6 @@
 <template>
 <div class="voucher-manager">
-  <table border="1">
+  <table>
     <thead>
       <tr>
         <th>Mã voucher</th>
@@ -95,4 +95,4 @@ export default {
   },
 };
 </script>
-<style src="../assets/styles.css" scoped></style>
+<style src="./assets/styles.css" scoped></style>

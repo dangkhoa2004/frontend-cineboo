@@ -128,10 +128,18 @@ export default {
         return;
       }
 
+      const userConfirmed = confirm("Bạn có chắc chắn muốn tiếp tục thanh toán?");
+      if (!userConfirmed) {
+        // Người dùng chọn "Cancel"
+        return;
+      }
+
       const customerInfo = this.userInfo;
       const customerID = customerInfo.maKhachHang || customerInfo.id || customerInfo.maNhanVien;
       if (!customerID) {
         console.error("Không xác định được ID khách hàng.");
+        alert("Vui lòng đăng nhập để mua vé.");
+        window.location.href = "/dang-nhap"; // Chuyển hướng về trang đăng nhập
         return;
       }
 
@@ -157,33 +165,41 @@ export default {
         ThoiGianThanhToan: formattedTime,
         TongSoTien: EventBus.totalAmount
       };
+
       try {
-        // Tạo hóa đơn
         const invoice = await createInvoice(invoiceData);
         console.log("Hóa đơn đã được tạo:", invoice);
-        // Lấy id từ kết quả trả về của createInvoice
         const idHoaDon = invoice.id;
         if (!idHoaDon) {
           console.error("Không tìm thấy ID hóa đơn.");
           return;
         }
-        // Tạo QR thanh toán
         try {
-          // const qrData = await createInvoiceQr(idHoaDon);
+          const qrData = await createInvoiceQr(idHoaDon);
           console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
           if (qrData && qrData.payment) {
-            window.open(qrData.payment, '_blank'); // '_blank' opens in a new tab/window
+            window.location.href = qrData.payment; // Chuyển hướng sang trang thanh toán
           } else {
             console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
           }
         } catch (error) {
           console.error("Lỗi khi tạo QR thanh toán:", error);
         }
+        // try {
+        //   const qrData = await createInvoiceQr(idHoaDon);
+        //   console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
+        //   if (qrData && qrData.payment) {
+        //     window.open(qrData.payment, '_blank');
+        //   } else {
+        //     console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
+        //   }
+        // } catch (error) {
+        //   console.error("Lỗi khi tạo QR thanh toán:", error);
+        // }
       } catch (error) {
         console.error("Lỗi khi tạo hóa đơn hoặc QR thanh toán:", error);
       }
     }
-
   }
 };
 </script>

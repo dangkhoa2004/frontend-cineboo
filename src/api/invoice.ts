@@ -15,6 +15,20 @@ export const fetchInvoices = async (params = {}) => {
         throw error;
     }
 };
+/* Lấy danh sách hoá đơn */
+export const updateInvoice = async (params = {}) => {
+    try {
+        const response = await apiClient.get('/hoadon/get', { params });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
 
 /* Lấy hoá đơn theo id */
 export const fetchInvoiceById = async (id: string) => {
