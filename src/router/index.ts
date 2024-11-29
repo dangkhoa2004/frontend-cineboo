@@ -7,7 +7,9 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { isLoggedIn, getUserInfo } from "@/api/authService"; // Nhập các hàm từ authService
 import notFoundComponent from '@/components/notFoundComponent/index.vue';
-
+import BarView from "@/views/statistic/BarView.vue"; 
+import ScatterView from "@/views/statistic/ScatterView.vue"; 
+import PieView from "@/views/statistic/PieView.vue"; 
 const routes = [
   {
     path: "/",
@@ -17,7 +19,22 @@ const routes = [
   ...homeRoutes,
   ...bookingRoutes,
   ...movieRoutes,
-  { path: '/:pathMatch(.*)*', component: notFoundComponent }
+  { path: '/:pathMatch(.*)*', component: notFoundComponent },
+  {
+    path: '/bar',
+    name: 'bar',
+    component: BarView,
+},
+{
+    path: '/scatter',
+    name: 'scatter',
+    component: ScatterView,
+},
+{
+    path: '/pie',
+    name: 'pie',
+    component: PieView,
+},
 ];
 
 const router = createRouter({
