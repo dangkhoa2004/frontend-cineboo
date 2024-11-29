@@ -49,7 +49,7 @@
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
-import { createInvoice, createInvoiceQr } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
+import { createInvoice, createInvoiceQr,setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { format } from 'date-fns'; // Định dạng ngày giờ
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
 
@@ -63,6 +63,7 @@ export default {
       movieDetails: {}, // Thông tin phim
       userInfo: {}, // Thông tin người dùng
       idPhongChieu: null,
+	  paymentMethod:1,//I really hate optionsAPI. For now, only paymentMethod 1
     };
   },
   computed: {
@@ -103,20 +104,32 @@ export default {
     },
 
     // Nạp dữ liệu ghế và giá vé
-    async loadSeats() {
-      const showtimeId = this.$route.params.idSuatChieu;
-      try {
-        const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`);
-        const seatsData = await response.json();
-        if (seatsData.length > 0) {
-          this.ticketPrice = seatsData[0].giaTien;
-          // Lưu `id_PhongChieu` từ dữ liệu trả về
-          this.idPhongChieu = seatsData[0].phongChieu.id;
-        }
-      } catch (error) {
-        console.error("Lỗi khi nạp dữ liệu ghế:", error);
-      }
-    },
+  async loadSeats() {
+  const showtimeId = this.$route.params.idSuatChieu;
+  let token = sessionStorage.getItem('token'); //PLS PORT THIS TO A HELPER METHOD LATER
+token = token.substring(1,token.length-1);//PLS PORT THIS TO A HELPER METHOD LATER
+ 
+  try {
+    const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': token, //  the JWT to the Authorization header
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const seatsData = await response.json();
+    
+    if (seatsData.length > 0) {
+      this.ticketPrice = seatsData[0].giaTien;
+      // Save the `id_PhongChieu` from the returned data
+      this.idPhongChieu = seatsData[0].phongChieu.id;
+    }
+  } catch (error) {
+    console.error("Lỗi khi nạp dữ liệu ghế:", error);
+  }
+}
+,
     // Xử lý thanh toán
     // Đánh dấu hàm này là async để có thể sử dụng await
     async handlePayment() {
@@ -146,21 +159,18 @@ export default {
 
       const invoiceData = {
         khachHangId: customerID,
-        phimId: movieInfo.id,
+        suatChieuId: this.$route.params.idSuatChieu,//Yêu cầu ID_SuatChieu vào đây, tạm thời lấy từ routeParam
         chiTietHoaDonList: selectedSeatsIndex.map(index => ({
-          maGhe: `${index}`,
-          id_PhongChieu: this.idPhongChieu
-        })),
-        ID_PTTT: 1,
-        MaHoaDon: `HD-${formattedTime.replace(/[-T:]/g, '')}`,
-        SoLuong: EventBus.ticketCount,
-        ThoiGianThanhToan: formattedTime,
-        TongSoTien: EventBus.totalAmount
+          maGhe: `${index}`
+        }))
       };
-      try {
-        // Tạo hóa đơn
-        const invoice = await createInvoice(invoiceData);
-        console.log("Hóa đơn đã được tạo:", invoice);
+      try { 
+        // Tạo hóa đơn rỗng
+        let invoice = await createInvoice(invoiceData);
+		 
+		//Đặt PTTT
+		invoice = await setPaymentMethod(invoice.id,this.paymentMethod);
+		
         // Lấy id từ kết quả trả về của createInvoice
         const idHoaDon = invoice.id;
         if (!idHoaDon) {
@@ -169,7 +179,7 @@ export default {
         }
         // Tạo QR thanh toán
         try {
-          // const qrData = await createInvoiceQr(idHoaDon);
+           const qrData = await createInvoiceQr(idHoaDon);
           console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
           if (qrData && qrData.payment) {
             window.open(qrData.payment, '_blank'); // '_blank' opens in a new tab/window
