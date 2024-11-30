@@ -77,3 +77,20 @@ export function getUserInfo(): any | null {
 export function hasToken(): boolean {
     return sessionStorageUtil().getItem(TOKEN_KEY) !== null; // Trả về true nếu token đã được lưu
 }
+// Kiểm tra vai trò người dùng và phân quyền truy cập module
+export function getUserRole(): string | null {
+    const userInfo = getUserInfo();
+    return userInfo?.role || null;
+}
+
+export function canAccessModule(moduleName: string): boolean {
+    const role = getUserRole() as "khachHang" | "nhanVien";
+    const permissions = {
+        khachHang: ["ungDung", "thongTin"],
+        nhanVien: [
+            "ungDung", "thongTin", "hoaDon", "phims", "vouchers", "tinNhan",
+            "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan"
+        ],
+    };
+    return role ? permissions[role]?.includes(moduleName) || false : false;
+}

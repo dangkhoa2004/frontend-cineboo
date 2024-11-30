@@ -3,21 +3,53 @@
     <h2>Chi tiết voucher</h2>
     <div v-if="voucher">
         <div class="card voucher-info">
-            <div><strong>Mã voucher:</strong> {{ voucher.maVoucher }}</div>
-            <div><strong>Giá trị đổi:</strong> {{ formatCurrency(voucher.giaTriDoi) }}</div>
-            <div><strong>Trừ tiền phần trăm:</strong> {{ voucher.truTienPhanTram }}%</div>
-            <div><strong>Trừ tiền số:</strong> {{ formatCurrency(voucher.truTienSo) }}</div>
-            <div><strong>Số tiền tối thiểu:</strong> {{ formatCurrency(voucher.soTienToiThieu) }}</div>
-            <div><strong>Giảm tối đa:</strong> {{ formatCurrency(voucher.giamToiDa) }}</div>
-            <div><strong>Ngày bắt đầu:</strong> {{ formatDate(voucher.ngayBatDau) }}</div>
-            <div><strong>Ngày kết thúc:</strong> {{ formatDate(voucher.ngayKetThuc) }}</div>
-            <div><strong>Số lượng:</strong> {{ voucher.soLuong }}</div>
-            <div><strong>Trạng thái voucher:</strong>
-                {{ voucher.trangThaiVoucher === 1 ? "Đang áp dụng" : "Hết hạn" }}
+            <div>
+                <label>Mã voucher:</label>
+                <input v-model="voucher.maVoucher" disabled />
+            </div>
+            <div>
+                <label>Giá trị đổi:</label>
+                <input v-model="voucher.giaTriDoi" :placeholder="voucher.giaTriDoi ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Trừ tiền phần trăm:</label>
+                <input v-model="voucher.truTienPhanTram"
+                    :placeholder="voucher.truTienPhanTram !== undefined ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Trừ tiền số:</label>
+                <input v-model="voucher.truTienSo" :placeholder="voucher.truTienSo ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Số tiền tối thiểu:</label>
+                <input v-model="voucher.soTienToiThieu" :placeholder="voucher.soTienToiThieu ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Giảm tối đa:</label>
+                <input v-model="voucher.giamToiDa" :placeholder="voucher.giamToiDa ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Ngày bắt đầu:</label>
+                <input type="date" v-model="formattedStartDate" :placeholder="formattedStartDate ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Ngày kết thúc:</label>
+                <input type="date" v-model="formattedEndDate" :placeholder="formattedEndDate ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Số lượng:</label>
+                <input v-model="voucher.soLuong" :placeholder="voucher.soLuong ? '' : '<trống>'" />
+            </div>
+            <div>
+                <label>Trạng thái voucher:</label>
+                <input v-model="voucher.trangThaiVoucher" :disabled="true"
+                    :placeholder="voucher.trangThaiVoucher ? '' : '<trống>'" />
             </div>
         </div>
-        <!-- Back Button -->
-        <button @click="goBack">Trở về</button>
+        <div class="button-container">
+            <button @click="goBack">Trở về</button>
+            <button @click="saveVoucher">Lưu lại</button>
+        </div>
     </div>
     <div v-else>
         <p>Đang tải thông tin voucher...</p>
@@ -36,6 +68,14 @@ export default {
     },
     async mounted() {
         await this.loadVoucher();
+    },
+    computed: {
+        formattedStartDate() {
+            return this.voucher?.ngayBatDau ? this.formatDate(this.voucher.ngayBatDau) : '';
+        },
+        formattedEndDate() {
+            return this.voucher?.ngayKetThuc ? this.formatDate(this.voucher.ngayKetThuc) : '';
+        },
     },
     methods: {
         async loadVoucher() {
@@ -64,4 +104,5 @@ export default {
     },
 };
 </script>
+
 <style src="./assets/styles.css" scoped></style>

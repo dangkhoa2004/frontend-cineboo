@@ -1,0 +1,148 @@
+h2,
+h3 {
+    color: var(--first-color);
+}
+
+button {
+    margin: 10px 5px;
+    background-color: var(--first-color);
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+input:disabled {
+    background-color: #f0f0f0;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button:hover {
+    background-color: black;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--first-color);
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--first-color);
+}
+
+.card div {
+    margin-bottom: 10px;
+}
+
+.card div strong {
+    color: var(--first-color);
+}
+
+.invoice-manager {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px;
+    overflow-x: auto;
+}
+
+.invoice-detail {
+    width: 100%;
+    max-width: 1000px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.invoice-detail .card {
+    margin: 15px 0;
+}
+
+.invoice-detail .card .voucher-info,
+.invoice-detail .card .payment-method {
+    background-color: #ecf0f1;
+}
+
+.invoice-detail .card.invoice-details ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.invoice-detail .card.invoice-details ul li {
+    margin-bottom: 15px;
+}
+
+.invoice-detail .card.invoice-details ul li strong {
+    color: var(--first-color);
+}
+
+.button-container button:last-child {
+    background-color: #2ecc71;
+}
+
+.button-container button:last-child:hover {
+    background-color: #27ae60;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .invoice-manager table {
+        font-size: 14px;
+    }
+
+    .invoice-detail {
+        padding: 15px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    button {
+        padding: 6px 12px;
+    }
+}

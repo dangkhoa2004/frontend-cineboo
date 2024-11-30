@@ -1,0 +1,155 @@
+h2,
+h3 {
+  color: #2c3e50;
+}
+
+button {
+  background-color: var(--first-color);
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: black;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #f0f0f0;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  margin: 10px 5px;
+}
+
+.voucher-manager {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.voucher-manager table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: var(--first-color);;
+  color: white;
+  font-weight: bold;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+.voucher-manager .voucher-info {
+  margin: 10px 0;
+}
+
+.voucher-manager .voucher-info label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.voucher-manager .voucher-info input {
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+.voucher-detail {
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.voucher-detail .voucher-info {
+  margin-bottom: 15px;
+}
+
+.voucher-detail .voucher-info label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.voucher-detail .voucher-info input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.voucher-detail .button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.voucher-detail .button-container button {
+  width: 48%;
+}
+
+.voucher-detail .button-container button:last-child {
+  background-color: #2ecc71;
+}
+
+.voucher-detail .button-container button:last-child:hover {
+  background-color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .voucher-manager table {
+    font-size: 14px;
+  }
+
+  .voucher-detail {
+    padding: 15px;
+  }
+
+  .voucher-detail .button-container button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .voucher-detail .voucher-info input {
+    font-size: 14px;
+  }
+
+  .voucher-manager .voucher-info input {
+    font-size: 14px;
+  }
+}

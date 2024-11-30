@@ -5,62 +5,118 @@
         <!-- Customer Information -->
         <div class="card customer-info">
             <h3>Thông tin khách hàng</h3>
-            <div><strong>Họ và tên:</strong> {{ `${invoice.khachHang.ho} ${invoice.khachHang.tenDem}
-                ${invoice.khachHang.ten}` }}</div>
-            <div><strong>Ngày sinh:</strong> {{ formatDate(invoice.khachHang.ngaySinh) }}</div>
-            <div><strong>Số điện thoại:</strong> {{ invoice.khachHang.soDienThoai }}</div>
-            <div><strong>Email:</strong> {{ invoice.khachHang.email }}</div>
-            <div><strong>Địa chỉ:</strong> {{ invoice.khachHang.diaChi }}</div>
-            <div><strong>Điểm:</strong> {{ invoice.khachHang.diem }}</div>
-            <div><strong>Loại khách hàng:</strong> {{ invoice.khachHang.phanLoaiKhachHang.tenPhanLoaiKhachHang }}</div>
-            <div><strong>Trạng thái khách hàng:</strong> {{ invoice.khachHang.trangThaiKhachHang === 1 ? 'Kích hoạt' :
-                'Không kích hoạt' }}</div>
+            <div><strong>Họ và tên:</strong>
+                <input v-model="invoice.khachHang.ho" placeholder="Họ" />
+                <input v-model="invoice.khachHang.tenDem" placeholder="Tên đệm" />
+                <input v-model="invoice.khachHang.ten" placeholder="Tên" />
+            </div>
+            <div><strong>Ngày sinh:</strong>
+                <input v-model="invoice.khachHang.ngaySinh" type="date" />
+            </div>
+            <div><strong>Số điện thoại:</strong>
+                <input v-model="invoice.khachHang.soDienThoai" />
+            </div>
+            <div><strong>Email:</strong>
+                <input v-model="invoice.khachHang.email" />
+            </div>
+            <div><strong>Địa chỉ:</strong>
+                <input v-model="invoice.khachHang.diaChi" />
+            </div>
+            <div><strong>Điểm:</strong>
+                <input v-model="invoice.khachHang.diem" type="number" />
+            </div>
+            <div><strong>Loại khách hàng:</strong>
+                <input v-model="invoice.khachHang.phanLoaiKhachHang.tenPhanLoaiKhachHang" />
+            </div>
+            <div><strong>Trạng thái khách hàng:</strong>
+                <input v-model="invoice.khachHang.trangThaiKhachHang" type="checkbox"
+                    :checked="invoice.khachHang.trangThaiKhachHang === 1" />
+            </div>
         </div>
 
         <!-- Movie Information -->
         <div class="card movie-info">
             <h3>Thông tin phim</h3>
-            <div><strong>Tên phim:</strong> {{ invoice.phim.tenPhim }}</div>
-            <div><strong>Thể loại:</strong> {{ invoice.phim.danhSachTLPhims.map(item =>
-                item.theLoaiPhim.tenTheLoai).join(', ') }}</div>
-            <div><strong>Quốc gia:</strong> {{ invoice.phim.quocGia }}</div>
-            <div><strong>Nội dung:</strong> {{ invoice.phim.noiDung }}</div>
-            <div><strong>Thời gian:</strong> {{ invoice.phim.thoiLuong }} phút</div>
-            <div><strong>Giới hạn độ tuổi:</strong> {{ invoice.phim.gioiHanDoTuoi.tenDoTuoi }}</div>
+            <div><strong>Tên phim:</strong>
+                <input v-model="invoice.phim.tenPhim" />
+            </div>
+            <div><strong>Thể loại:</strong>
+                <input v-model="invoice.phim.danhSachTLPhims" />
+            </div>
+            <div><strong>Quốc gia:</strong>
+                <input v-model="invoice.phim.quocGia" />
+            </div>
+            <div><strong>Nội dung:</strong>
+                <textarea v-model="invoice.phim.noiDung" />
+            </div>
+            <div><strong>Thời gian:</strong>
+                <input v-model="invoice.phim.thoiLuong" type="number" />
+            </div>
+            <div><strong>Giới hạn độ tuổi:</strong>
+                <input v-model="invoice.phim.gioiHanDoTuoi.tenDoTuoi" />
+            </div>
         </div>
 
         <!-- Voucher Information -->
         <div class="card voucher-info" v-if="invoice.voucher">
             <h3>Thông tin voucher</h3>
-            <div><strong>Mã voucher:</strong> {{ invoice.voucher.maVoucher }}</div>
-            <div><strong>Giá trị đổi:</strong> {{ invoice.voucher.giaTriDoi }} VND</div>
-            <div><strong>Giảm tiền phần trăm:</strong> {{ invoice.voucher.truTienPhanTram }}%</div>
-            <div><strong>Giảm tối đa:</strong> {{ invoice.voucher.giamToiDa }} VND</div>
-            <div><strong>Ngày bắt đầu:</strong> {{ formatDate(invoice.voucher.ngayBatDau) }}</div>
-            <div><strong>Ngày kết thúc:</strong> {{ formatDate(invoice.voucher.ngayKetThuc) }}</div>
+            <div><strong>Mã voucher:</strong>
+                <input v-model="invoice.voucher.maVoucher" />
+            </div>
+            <div><strong>Giá trị đổi:</strong>
+                <input v-model="invoice.voucher.giaTriDoi" type="number" />
+            </div>
+            <div><strong>Giảm tiền phần trăm:</strong>
+                <input v-model="invoice.voucher.truTienPhanTram" type="number" />
+            </div>
+            <div><strong>Giảm tối đa:</strong>
+                <input v-model="invoice.voucher.giamToiDa" type="number" />
+            </div>
+            <div><strong>Ngày bắt đầu:</strong>
+                <input v-model="invoice.voucher.ngayBatDau" type="date" />
+            </div>
+            <div><strong>Ngày kết thúc:</strong>
+                <input v-model="invoice.voucher.ngayKetThuc" type="date" />
+            </div>
         </div>
 
         <!-- Payment Method -->
         <div class="card payment-method">
             <h3>Phương thức thanh toán</h3>
             <div v-if="invoice.pttt">
-                <div><strong>Mã phương thức thanh toán:</strong> {{ invoice.pttt.maPTTT }}</div>
-                <div><strong>Hình thức:</strong> {{ invoice.pttt.tenPTTT }}</div>
+                <div><strong>Mã phương thức thanh toán:</strong>
+                    <input v-model="invoice.pttt.maPTTT" />
+                </div>
+                <div><strong>Hình thức:</strong>
+                    <input v-model="invoice.pttt.tenPTTT" />
+                </div>
             </div>
             <div v-else>
                 <p><strong>Không có phương thức thanh toán</strong></p>
             </div>
         </div>
+
         <!-- Invoice Information -->
         <div class="card invoice-info">
             <h3>Thông tin hoá đơn</h3>
-            <div><strong>Mã hoá đơn:</strong> {{ invoice.maHoaDon }}</div>
-            <div><strong>Số lượng:</strong> {{ invoice.soLuong }}</div>
-            <div><strong>Tổng tiền:</strong> {{ formatCurrency(invoice.tongSoTien) }}</div>
-            <div><strong>Điểm:</strong> {{ invoice.diem }}</div>
-            <div><strong>Thời gian thanh toán:</strong> {{ formatPaymentTime(invoice.thoiGianThanhToan) }}</div>
+            <div><strong>Mã hoá đơn:</strong>
+                <input v-model="invoice.maHoaDon" />
+            </div>
+            <div><strong>Số lượng:</strong>
+                <input v-model="invoice.soLuong" type="number" />
+            </div>
+            <div><strong>Tổng tiền:</strong>
+                <input v-model="invoice.tongSoTien" type="number" />
+            </div>
+            <div><strong>Điểm:</strong>
+                <input v-model="invoice.diem" type="number" />
+            </div>
+            <div><strong>Thời gian thanh toán:</strong>
+                <input v-model="invoice.thoiGianThanhToan" type="datetime-local" />
+            </div>
             <div><strong>Trạng thái hoá đơn:</strong>
-                {{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán" : "Chưa thanh toán" }}</div>
+                <input v-model="invoice.trangThaiHoaDon" type="checkbox" :checked="invoice.trangThaiHoaDon === 1" />
+            </div>
         </div>
 
         <!-- Invoice Details -->
@@ -69,9 +125,12 @@
             <div v-if="invoice.chiTietHoaDonList.length > 0">
                 <ul>
                     <li v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">
-                        <strong>Mã ghế:</strong> {{ item.ghe.maGhe }} <br>
-                        <strong>Giá tiền:</strong> {{ formatCurrency(item.ghe.giaTien) }} <br>
-                        <strong>Phòng chiếu:</strong> {{ item.ghe.phongChieu.maPhong }}
+                        <strong>Mã ghế:</strong>
+                        <input v-model="item.ghe.maGhe" /> <br>
+                        <strong>Giá tiền:</strong>
+                        <input v-model="item.ghe.giaTien" type="number" /> <br>
+                        <strong>Phòng chiếu:</strong>
+                        <input v-model="item.ghe.phongChieu.maPhong" />
                     </li>
                 </ul>
             </div>
@@ -79,8 +138,12 @@
                 <p><strong>Chưa có chi tiết</strong></p>
             </div>
         </div>
-        <!-- Back Button -->
-        <button @click="goBack">Trở về</button>
+
+        <!-- Save Button -->
+        <div class="button-container">
+            <button @click="goBack">Trở về</button>
+            <button @click="saveMovie">Lưu lại</button>
+        </div>
     </div>
     <div v-else>
         <p>Đang tải thông tin hoá đơn...</p>
@@ -88,9 +151,8 @@
 </div>
 </template>
 
-
 <script>
-import { fetchInvoiceById } from "@/api/invoice"; // Assuming a function to fetch invoice by ID
+import { fetchInvoiceById, updateInvoice } from "@/api/invoice"; // Assuming a function to fetch and update invoice
 
 export default {
     data() {
@@ -111,18 +173,13 @@ export default {
                 console.error("Lỗi khi tải thông tin hoá đơn:", error);
             }
         },
-        formatDate(dateArray) {
-            const [year, month, day] = dateArray;
-            return new Date(year, month - 1, day).toLocaleDateString('vi-VN');
-        },
-        formatCurrency(amount) {
-            return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-        },
-        formatPaymentTime(timeArray) {
-            const [year, month, day, hour, minute] = timeArray;
-            const date = new Date(year, month - 1, day, hour, minute);
-            const options = { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" };
-            return date.toLocaleString("vi-VN", options);
+        async saveInvoice() {
+            try {
+                await updateInvoice(this.invoice);
+                alert("Hoá đơn đã được lưu thành công!");
+            } catch (error) {
+                console.error("Lỗi khi lưu hoá đơn:", error);
+            }
         },
         goBack() {
             this.$router.go(-1); // Go back to the previous page
@@ -130,48 +187,4 @@ export default {
     },
 };
 </script>
-<style scoped>
-.invoice-detail {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    font-size: 1.8em;
-    color: #333;
-}
-
-h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-strong {
-    font-weight: bold;
-}
-
-.card {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card h3 {
-    margin-top: 0;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
-</style>
+<style src="./assets/styles.css" scoped></style>
