@@ -1,4 +1,4 @@
-import { apiClient } from './api';
+import { apiClient,requestWithJWT } from './api';
 import axios from 'axios'; // Ensure Axios is imported
 
 /* Lấy danh sách hoá đơn */
@@ -80,7 +80,7 @@ export const deleteInvoiceById = async (id: string) => {
 /* Tạo hoá đơn mới */
 export const createInvoice = async (invoiceData: any) => {
     try {
-        const response = await apiClient.post('/hoadon/add', invoiceData);
+        const response = await requestWithJWT('post','/hoadon/add', invoiceData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -116,6 +116,20 @@ export const createInvoiceQr = async (id: string) => {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+/* Tạo hoá đơn mới */
+export const setPaymentMethod = async (invoiceId:any ,paymentMethodId:any) => {
+    try {
+        const response = await requestWithJWT('put','/hoadon/hoaDon/'+invoiceId+"/setPTTT/"+paymentMethodId, {});
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi đặt PTTT]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }

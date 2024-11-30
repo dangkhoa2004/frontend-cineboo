@@ -41,67 +41,80 @@
   </div>
 </template>
 
-<script>
+<<script setup>
+import { ref, watch, onMounted } from 'vue';
 import EventBus from "@/store/eventBus";
-export default {
-  data() {
-    return {
-      prebookedSeats: [],
-      selectedSeats: Array(60).fill(false),
-      ticketCount: 0,
-      totalAmount: 0,
-      showtimeId: this.$route.params.idSuatChieu,
-    };
-  },
-  created() {
-    if (this.showtimeId) {
-      this.loadSeats(this.showtimeId);
-    }
-  },
-  methods: {
-    async loadSeats(showtimeId) {
-      try {
-        const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`);
-        const seatsData = await response.json();
-        this.prebookedSeats = seatsData.map((seat) => ({
-          maGhe: seat.maGhe,
-          booked: seat.trangThaiGhe === 1,
-        }));
-        if (seatsData.length > 0) {
-          this.ticketPrice = seatsData[0].giaTien;
-        }
-      } catch (error) {
-        console.error("Component: [Lỗi khi nạp dữ liệu ghế từ suất chiếu]", error);
-      }
-    },
-    updateTicketCountAndAmount() {
-      EventBus.ticketCount = this.ticketCount;
-      this.ticketCount = this.selectedSeats.filter((seat) => seat).length;
-      this.totalAmount = this.ticketCount * this.ticketPrice;
-      EventBus.selectedSeats = this.getSelectedSeats();
-      EventBus.totalAmount = this.totalAmount;
-      EventBus.ticketCount = this.ticketCount;
-    },
+import { useRoute } from 'vue-router';
+// State variables using `ref`
+const prebookedSeats = ref([]);
+const selectedSeats = ref(Array(60).fill(false));
+const ticketCount = ref(0);
+const totalAmount = ref(0);
+const ticketPrice = ref(0);
+const showtimeId = ref(useRoute().params.idSuatChieu); // Accessing the route params directly
+ // Access the route params directly
 
-    getSelectedSeats() {
-      return this.selectedSeats
-        .map((selected, index) => (selected ? `S${index + 1}` : null))
-        .filter((seat) => seat !== null);
-    },
-  },
-  watch: {
-    selectedSeats: {
-      handler() {
-        this.updateTicketCountAndAmount();
+// Function to load seats data
+const loadSeats = async (showtimeId) => {
+  try {
+	  let token = sessionStorage.getItem('token');
+	  token = token.substring(1,token.length-1);
+	  
+   // const token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0azEiLCJleHAiOjE3MzI4NzI0MDAsImlhdCI6MTczMjg2ODgwMH0.NKSBsbLc6RgKQozMHl_q3mh6gbUsYfOg7Kk4Xgl_45-Z1ONRAGjl34mPoZtION5lArqLs9MRK_BhfQy1t9P6Lw"; // Replace with actual token
+    const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json',
       },
-      deep: true,
-    },
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.showtimeId = to.params.idSuatChieu;
-    this.loadSeats(this.showtimeId);
-    next();
-  },
+    });
+
+    const seatsData = await response.json();
+    prebookedSeats.value = seatsData.map((seat) => ({
+      maGhe: seat.maGhe,
+      booked: seat.trangThaiGhe === 1,
+    }));
+
+    if (seatsData.length > 0) {
+      ticketPrice.value = seatsData[0].giaTien;
+    }
+  } catch (error) {
+    console.error("Component: [Lỗi khi nạp dữ liệu ghế từ suất chiếu]", error);
+  }
+};
+
+// Update ticket count and total amount
+const updateTicketCountAndAmount = () => {
+  EventBus.ticketCount = ticketCount.value;
+  ticketCount.value = selectedSeats.value.filter((seat) => seat).length;
+  totalAmount.value = ticketCount.value * ticketPrice.value;
+  EventBus.selectedSeats = getSelectedSeats();
+  EventBus.totalAmount = totalAmount.value;
+  EventBus.ticketCount = ticketCount.value;
+};
+
+// Get selected seats as an array of seat codes
+const getSelectedSeats = () => {
+  return selectedSeats.value
+    .map((selected, index) => (selected ? `S${index + 1}` : null))
+    .filter((seat) => seat !== null);
+};
+
+// Watch for changes in selected seats and update ticket count and amount
+watch(selectedSeats, updateTicketCountAndAmount, { deep: true });
+
+// Fetch seats when the component is mounted
+onMounted(() => {
+  if (showtimeId.value) {
+    loadSeats(showtimeId.value);
+  }
+});
+
+// Handle route updates and reload seats based on new showtimeId
+const beforeRouteUpdate = (to, from, next) => {
+  showtimeId.value = to.params.idSuatChieu;
+  loadSeats(showtimeId.value);
+  next();
 };
 </script>
 

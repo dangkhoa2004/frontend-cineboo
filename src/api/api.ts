@@ -3,7 +3,7 @@ import axios, { Method } from 'axios';
 // Tạo một client Axios với baseURL và timeout
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080',  // Cập nhật nếu backend dùng địa chỉ hoặc cổng khác
-    timeout: 10000,  // Thời gian chờ là 10 giây
+    timeout: 1000000,  // Thời gian chờ là 10 giây. Thay đổi thời gian chờ lên 1000 giây để tiện debug
     headers: {
         'Content-Type': 'application/json',
     },
@@ -35,7 +35,7 @@ apiClient.interceptors.response.use(
 );
 
 // Hàm thực hiện request có gắn token khi cần
-const requestWithAuth = (method: Method, url: string, data: any = {}) => {
+const requestWithAuth = (method: Method, url: string, data: any = {}) => {//Đề nghị loại bỏ method này
     const token = localStorage.getItem('token');
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     return apiClient({
@@ -46,4 +46,24 @@ const requestWithAuth = (method: Method, url: string, data: any = {}) => {
     });
 };
 
-export { apiClient, requestWithAuth };
+
+const requestWithJWT = (method: Method, url: string, data: any = {}) => {//Method chuẩn để thêm token vào request
+    let token = sessionStorage.getItem('token');
+    if(token!=null){
+        token = token.substring(1,token.length-1);
+    }else{
+        //To be safe, do nothing if token is null
+        //Cuz this method REQUIRES token
+        return;
+    }
+    return apiClient({
+        method,
+        url,
+        data,
+        headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+      },
+    });
+};
+export { apiClient, requestWithAuth,requestWithJWT };
