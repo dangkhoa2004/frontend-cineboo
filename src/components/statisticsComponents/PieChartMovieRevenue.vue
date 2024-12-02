@@ -3,6 +3,7 @@
 </template>
   
   <script setup>
+  import {requestWithJWT} from "@/api/api.ts";
 import { ref,onMounted } from 'vue'
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
@@ -46,7 +47,7 @@ const chartOptions = ref({
  
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/thongke/pie')
+    const response = await requestWithJWT("GET",'http://localhost:8080/thongke/pie')
     const responseData = await response.data
 
     //Replace the entire thing since

@@ -4,6 +4,7 @@
   
   <script setup>
 import { ref,onMounted } from 'vue'
+import {requestWithJWT} from "@/api/api.ts";
 import axios from 'axios';
 import { Scatter } from 'vue-chartjs'
 import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js'
@@ -77,7 +78,7 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/thongke/scatter') ;
+    const response = await requestWithJWT("GET",'http://localhost:8080/thongke/scatter') ;
     const responseData =  await response.data;
      
     //Replace the entire thing since

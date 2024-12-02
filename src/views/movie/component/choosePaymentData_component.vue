@@ -35,7 +35,10 @@
     </div>
 
     <!-- Component hiển thị thông tin khách hàng -->
-    <infoCustomerData_component v-model="customerInfo" /> <!-- Truyền và nhận thông tin người dùng -->
+    <infoCustomerData_component 
+	v-model="customerInfo" 
+	 @update-payment-method="updatePaymentMethod"
+	/> <!-- Truyền và nhận thông tin người dùng -->
 
     <div class="movie_checkout_container">
       <div class="movie_checkout_actions">
@@ -102,7 +105,12 @@ export default {
         console.error("Lỗi khi nạp dữ liệu phim:", error);
       }
     },
-
+	//Grab paymentMethodID from child component infoCustomerData_component
+  updatePaymentMethod(newPaymentMethodId) {
+      this.paymentMethod = newPaymentMethodId;
+	  console.log("NEW PAYMENT ID IS:" +newPaymentMethodId);
+    },
+	
     // Nạp dữ liệu ghế và giá vé
   async loadSeats() {
   const showtimeId = this.$route.params.idSuatChieu;

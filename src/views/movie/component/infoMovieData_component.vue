@@ -9,17 +9,17 @@
       </div>
       <div class="booking-movie-info">
         <h1 class="booking-movie-title">
-          <span>{{ movie.tenPhim }}</span>
+          <span>&#8203;{{ movie.tenPhim }}</span>
         </h1>
         <div class="booking-movie-meta">
-          <span class="booking-duration">{{ movie.thoiLuong }} Phút</span>
-          <span class="booking-release-date">{{ formattedReleaseDate }}</span>
-          <span class="booking-rating">{{ movie.danhGia || 'Chưa có đánh giá' }}</span>
+          <span class="booking-duration">&#8203;{{ movie.thoiLuong }} Phút</span>
+          <span class="booking-release-date">Ngày ra mắt: {{ formattedReleaseDate }}</span>
+         <!-- <span class="booking-rating">{{ movie.danhGia || 'Chưa có đánh giá' }}</span> -->
         </div>
         <div class="booking-movie-details">
-          <p><strong>Quốc gia:</strong> <span>{{ movie.quocGia }}</span></p>
-          <p><strong>Thể loại:</strong> <span>{{ genres }}</span></p>
-          <p><strong>Đạo diễn:</strong> <span>{{ movie.daoDien }}</span></p>
+          <p><strong>Quốc gia: </strong> <span>{{ movie.quocGia }}</span></p>
+          <p><strong>Thể loại: &#8203;</strong> <span>{{ genres }}</span></p>
+          <p><strong>Rating  : &#8203;    </strong>   <span>{{ movie.diem }}</span></p>
           <p><strong>Diễn viên:</strong> <span>{{ movie.dienVien }}</span></p>
         </div>
       </div>
