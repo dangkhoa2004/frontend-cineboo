@@ -31,7 +31,7 @@
       <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
       <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
       <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
-      <div class="movie-format">Ngày chiếu: {{ formatDate(theater.thoiGianChieu) }}</div>
+      <!--<div class="movie-format">Ngày chiếu: {{ formatDate(theater.thoiGianChieu) }}</div> //Not needed at all -->
     </button>
   </div>
 </div>
@@ -58,53 +58,68 @@ export default {
     const sevenDays = computed(() => {
       const dates = [];
       const today = new Date();
-      for (let i = -2; i <= 2; i++) {
+      for (let i = 0; i <= 5; i++) {
         const date = new Date(today);
+		
         date.setDate(today.getDate() + i);
         dates.push(date.toISOString().split("T")[0]);
       }
       return dates;
     });
 
-    const fetchShowtimes = async (movieId) => {
-      try {
-        const response = await fetchShowtimesByMovieId(movieId);
-        if (Array.isArray(response) && response.length) {
-          showtimes.value = response.map(theater => {
-            if (Array.isArray(theater.thoiGianChieu)) {
-              const [year, month, day, hour, minute] = theater.thoiGianChieu;
-              theater.thoiGianChieu = new Date(year, month - 1, day, hour, minute).toISOString();
-            }
-            return theater;
-          });
-          filteredShowtimes.value = showtimes.value;
-        } else {
-          showtimes.value = [];
-          console.error("Không tìm thấy dữ liệu suất chiếu.");
+   const fetchShowtimes = async (movieId) => {
+  try {
+    const response = await fetchShowtimesByMovieId(movieId);
+    if (Array.isArray(response) && response.length) {
+      showtimes.value = response.map(theater => {
+        // If `thoiGianChieu` is a string in UTC, convert it to local time (Vietnam Time)
+        if (typeof theater.thoiGianChieu === 'string') {
+          const localTime = new Date(theater.thoiGianChieu);
+          // Adjust to local timezone (Vietnam is UTC+7)
+          localTime.setHours(localTime.getHours() + 7); // This adjusts to Vietnam Time (UTC+7)
+          theater.thoiGianChieu = localTime; // Set the new local time
+        } else if (Array.isArray(theater.thoiGianChieu)) {
+          const [year, month, day, hour, minute] = theater.thoiGianChieu;
+          const localTime = new Date(year, month - 1, day, hour, minute);
+          localTime.setHours(localTime.getHours() + 7); // Adjust to Vietnam Time
+          theater.thoiGianChieu = localTime; // Set the new local time
         }
-      } catch (error) {
-        showtimes.value = [];
-        console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
-      }
-    };
+        return theater;
+      });
+      filterShowtimes(); // Apply initial filter after fetching
+    } else {
+      showtimes.value = [];
+      console.error("Không tìm thấy dữ liệu suất chiếu.");
+    }
+  } catch (error) {
+    console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
+  }
+};
+
 
     const filterShowtimes = () => {
+		 console.log("GETTING Showtimes for DATE: "+selectedDate.value);
       filteredShowtimes.value = showtimes.value.filter(theater => {
-        const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
+        const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0]; 
         return showtimeDate === selectedDate.value;
       });
+	  console.log(filteredShowtimes.value);
     };
 
-    const updateSelectedDate = (date) => {
+    const updateSelectedDate = (date) => { 
+		selectedDate.value = date;
+		filterShowtimes();
+		return;
       if (date === selectedDate.value) {
         filteredShowtimes.value = showtimes.value;
       } else {
         selectedDate.value = date;
         filterShowtimes();
+		 
       }
     };
 
-    const logTheaterInfo = (theater) => {
+    const logTheaterInfo = (theater) => { 
       const suatChieuId = theater.id;
       if (suatChieuId) {
         router.push(`/phim/${selectedMovieId.value}/suat-chieu/${suatChieuId}`);
@@ -129,7 +144,8 @@ export default {
 
     onMounted(() => {
       if (selectedMovieId.value) {
-        fetchShowtimes(selectedMovieId.value);
+        fetchShowtimes(selectedMovieId.value);  
+	 
       } else {
         console.error("Không tìm thấy ID phim.");
       }

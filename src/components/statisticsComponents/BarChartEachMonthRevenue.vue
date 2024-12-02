@@ -7,6 +7,7 @@
   </template>
   
   <script setup>
+  import {requestWithJWT} from "@/api/api.ts";
   import { Bar } from 'vue-chartjs'
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
   import {ref,onMounted} from 'vue';  
@@ -36,7 +37,7 @@
       
         const fetchData = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/thongke/bar/${year.value}`) ;
+    const response = await requestWithJWT("get",`http://localhost:8080/thongke/bar/${year.value}`) ;
     const responseData =  await response.data;
      
     //Replace the entire thing since
