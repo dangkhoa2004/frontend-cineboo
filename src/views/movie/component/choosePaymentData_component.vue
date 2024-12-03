@@ -55,7 +55,7 @@ import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để 
 import { createInvoice, createInvoiceQr,setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { format } from 'date-fns'; // Định dạng ngày giờ
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
-
+import swal from 'sweetalert';
 export default {
   components: { infoCustomerData_component },
   data() {
@@ -145,13 +145,7 @@ token = token.substring(1,token.length-1);//PLS PORT THIS TO A HELPER METHOD LAT
 
       if (!selectedSeatsIndex || selectedSeatsIndex.length === 0) {
         console.error("Chưa chọn ghế nào");
-        alert("Vui lòng chọn ghế trước khi thanh toán.");
-        return;
-      }
-
-      const userConfirmed = confirm("Bạn có chắc chắn muốn tiếp tục thanh toán?");
-      if (!userConfirmed) {
-        // Người dùng chọn "Cancel"
+        swal("Thiếu ghế rồi", "Vui lòng chọn ghế trước khi thanh toán.","errors");
         return;
       }
 
@@ -159,7 +153,7 @@ token = token.substring(1,token.length-1);//PLS PORT THIS TO A HELPER METHOD LAT
       const customerID = customerInfo.maKhachHang || customerInfo.id || customerInfo.maNhanVien;
       if (!customerID) {
         console.error("Không xác định được ID khách hàng.");
-        alert("Vui lòng đăng nhập để mua vé.");
+        swal("Oops","Vui lòng đăng nhập để mua vé.","error");
         window.location.href = "/dang-nhap"; // Chuyển hướng về trang đăng nhập
         return;
       }
@@ -182,7 +176,23 @@ token = token.substring(1,token.length-1);//PLS PORT THIS TO A HELPER METHOD LAT
       };
 
       try { 
-        // Tạo hóa đơn rỗng
+	   swal({
+          title: "Xác nhận đặt vé",
+          text: "Bạn có chắc chắn muốn đặt vé",
+          icon: "warning",
+          buttons: [
+            'Không, huỷ đặt vé!',
+            'Có, tiếp tục!'
+          ],
+           
+        }).then(function(isConfirm) {
+          if (isConfirm) {
+            swal({
+              title: 'Xác nhận đặt vé!',
+              text: 'Bạn đã xác nhận đặt vé',
+              icon: 'success'
+            }).then( async function() {
+		 // Tạo hóa đơn rỗng
         let invoice = await createInvoice(invoiceData);
 		 
 		//Đặt PTTT
@@ -207,17 +217,14 @@ token = token.substring(1,token.length-1);//PLS PORT THIS TO A HELPER METHOD LAT
         } catch (error) {
           console.error("Lỗi khi tạo QR thanh toán:", error);
         }
-        // try {
-        //   const qrData = await createInvoiceQr(idHoaDon);
-        //   console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
-        //   if (qrData && qrData.payment) {
-        //     window.open(qrData.payment, '_blank');
-        //   } else {
-        //     console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
-        //   }
-        // } catch (error) {
-        //   console.error("Lỗi khi tạo QR thanh toán:", error);
-        // }
+            });
+          } else {
+            swal("Đã huỷ đặt vé :)", "error");
+			return;
+          }
+        });
+	  
+
       } catch (error) {
         console.error("Lỗi khi tạo hóa đơn hoặc QR thanh toán:", error);
       }
