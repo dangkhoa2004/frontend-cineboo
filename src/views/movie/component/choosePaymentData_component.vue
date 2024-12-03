@@ -6,7 +6,7 @@
         <div class="movie_checkout_item__image">
           <img class="movie_checkout_iphone" :src="movieDetails.anhPhim" alt="" />
         </div>
-        <div class="movie_checkout_item__details">
+        <div class="movie_checkout_item__details" >
           <div class="movie_checkout_item__title">
             <h1>{{ movieDetails.tenPhim }}</h1>
           </div>

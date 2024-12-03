@@ -5,7 +5,7 @@
       <h2>CHỌN GHẾ</h2>
       <div class="date-selector">
         <button>TẤT CẢ</button>
-        <button class="inactive">GHẾ VIP</button>
+        <button class="inactive">GHẾ VIP</button >
         <button class="inactive">GHẾ THƯỜNG</button>
       </div>
     </div>
