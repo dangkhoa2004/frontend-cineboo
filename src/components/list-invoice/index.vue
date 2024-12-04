@@ -16,13 +16,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="invoice in invoices" :key="invoice.id">
+      <tr v-for="invoice in this.invoices" :key="invoice.id">
         <td>{{ invoice.maHoaDon }}</td>
         <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.ten} ${invoice.khachHang.tenDem}` }}</td>
-        <td>{{ invoice.phim.tenPhim }}</td>
+          <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
         <td>
-          {{ invoice.phim.danhSachTLPhims.map(item => item.theLoaiPhim.tenTheLoai).join(', ') }}
-        </td>
+          {{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.danhSachTLPhims.map(item => item.theLoaiPhim.tenTheLoai).join(', ') }}
+        </td> 
         <td>{{ invoice.soLuong }}</td>
         <td>{{ formatCurrency(invoice.tongSoTien) }}</td>
         <td>{{ formatPaymentTime(invoice.thoiGianThanhToan) }}</td>
@@ -63,6 +63,7 @@ export default {
       try {
         const invoiceData = await fetchInvoices();
         this.invoices = invoiceData;
+		console.log(this.invoices);
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu hoá đơn:", error);
       }

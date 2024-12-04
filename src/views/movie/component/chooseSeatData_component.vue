@@ -56,7 +56,7 @@ import { ref, watch, onMounted } from 'vue';
 import EventBus from "@/store/eventBus";
 import { useRoute } from 'vue-router';
 import swal from 'sweetalert';
-
+import {requestWithJWT} from "@/api/api.ts"
 const prebookedSeats = ref([]); // Dynamic seat data
 const selectedSeats = ref([]); // Seat selection array
 const ticketCount = ref(0); // Total selected tickets
@@ -68,26 +68,27 @@ const showtimeId = ref(useRoute().params.idSuatChieu); // Access the showtime ID
 const loadSeats = async (showtimeId) => {
   try {
     const token = sessionStorage.getItem("token").slice(1, -1);
-    const response = await fetch(`http://localhost:8080/ghe/find/ID_SuatChieu/${showtimeId}`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-    });
-
-    const seatsData = await response.json();
+    const response = await requestWithJWT("get",`http://localhost:8080/ghe/findWithBooking/${showtimeId}`);
+    const seatsData = response.data;
+	if(seatsData.length==0){
+	prebookedSeats.value=[];
+	return;
+}
     prebookedSeats.value = seatsData
       .map((seat) => ({
+		  id:seat.id,
         maGhe: seat.maGhe,
-        booked: seat.trangThaiGhe === 1,
+		giaTien:seat.giaTien,
+		id_PhongChieu:seat.id_PhongChieu,
+		trangThaiGhe:seat.trangThaiGhe,
+        booked: seat.trangThaiGheAndSuatChieu === 1||seat.trangThaiGheAndSuatChieu ==2,
       }))
       .sort((a, b) => {
         const numA = parseInt(a.maGhe.replace(/\D/g, ""), 10); // Extract numeric part
         const numB = parseInt(b.maGhe.replace(/\D/g, ""), 10); // Extract numeric part
         return numA - numB; // Sort numerically
       });
-
+ 
     selectedSeats.value = Array(prebookedSeats.value.length).fill(false);
 
     if (seatsData.length > 0) {
@@ -95,7 +96,7 @@ const loadSeats = async (showtimeId) => {
     }
   } catch (error) {
     console.error("Error loading seats:", error);
-  }
+  }  
 };
 
 //Method to (un)check inputs and dealing with lists
@@ -113,8 +114,7 @@ const handleSeatChange = (event, seat, index) => {
 //Method to check seat selection logic
 const validateSeatSelection = () => {
 	//All of this will assume that all seats are distributed in 10 columns
-	const selectedList = getSelectedSeats(); 
-	console.log(selectedList);
+	const selectedList = getSelectedSeats();  
 	if(selectedList.length==1){
 		//Check edge
 		//get number part

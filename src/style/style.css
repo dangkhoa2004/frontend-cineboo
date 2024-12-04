@@ -472,7 +472,20 @@
     font-weight: bold;
     color: var(--first-color);
 }
-
+.seat-info .price{
+	    color: var(--first-color);
+		float:none;
+		display:inline-block;
+}
+.seat-info{
+   display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;;
+}
+.seat-info p{
+	display:inline-block;
+}
 .total-info p {
     font-size: 20px;
 }

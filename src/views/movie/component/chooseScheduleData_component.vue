@@ -40,6 +40,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router"; // import useRouter
 import { fetchShowtimesByMovieId } from "@/api/movie";
+import { requestWithJWT } from '@/api/api.ts';
 
 export default {
   setup() {
@@ -67,25 +68,59 @@ export default {
       return dates;
     });
 
-   const fetchShowtimes = async (movieId) => {
+const fetchShowtimes = async (movieId) => {
   try {
     const response = await fetchShowtimesByMovieId(movieId);
     if (Array.isArray(response) && response.length) {
       showtimes.value = response.map(theater => {
-        // If `thoiGianChieu` is a string in UTC, convert it to local time (Vietnam Time)
         if (typeof theater.thoiGianChieu === 'string') {
           const localTime = new Date(theater.thoiGianChieu);
-          // Adjust to local timezone (Vietnam is UTC+7)
-          localTime.setHours(localTime.getHours() + 7); // This adjusts to Vietnam Time (UTC+7)
-          theater.thoiGianChieu = localTime; // Set the new local time
+          localTime.setHours(localTime.getHours() + 7); // Adjust to Vietnam Time
+          theater.thoiGianChieu = localTime;
         } else if (Array.isArray(theater.thoiGianChieu)) {
           const [year, month, day, hour, minute] = theater.thoiGianChieu;
           const localTime = new Date(year, month - 1, day, hour, minute);
           localTime.setHours(localTime.getHours() + 7); // Adjust to Vietnam Time
-          theater.thoiGianChieu = localTime; // Set the new local time
+          theater.thoiGianChieu = localTime;
         }
         return theater;
       });
+
+      // Fetch and append specific PhongChieu fields
+      const phongChieuPromises = showtimes.value.map(async (theater) => {
+        const tempSuatChieuId = theater.id;
+        if (tempSuatChieuId) {
+          try {
+            const phongChieuResponse = await requestWithJWT(
+              'get',
+              `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`
+            );
+            if (phongChieuResponse && phongChieuResponse.status === 200) {
+              const data = phongChieuResponse.data;
+              theater.phongChieu = {
+                id: data.id || -1,
+                maPhong: data.maPhong || "",
+                tongSoGhe: data.tongSoGhe || 0,
+                trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
+              };
+            } else {
+              throw new Error("PhongChieu fetch failed");
+            }
+          } catch (error) {
+            // Fallback values in case of failure
+            theater.phongChieu = {
+              id: -1,
+              maPhong: "(chưa có)",
+              tongSoGhe: 0,
+              trangThaiPhongChieu: 0,
+            };
+          }
+        }
+        return theater;
+      });
+
+      showtimes.value = await Promise.all(phongChieuPromises);
+
       filterShowtimes(); // Apply initial filter after fetching
     } else {
       showtimes.value = [];
@@ -97,16 +132,19 @@ export default {
 };
 
 
+
+
     const filterShowtimes = () => {
-		 console.log("GETTING Showtimes for DATE: "+selectedDate.value);
       filteredShowtimes.value = showtimes.value.filter(theater => {
         const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0]; 
         return showtimeDate === selectedDate.value;
       });
-	  console.log(filteredShowtimes.value);
+	  console.log(filteredShowtimes.value);//When choosing schedule this one is called to filter out other days
+	  console.log("MEWOO");
     };
 
     const updateSelectedDate = (date) => { 
+		router.push("no-showtime-chosen");
 		selectedDate.value = date;
 		filterShowtimes();
 		return;
