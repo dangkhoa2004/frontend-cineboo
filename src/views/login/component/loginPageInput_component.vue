@@ -33,6 +33,56 @@
           </span>
         </div>
       </div>
+      <div class="movie-form signup">
+          <span class="movie-title">ĐĂNG KÝ</span>
+          <form @submit.prevent="signup">
+            <div class="movie-input-field">
+              <input type="text" placeholder="Nhập tên của bạn" required />
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="movie-input-field">
+              <input type="text" placeholder="Nhập email của bạn" required />
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="movie-input-field">
+              <input
+                type="password"
+                class="password"
+                placeholder="Nhập mật khẩu"
+                required
+              />
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="movie-input-field">
+              <input
+                type="password"
+                class="password"
+                placeholder="Xác nhận mật khẩu"
+                required
+              />
+              <i class="fas fa-lock"></i>
+              <i class="fas fa-eye-slash showHidePw"></i>
+            </div>
+            <div class="movie-checkbox-text">
+              <div class="movie-checkbox-content">
+                <input type="checkbox" id="termCon" />
+                <label for="termCon" class="movie-text"
+                  >Tôi đã chấp nhận tất cả các điều khoản và điều kiện</label
+                >
+              </div>
+            </div>
+
+            <div class="movie-input-field movie-button">
+              <input type="button" value="Đăng ký" />
+            </div>
+          </form>
+          <div class="movie-login-signup">
+            <span class="movie-text"
+              >Đã đăng ký thành viên
+              <a href="#" class="movie-text movie-login-link">Đăng nhập ngay</a>
+            </span>
+          </div>
+        </div>
     </div>
   </div>
 </div>
