@@ -22,6 +22,48 @@ function sessionStorageUtil() {
         }
     };
 }
+// Định nghĩa interface cho các tham số truyền vào
+interface SignUpData {
+    username: string;
+    password: string;
+    ten: string;
+    ho: string;
+    tendem: string;
+    diaChi: string;
+    email: string;
+    soDienThoai: string;
+    ngaySinh: string;
+    danToc: number;
+}
+
+// Hàm đăng ký với kiểu dữ liệu
+export async function signup(data: SignUpData) {
+    try {
+        // Tạo URL với query parameters từ dữ liệu
+        const queryParams = new URLSearchParams({
+            username: data.username,
+            password: data.password,
+        }).toString();
+
+        // Gửi request không có body vì API không yêu cầu
+        const response = await axios.post(`http://localhost:8080/khachhang/add?${queryParams}`, null, {
+            headers: {
+                'Content-Type': 'application/json', // Có thể không cần thiết nếu không gửi body
+            }
+        });
+
+        if (response.status === 200) {
+            const responseData = response.data;
+            console.log("Đăng ký thành công:", responseData);
+            return responseData;
+        } else {
+            throw new Error("Đăng ký thất bại");
+        }
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Đăng ký thất bại");
+    }
+}
+
 
 // Lưu token và thông tin người dùng
 export async function login(username: string, password: string) {

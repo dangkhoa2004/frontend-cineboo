@@ -63,7 +63,6 @@ export default {
       try {
         const invoiceData = await fetchInvoices();
         this.invoices = invoiceData;
-		console.log(this.invoices);
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu hoá đơn:", error);
       }

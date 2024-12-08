@@ -15,6 +15,21 @@ export const fetchMovies = async (params = {}) => {
         throw error;
     }
 };
+/* Thêm phim mới */
+export const createMovie = async (movieData:any) => {
+    try {
+        const response = await apiClient.post(`/phim/add`, movieData); // Đổi sang POST
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi thêm phim]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error; // Ném lại lỗi để xử lý tại component
+    }
+};
+
 /* Cập nhật thông tin phim theo id */
 export const updateMovieById = async (id: string, movieData: any) => {
     try {

@@ -36,6 +36,13 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
       listComponent: () => import("@/components/list-movie/detail.vue"),
     },
   },
+  {
+    path: "them-moi-phim",
+    name: "them-moi-phim",
+    components: {
+      listComponent: () => import("@/components/list-movie/new.vue"),
+    },
+  },
   // Liên quan đến voucher
   {
     path: "vouchers",

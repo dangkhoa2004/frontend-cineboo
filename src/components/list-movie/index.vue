@@ -1,5 +1,10 @@
 <template>
 <div class="movie-manager">
+  <div>
+    <button @click="addMovie()">
+      THÊM MỚI
+    </button>
+  </div>
   <table>
     <thead>
       <tr>
@@ -43,6 +48,9 @@ export default {
     await this.loadMovies();
   },
   methods: {
+    async addMovie() {
+      this.$router.push({ name: 'them-moi-phim' });
+    },
     async loadMovies() {
       try {
         const movieData = await fetchMovies();
