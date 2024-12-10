@@ -461,7 +461,7 @@
 
     /* Reduce sidebar */
     .show-sidebar {
-        width: 90px;
+        width: 100px;
     }
 
     .show-sidebar .sidebar__user {

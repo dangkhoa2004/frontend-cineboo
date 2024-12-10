@@ -1,43 +1,51 @@
 <template>
-  <div class="scroll-to-top" id="scrollToTop" @click="scrollToTop" :class="{ show: isScrollButtonVisible }">
-    <span class="fas fa-arrow-up"></span>
-  </div>
-  <div id="stars"></div>
+<div>
   <onlyPageHeader_component />
-  <div class="movie-container">
-    <div class="one">
-      <h1>PHIM ĐANG CHIẾU</h1>
+  <div class="tab-container">
+    <div class="tab" :class="{ active: currentTab === 'now-playing' }" @click="currentTab = 'now-playing'">
+      Đang chiếu
     </div>
+    <div class="tab" :class="{ active: currentTab === 'upcoming' }" @click="currentTab = 'upcoming'">
+      Sắp chiếu
+    </div>
+  </div>
+  <!-- Nội dung phim -->
+  <div v-if="currentTab === 'now-playing'" class="movie-container">
     <div class="movie-content">
       <div class="movie-grid-container section">
-        <movieCardData_component
-          v-if="movies.length"
-          v-for="(movie, index) in movies"
-          :key="index"
-          :movieImage="movie.anhPhim"
-          :movieTitle="movie.tenPhim"
-          :movieDescription="movie.noiDungMoTa"
-          :movieRating="movie.danhGia || 'Chưa đánh giá'"
-          :movieVotes="movie.luotXem || 0"
-          :movieCast="movie.dienVien"
-          :movieReleaseYear="movie.nam"
-          :movieDuration="movie.thoiLuong"
-          :movieCountry="movie.quocGia"
+        <movieCardData_component v-if="movies.length" v-for="(movie, index) in movies" :key="index"
+          :movieImage="movie.anhPhim" :movieTitle="movie.tenPhim" :movieDescription="movie.noiDungMoTa"
+          :movieRating="movie.danhGia || 'Chưa đánh giá'" :movieVotes="movie.luotXem || 0" :movieCast="movie.dienVien"
+          :movieReleaseYear="movie.nam" :movieDuration="movie.thoiLuong" :movieCountry="movie.quocGia"
           :movieAgeRating="movie.gioiHanDoTuoi.tenDoTuoi"
-          :movieReleaseDate="new Date(movie.ngayRaMat).toLocaleDateString()"
-          :movieTrailer="movie.trailer"
-          :movieId="movie.id"
-        />
+          :movieReleaseDate="new Date(movie.ngayRaMat).toLocaleDateString()" :movieTrailer="movie.trailer"
+          :movieId="movie.id" />
         <div v-else class="no-movies">Không có phim nào đang chiếu.</div>
       </div>
     </div>
   </div>
-  <onlyPageFooter_component />
-</template>
 
+  <div v-if="currentTab === 'upcoming'" class="movie-container">
+    <div class="movie-content">
+      <div class="movie-grid-container section">
+        <movieCardData_component v-if="upcomingMovies.length" v-for="(movie, index) in upcomingMovies" :key="index"
+          :movieImage="movie.anhPhim" :movieTitle="movie.tenPhim" :movieDescription="movie.noiDungMoTa"
+          :movieRating="movie.danhGia || 'Chưa đánh giá'" :movieVotes="movie.luotXem || 0" :movieCast="movie.dienVien"
+          :movieReleaseYear="movie.nam" :movieDuration="movie.thoiLuong" :movieCountry="movie.quocGia"
+          :movieAgeRating="movie.gioiHanDoTuoi.tenDoTuoi"
+          :movieReleaseDate="new Date(movie.ngayRaMat).toLocaleDateString()" :movieTrailer="movie.trailer"
+          :movieId="movie.id" />
+        <div v-else class="no-movies">Không có phim nào sắp chiếu.</div>
+      </div>
+    </div>
+  </div>
+
+  <onlyPageFooter_component />
+</div>
+</template>
 <script lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { fetchMovies } from "@/api/movie";
+import { ref, onMounted } from "vue";
+import { fetchMovies, } from "@/api/movie";
 import movieCardData_component from "./component/movieCardData_component.vue";
 import onlyPageHeader_component from "@/layout/components/lay-header/onlyPageHeader_component.vue";
 import onlyPageFooter_component from "@/layout/components/lay-footer/onlyPageFooter_component.vue";
@@ -51,42 +59,27 @@ export default {
   },
   setup() {
     const movies = ref<any[]>([]);
-    const isScrollButtonVisible = ref(false);
-
-    const handleScroll = () => {
-      isScrollButtonVisible.value = window.scrollY > 100;
-    };
+    const upcomingMovies = ref<any[]>([]);
+    const currentTab = ref("now-playing");
 
     onMounted(async () => {
       try {
         movies.value = await fetchMovies();
+        upcomingMovies.value = await fetchMovies();
       } catch (error) {
-        console.error("Component [Lỗi khi xử lý dữ liệu phim]:", error);
+        console.error("Lỗi khi tải dữ liệu phim:", error);
       }
-      window.addEventListener("scroll", handleScroll);
     });
-
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
-    });
-
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
 
     return {
       movies,
-      isScrollButtonVisible,
-      scrollToTop,
+      upcomingMovies,
+      currentTab,
     };
   },
 };
 </script>
 
 <style scoped>
-.no-movies {
-  text-align: center;
-  font-size: 18px;
-  color: #777;
-}
+
 </style>

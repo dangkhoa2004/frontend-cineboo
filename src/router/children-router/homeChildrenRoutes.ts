@@ -43,6 +43,20 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
       listComponent: () => import("@/components/list-movie/new.vue"),
     },
   },
+  {
+    path: "them-lich-chieu-phim",
+    name: "them-lich-chieu-phim",
+    components: {
+      listComponent: () => import("@/components/list-movie/movieSchedual.vue"),
+    },
+  },
+  {
+    path: "quan-ly-lich-chieu",
+    name: "quan-ly-lich-chieu",
+    components: {
+      listComponent: () => import("@/components/list-movie/listSchedual.vue"),
+    },
+  },
   // Liên quan đến voucher
   {
     path: "vouchers",
@@ -63,14 +77,14 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     path: "phuong-thuc-thanh-toan",
     name: "pttts",
     components: {
-      listComponent: () => import("@/components/list-pttt/index.vue"),
+      listComponent: () => import("@/components/list-voucher/index.vue"),
     },
   },
   {
     path: "phuong-thuc-thanh-toan/:id",
     name: "thay-doi-thong-tin-pttt",
     components: {
-      listComponent: () => import("@/components/list-pttt/detail.vue"),
+      listComponent: () => import("@/components/list-voucher/detail.vue"),
     },
   },
   // Liên quan đến khách hàng

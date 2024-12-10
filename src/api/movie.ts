@@ -15,8 +15,36 @@ export const fetchMovies = async (params = {}) => {
         throw error;
     }
 };
+
+/* Lấy danh sách phòng chiếu */
+export const fetchPhongChieu = async (params = {}) => {
+    try {
+        const response = await apiClient.get('/phongchieu/get', { params });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu phòng chiếu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+export const fetchSuatChieu = async (params = {}) => {
+    try {
+        const response = await apiClient.get('/suatchieu/get', { params });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu suất chiếu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
 /* Thêm phim mới */
-export const createMovie = async (movieData:any) => {
+export const createMovie = async (movieData: any) => {
     try {
         const response = await apiClient.post(`/phim/add`, movieData); // Đổi sang POST
         return response.data;

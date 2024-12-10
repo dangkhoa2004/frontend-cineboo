@@ -212,7 +212,6 @@
 }
 
 .movie-image-wrapper {
-    height: 11rem;
     position: relative;
     overflow: hidden;
 }
@@ -224,7 +223,7 @@
 }
 
 .movie-card-content {
-    min-height: 139px;
+    min-height: 200px;
     background-color: white;
     padding: 1rem;
 }

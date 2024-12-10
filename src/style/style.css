@@ -80,7 +80,6 @@
 }
 
 .movie-image-wrapper {
-    height: 11rem;
     position: relative;
     overflow: hidden;
 }
@@ -92,7 +91,7 @@
 }
 
 .movie-card-content {
-    min-height: 139px;
+    min-height: 200px;
     background-color: white;
     padding: 1rem;
 }
@@ -472,20 +471,25 @@
     font-weight: bold;
     color: var(--first-color);
 }
-.seat-info .price{
-	    color: var(--first-color);
-		float:none;
-		display:inline-block;
+
+.seat-info .price {
+    color: var(--first-color);
+    float: none;
+    display: inline-block;
 }
-.seat-info{
-   display: flex;
+
+.seat-info {
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;;
+    margin-bottom: 10px;
+    ;
 }
-.seat-info p{
-	display:inline-block;
+
+.seat-info p {
+    display: inline-block;
 }
+
 .total-info p {
     font-size: 20px;
 }
@@ -623,4 +627,37 @@
 
 .movie_checkout_payment__type+.movie_checkout_payment__type {
     margin-left: 10px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+}
+
+.tab {
+    background-color: black;
+    margin: 0 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #777;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.tab.active {
+    color: var(--first-color);
+    border-color: var(--first-color);
+    font-weight: bold;
+}
+
+.tab:hover {
+    color: var(--first-color);
+}
+
+.no-movies {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
 }

@@ -2,7 +2,10 @@
 <div class="movie-manager">
   <div>
     <button @click="addMovie()">
-      THÊM MỚI
+      Thêm mới
+    </button>
+    <button @click="MovieSchedual()">
+      Quản lý lịch chiếu
     </button>
   </div>
   <table>
@@ -21,7 +24,7 @@
         <td>
           <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
         </td>
-        <td>{{ movie.id }}</td>
+        <td>{{ movie.maPhim }}</td>
         <td>{{ movie.tenPhim }}</td>
         <td>{{ formatDate(movie.ngayRaMat) }}</td>
         <td>{{ movie.danhSachTLPhims.map(item => item.theLoaiPhim.tenTheLoai).join(', ') }}</td>
@@ -50,6 +53,9 @@ export default {
   methods: {
     async addMovie() {
       this.$router.push({ name: 'them-moi-phim' });
+    },
+    async MovieSchedual() {
+      this.$router.push({ name: 'quan-ly-lich-chieu' });
     },
     async loadMovies() {
       try {

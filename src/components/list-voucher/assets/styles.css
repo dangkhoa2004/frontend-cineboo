@@ -43,7 +43,6 @@ button {
 .voucher-manager {
   width: 100%;
   max-width: 1200px;
-  margin: 20px;
   overflow-x: auto;
 }
 

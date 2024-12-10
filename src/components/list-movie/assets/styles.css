@@ -14,7 +14,7 @@ button {
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color:  var(--first-color);
 }
 
 input,
@@ -37,13 +37,12 @@ textarea {
 }
 
 button {
-  margin: 10px 5px;
+  margin: 10px 10px 10px 0;
 }
 
 .movie-manager {
   width: 100%;
   max-width: 1200px;
-  margin: 20px;
   overflow-x: auto;
 }
 
@@ -82,11 +81,6 @@ tr:hover {
 .movie-detail {
   width: 100%;
   max-width: 1000px;
-  margin: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .movie-detail .movie-poster {
@@ -96,6 +90,7 @@ tr:hover {
   border-radius: 4px;
   margin-bottom: 20px;
 }
+
 .movie-detail div label {
   font-weight: bold;
   color: #2c3e50;
@@ -104,7 +99,6 @@ tr:hover {
 .movie-detail .button-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
 }
 
 .movie-detail .button-container button {

@@ -1,5 +1,10 @@
 <template>
 <div class="movie-detail">
+    <!-- Các nút chức năng -->
+    <div class="button-container">
+        <button @click="goBack">Trở về</button>
+        <button @click="saveMovie">Thêm phim</button>
+    </div>
     <h2>Thêm phim mới</h2>
     <div>
         <!-- Các trường nhập liệu -->
@@ -66,7 +71,6 @@
             </div>
         </div>
         <!-- Checkbox danh sách độ tuổi -->
-        <!-- Checkbox danh sách độ tuổi -->
         <div>
             <label>Danh sách độ tuổi phim:</label>
             <div class="the-loai-container">
@@ -75,11 +79,6 @@
                     <span>{{ dotuoi.tenDoTuoi }}</span>
                 </div>
             </div>
-        </div>
-        <!-- Các nút chức năng -->
-        <div class="button-container">
-            <button @click="goBack">Trở về</button>
-            <button @click="saveMovie">Thêm phim</button>
         </div>
     </div>
 </div>
