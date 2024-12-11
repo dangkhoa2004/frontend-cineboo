@@ -132,6 +132,13 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
       listComponent: () => import("@/components/list-application/index.vue"),
     },
   },
+  {
+    path: "testing",
+    name: "testing",
+    components: {
+      listComponent: () => import("@/components/payment-component/paymentSuccess_component.vue"),
+    },
+  },
 ];
 
 export default homeChildrenRoutes;

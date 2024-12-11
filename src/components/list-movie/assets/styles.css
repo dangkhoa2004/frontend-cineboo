@@ -42,7 +42,6 @@ button {
 
 .movie-manager {
   width: 100%;
-  max-width: 1200px;
   overflow-x: auto;
 }
 

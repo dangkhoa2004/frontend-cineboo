@@ -97,31 +97,34 @@ export default {
                 alert("Vui lòng chọn đầy đủ thông tin!");
                 return;
             }
-            const payload = [];
+
+            const thoiGianChieuList = [];
             const start = new Date(this.startDate);
             const end = new Date(this.endDate);
 
             // Lặp qua các ngày trong khoảng
             for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-                const dateString = d.toISOString().split("T")[0]; // Lấy ngày dưới dạng yyyy-mm-dd
-
-                // Tạo JSON cho từng giờ chiếu
+                // Lấy danh sách giờ chiếu và ghép vào ngày hiện tại
                 this.selectedTimes.forEach((time) => {
                     const [hours, minutes] = time.split(":");
                     const dateTime = new Date(d);
                     dateTime.setHours(hours, minutes, 0); // Thiết lập giờ và phút
 
-                    payload.push({
-                        thoiGianChieu: dateTime.toISOString(),
-                        id_Phim: this.selectedMovie,
-                        id_PhongChieu: this.selectedRoom,
-                    });
+                    // Thêm thời gian vào danh sách theo định dạng ISO đầy đủ
+                    thoiGianChieuList.push(dateTime.toISOString());
                 });
             }
 
+            // Tạo payload
+            const payload = {
+                thoiGianChieuList,
+                id_Phim: this.selectedMovie,
+                id_PhongChieu: this.selectedRoom,
+            };
+
             console.log("Dữ liệu gửi đến back-end:", payload);
 
-            // Gửi payload đến back-end (giả sử bạn có hàm postSchedule)
+            // Gửi payload đến back-end
             try {
                 await this.postSchedule(payload);
                 alert("Tạo lịch chiếu thành công!");
@@ -131,7 +134,6 @@ export default {
             }
         },
         async postSchedule(payload) {
-            // Thay thế URL bằng endpoint back-end thực tế của bạn
             const response = await fetch("http://localhost:8080/suatchieu/add", {
                 method: "POST",
                 headers: {
@@ -142,7 +144,7 @@ export default {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-        },
+        }
     },
 };
 </script>

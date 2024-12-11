@@ -110,6 +110,11 @@ export default {
         console.error("Lỗi khi tải danh sách độ tuổi phim:", error);
       }
     },
+    formatDate(timestamp) {
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return new Date(timestamp).toLocaleDateString("vi-VN", options);
+    },
+
     async loadMovie() {
       const movieId = this.$route.params.id;
       try {
@@ -122,10 +127,19 @@ export default {
           gioiHanDoTuoi: movieData.gioiHanDoTuoi || { id: null, maDoTuoi: "", tenDoTuoi: "" },
         };
 
-        // Định dạng ngày phát hành
-        this.formattedReleaseDate = movieData.ngayRaMat
-          ? new Date(movieData.ngayRaMat).toISOString().substr(0, 10)
-          : "";
+        // Ensure that the timestamp is parsed correctly
+        if (movieData.ngayRaMat) {
+          const releaseDate = new Date(movieData.ngayRaMat);
+
+          // Adjust for time zone difference
+          const offset = releaseDate.getTimezoneOffset() * 60000; // Get the timezone offset in milliseconds
+          const adjustedDate = new Date(releaseDate.getTime() - offset);  // Adjust to UTC
+
+          // Manually format the date to yyyy-MM-dd
+          this.formattedReleaseDate = adjustedDate.toISOString().split("T")[0];  // Extract the date part (yyyy-MM-dd)
+        } else {
+          this.formattedReleaseDate = '';
+        }
 
         // Gán danh sách thể loại nếu có
         this.selectedTheLoaiIds = movieData.danhSachTLPhims.map((item) => item.theLoaiPhim?.id || []);
@@ -138,11 +152,25 @@ export default {
     },
     async saveMovie() {
       try {
+        // Manually format the date to ensure it stays as yyyy-MM-dd
+        const formattedDate = this.formattedReleaseDate; // formattedReleaseDate is already in yyyy-MM-dd format
+
         const updatedMovie = {
-          ...this.movie,
-          ngayRaMat: new Date(this.formattedReleaseDate).toISOString(),
-          danhSachTLPhims: this.selectedTheLoaiIds.map((id) => ({ id })), // Cập nhật danh sách thể loại
-          gioiHanDoTuoi: { id: this.selectedDoTuoiIds }, // Cập nhật độ tuổi
+          id: this.movie.id, // Ensure the movie ID is included
+          tenPhim: this.movie.tenPhim,
+          anhPhim: this.movie.anhPhim,
+          dienVien: this.movie.dienVien || "", // Set a default empty string if no actor data
+          id_TheLoaiPhims: this.selectedTheLoaiIds, // Array of selected genre IDs
+          nam: new Date(formattedDate).getFullYear(), // Extract the year from the formatted date
+          noiDungMoTa: this.movie.noiDungMoTa,
+          trailer: this.movie.trailer,
+          ngayRaMat: new Date(formattedDate).toISOString(), // Format the date to ISO string
+          thoiLuong: this.movie.thoiLuong,
+          quocGia: this.movie.quocGia,
+          noiDung: this.movie.noiDung,
+          id_GioiHanDoTuoi: this.selectedDoTuoiIds, // The selected age group ID
+          trangThai: this.movie.trangThai || 0, // Default to 0 if no status is set
+          diem: this.movie.diem || 0, // Default to 0 if no score is set
         };
 
         console.log("Dữ liệu sẽ gửi:", updatedMovie);
@@ -159,6 +187,7 @@ export default {
         alert("Cập nhật thông tin phim thất bại.");
       }
     },
+
     goBack() {
       this.$router.go(-1);
     },

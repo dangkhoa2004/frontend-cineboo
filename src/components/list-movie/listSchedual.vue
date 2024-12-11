@@ -1,34 +1,37 @@
 <template>
-<div class="button-group">
-    <button @click="goBack">Trở về</button>
-    <button @click="addsuatchieuschedual()">
-        Thêm lịch chiếu
-    </button>
+<div class="movie-manager">
+    <div class="button-group">
+        <button @click="goBack">Trở về</button>
+        <button @click="addsuatchieuschedual()">
+            Thêm lịch chiếu
+        </button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID suất chiếu</th>
+                <th>Mã suất chiếu</th>
+                <th>Thời gian chiếu</th>
+                <th>ID_Phim</th>
+                <th>Trạng thái suất chiếu</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="suatchieu in suatchieus" :key="suatchieu.id">
+                <td>{{ suatchieu.id }}</td>
+                <td>{{ suatchieu.maSuatChieu }}</td>
+                <td>{{ formatDate(suatchieu.thoiGianChieu) }}</td>
+                <td>{{ suatchieu.idPhim }}</td>
+                <td>{{ suatchieu.TrangThaiSuatChieu }}</td>
+                <td>
+                    <button @click="editMovie(suatchieu)">Sửa</button>
+                    <button @click="deleteMovie(suatchieu.id)">Xoá</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-<table>
-    <thead>
-        <tr>
-            <th>ID suất chiếu</th>
-            <th>Mã suất chiếu</th>
-            <th>Thời gian chiếu</th>
-            <th>ID_Phim</th>
-            <th>Trạng thái suất chiếu</th>
-            <th>Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="suatchieu in suatchieus" :key="suatchieu.id">
-            <td>{{ suatchieu.maSuatChieu }}</td>
-            <td>{{ formatDate(suatchieu.thoiGianChieu) }}</td>
-            <td>{{ suatchieu.idPhim }}</td>
-            <td>{{ suatchieu.TrangThaiSuatChieu }}</td>
-            <td>
-                <button @click="editMovie(suatchieu)">Sửa</button>
-                <button @click="deleteMovie(suatchieu.id)">Xoá</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
 </template>
 
 <script>

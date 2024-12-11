@@ -42,7 +42,6 @@ button {
 
 .voucher-manager {
   width: 100%;
-  max-width: 1200px;
   overflow-x: auto;
 }
 
@@ -87,10 +86,8 @@ tr:hover {
 
 .voucher-detail {
   width: 100%;
-  max-width: 1000px;
   margin: 20px;
   background-color: #fff;
-  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
