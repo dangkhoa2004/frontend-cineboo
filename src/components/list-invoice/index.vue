@@ -11,41 +11,37 @@
         <th>Tổng tiền</th>
         <th>Thời gian thanh toán</th>
         <th>Trạng thái</th>
-        <!-- <th>Chi tiết hoá đơn</th> -->
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="invoice in this.invoices" :key="invoice.id">
+      <tr v-for="invoice in paginatedInvoices" :key="invoice.id">
         <td>{{ invoice.maHoaDon }}</td>
         <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.ten} ${invoice.khachHang.tenDem}` }}</td>
-          <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
+        <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
         <td>
-          {{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.danhSachTLPhims.map(item => item.theLoaiPhim.tenTheLoai).join(', ') }}
-        </td> 
+          {{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.danhSachTLPhims.map(item =>
+            item.theLoaiPhim.tenTheLoai).join(', ') }}
+        </td>
         <td>{{ invoice.soLuong }}</td>
         <td>{{ formatCurrency(invoice.tongSoTien) }}</td>
         <td>{{ formatPaymentTime(invoice.thoiGianThanhToan) }}</td>
         <td>
           <span>{{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán" : "Chưa thanh toán" }}</span>
         </td>
-        <!-- <td>
-          <span v-if="invoice.chiTietHoaDonList.length > 0">
-            {{ invoice.chiTietHoaDonList.join(', ') }}
-          </span>
-          <span v-else>
-            < trống>
-          </span>
-        </td> -->
         <td>
           <button @click="viewInvoiceDetails(invoice)">Xem</button>
         </td>
       </tr>
     </tbody>
   </table>
+  <div class="pagination">
+    <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
+    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+    <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
+  </div>
 </div>
 </template>
-
 <script>
 import { fetchInvoices } from "@/api/invoice";
 
@@ -53,7 +49,19 @@ export default {
   data() {
     return {
       invoices: [],
+      currentPage: 1,
+      itemsPerPage: 8, // 8 trường mỗi trang
     };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.invoices.length / this.itemsPerPage);
+    },
+    paginatedInvoices() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.invoices.slice(start, end);
+    },
   },
   async mounted() {
     await this.loadInvoices();
@@ -79,7 +87,13 @@ export default {
     viewInvoiceDetails(invoice) {
       this.$router.push({ name: 'thay-doi-thong-tin-hoa-don', params: { id: invoice.id } });
     },
+    changePage(page) {
+      if (page > 0 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    },
   },
 };
+
 </script>
 <style src="./assets/styles.css" scoped></style>

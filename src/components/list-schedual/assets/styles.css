@@ -78,8 +78,8 @@
 .schedual-list-calendar-days li:hover {
     cursor: pointer;
     border-radius: 8px;
-    color: white;
-    background-color: var(--first-color);
+    color: var(--first-color);
+    background-color: black;
     padding: 5px;
 }
 

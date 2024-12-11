@@ -5,52 +5,6 @@
         <button @click="goBack">Trở về</button>
     </div>
     <div v-if="invoice">
-        <h3>Chi tiết hoá đơn</h3>
-        <section class="movie_checkout_content">
-            <div class="header-ticker">
-                <p>Cảm ơn bạn đã đặt vé của Cineboo!</p>
-            </div>
-            <div class="ticket-container">
-                <div class="col-1">
-                    <div class="ticket-info">
-                        <p class="status">Xuất vé thành công</p>
-                        <h2>{{ invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</h2>
-                        <p class="movie-details">Thời lượng: {{
-                            invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.thoiLuong }} phút</p>
-                        <div class="row-1">
-                            <p><span>Ngày:</span> {{
-                                formatDate(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
-                            }}</p>
-                            <p><span>Giờ:</span> {{
-                                formatTime(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
-                            }}</p>
-                            <p><span>Rạp:</span> {{
-                                invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_Ghe.phongChieu.maPhong }}</p>
-                        </div>
-                        <div class="row-1">
-                            <p><span>Vị trí ghế: </span>
-                                <span v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">
-                                    {{ item.id_GheAndSuatChieu.id_Ghe.maGhe }}<span
-                                        v-if="index < invoice.chiTietHoaDonList.length - 1">, </span>
-                                </span>
-                            </p>
-                            <p>Rạp CineBoo Nguyễn Du</p>
-                        </div>
-                        <p class="address">Tầng 3 TTTM CineBoo Hải Phòng Lê Thánh Tông, Thành phố Hải Phòng</p>
-                    </div>
-                </div>
-                <div class="col-1">
-                    <div class="qr-section">
-                        <img src="@/assets/img/qr.png" alt="QR Code">
-                        <p>Đưa mã QR cho nhân viên soát vé</p>
-                        <div class="ticket-code">
-                            <p>Mã vé</p>
-                            <span>666155985</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
         <h3>Thông tin khách hàng</h3>
         <div class="card customer-info">
             <div><strong>Họ và tên:</strong>
@@ -123,6 +77,54 @@
                 <input :value="getTrangThaiHoaDonText(invoice.trangThaiHoaDon)" disabled />
             </div>
         </div>
+        <h3>Chi tiết hoá đơn</h3>
+        <section class="movie_checkout_content">
+            <div class="header-ticker">
+                <p>Cảm ơn bạn đã đặt vé của Cineboo!</p>
+            </div>
+            <div class="ticket-container">
+                <div class="col-1">
+                    <div class="ticket-info">
+                        <p class="status" :class="statusClass(invoice.trangThaiHoaDon)">
+                            {{ getTrangThaiHoaDonText(invoice.trangThaiHoaDon) }}
+                        </p>
+                        <h2>{{ invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</h2>
+                        <p class="movie-details">Thời lượng: {{
+                            invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.thoiLuong }} phút</p>
+                        <div class="row-1">
+                            <p><span>Ngày:</span> {{
+                                formatDate(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
+                                }}</p>
+                            <p><span>Giờ:</span> {{
+                                formatTime(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
+                                }}</p>
+                            <p><span>Rạp:</span> {{
+                                invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_Ghe.phongChieu.maPhong }}</p>
+                        </div>
+                        <div class="row-1">
+                            <p><span>Vị trí ghế: </span>
+                                <span v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">
+                                    {{ item.id_GheAndSuatChieu.id_Ghe.maGhe }}<span
+                                        v-if="index < invoice.chiTietHoaDonList.length - 1">, </span>
+                                </span>
+                            </p>
+                            <p>Rạp CineBoo Nguyễn Du</p>
+                        </div>
+                        <p class="address">Tầng 3 TTTM CineBoo Hải Phòng Lê Thánh Tông, Thành phố Hải Phòng</p>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <div v-if="invoice.trangThaiHoaDon === 1" class="qr-section">
+                        <img src="@/assets/img/qr.png" alt="QR Code">
+                        <p>Đưa mã QR cho nhân viên soát vé</p>
+                        <div class="ticket-code">
+                            <p>Mã vé</p>
+                            <span>666155985</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
     <div v-else>
         <p>Đang tải thông tin hoá đơn...</p>
@@ -139,24 +141,21 @@ export default {
         };
     },
     computed: {
-
         formattedTime: {
             get() {
                 if (this.invoice && this.invoice.thoiGianThanhToan) {
-                    // Chuyển đổi từ mảng [2024, 1, 1, 19, 0] sang định dạng "YYYY-MM-DDTHH:mm"
                     const time = this.invoice.thoiGianThanhToan;
                     return `${time[0]}-${String(time[1]).padStart(2, '0')}-${String(time[2]).padStart(2, '0')}T${String(time[3]).padStart(2, '0')}:${String(time[4]).padStart(2, '0')}`;
                 }
                 return '';
             },
             set(value) {
-                // Chuyển đổi từ "YYYY-MM-DDTHH:mm" sang mảng [2024, 1, 1, 19, 0]
                 const date = new Date(value);
                 this.invoice.thoiGianThanhToan = [
                     date.getFullYear(),
-                    date.getMonth() + 1, // tháng bắt đầu từ 0, nên phải cộng thêm 1
+                    date.getMonth() + 1,
                     date.getDate(),
-                    date.getHours(),  // Giờ tự động theo chuẩn 24h
+                    date.getHours(),
                     date.getMinutes(),
                 ];
             }
@@ -167,27 +166,40 @@ export default {
     },
     methods: {
         formatDate(timeArray) {
-            const date = new Date(timeArray[0], timeArray[1] - 1, timeArray[2]); // Chuyển mảng thành ngày tháng năm
+            const date = new Date(timeArray[0], timeArray[1] - 1, timeArray[2]);
             return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
         },
         formatTime(timeArray) {
-            const date = new Date(timeArray[0], timeArray[1] - 1, timeArray[2], timeArray[3], timeArray[4]); // Chuyển mảng thành giờ phút
+            const date = new Date(timeArray[0], timeArray[1] - 1, timeArray[2], timeArray[3], timeArray[4]);
             return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
         },
         getTrangThaiHoaDonText(status) {
             switch (status) {
                 case 0:
-                    return "Chưa thanh toán";
+                    return "Hoá đơn chưa thanh toán";
                 case 1:
-                    return "Đã thanh toán";
+                    return "Hoá đơn đã thanh toán";
                 case 2:
-                    return "Đã huỷ";
+                    return "Hoá đơn đã huỷ thanh toán";
                 case 3:
-                    return "Đã thanh toán và in vé";
+                    return "Hoá đơn đã lấy vé thành công";
                 case 4:
-                    return "Đang chờ hoàn tiền";
+                    return "Đang có yêu cầu hoàn tiền";
                 default:
-                    return "Chưa xác định";
+                    return "Hoá đơn không xác định";
+            }
+        },
+        statusClass(status) {
+            switch (status) {
+                case 0:
+                case 2:
+                case 3:
+                case 4:
+                    return 'text-red';
+                case 1:
+                    return 'text-green';
+                default:
+                    return '';
             }
         },
         async loadInvoice() {
@@ -195,7 +207,6 @@ export default {
             try {
                 const invoiceData = await fetchInvoiceById(invoiceId);
                 this.invoice = invoiceData;
-                console.log(invoiceData);
             } catch (error) {
                 console.error("Lỗi khi tải thông tin hoá đơn:", error);
             }

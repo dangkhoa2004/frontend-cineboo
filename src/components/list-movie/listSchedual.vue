@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="suatchieu in suatchieus" :key="suatchieu.id">
+            <tr v-for="suatchieu in paginatedSuatChieus" :key="suatchieu.id">
                 <td>{{ suatchieu.id }}</td>
                 <td>{{ suatchieu.maSuatChieu }}</td>
                 <td>{{ formatDate(suatchieu.thoiGianChieu) }}</td>
@@ -31,9 +31,13 @@
             </tr>
         </tbody>
     </table>
+    <div class="pagination">
+        <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
+        <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+        <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
+    </div>
 </div>
 </template>
-
 <script>
 import { fetchSuatChieu } from "@/api/movie";
 
@@ -41,7 +45,19 @@ export default {
     data() {
         return {
             suatchieus: [],
+            currentPage: 1,
+            itemsPerPage: 7, // Số suất chiếu mỗi trang
         };
+    },
+    computed: {
+        totalPages() {
+            return Math.ceil(this.suatchieus.length / this.itemsPerPage);
+        },
+        paginatedSuatChieus() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.suatchieus.slice(start, end);
+        },
     },
     async mounted() {
         await this.loadsuatchieus();
@@ -68,7 +84,13 @@ export default {
         goBack() {
             this.$router.go(-1);
         },
-    }
+        changePage(page) {
+            if (page > 0 && page <= this.totalPages) {
+                this.currentPage = page;
+            }
+        },
+    },
 };
+
 </script>
 <style src="./assets/styles.css" scoped></style>

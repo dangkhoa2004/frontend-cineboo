@@ -16,7 +16,13 @@
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+    transition: .3s
+}
+
+.scroll-to-top:hover {
+    background-color: black;
+    color: var(--first-color);
 }
 
 .scroll-to-top span {

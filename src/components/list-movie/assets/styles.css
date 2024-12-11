@@ -14,7 +14,7 @@ button {
 }
 
 button:hover {
-  background-color:  var(--first-color);
+  background-color: black;
 }
 
 input,
@@ -105,11 +105,11 @@ tr:hover {
 }
 
 .movie-detail .button-container button:last-child {
-  background-color: #2ecc71;
+  background-color: var(--first-color);
 }
 
 .movie-detail .button-container button:last-child:hover {
-  background-color: #27ae60;
+  background-color: black;
 }
 
 .the-loai-container {

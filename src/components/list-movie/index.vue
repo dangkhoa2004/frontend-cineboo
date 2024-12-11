@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in movies" :key="movie.id">
+      <tr v-for="movie in paginatedMovies" :key="movie.id">
         <td>
           <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
         </td>
@@ -35,8 +35,14 @@
       </tr>
     </tbody>
   </table>
+  <div class="pagination">
+    <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
+    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+    <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
+  </div>
 </div>
 </template>
+
 
 <script>
 import { fetchMovies, deleteMovieById } from "@/api/movie";
@@ -45,7 +51,19 @@ export default {
   data() {
     return {
       movies: [],
+      currentPage: 1,
+      itemsPerPage: 5, // 8 phim mỗi trang
     };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.movies.length / this.itemsPerPage);
+    },
+    paginatedMovies() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.movies.slice(start, end);
+    },
   },
   async mounted() {
     await this.loadMovies();
@@ -85,7 +103,13 @@ export default {
         }
       }
     },
+    changePage(page) {
+      if (page > 0 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    },
   },
 };
+
 </script>
 <style src="./assets/styles.css" scoped></style>

@@ -120,11 +120,11 @@ tr:hover {
 }
 
 .voucher-detail .button-container button:last-child {
-  background-color: #2ecc71;
+  background-color: var(--first-color);
 }
 
 .voucher-detail .button-container button:last-child:hover {
-  background-color: #27ae60;
+  background-color: black;
 }
 
 @media (max-width: 768px) {

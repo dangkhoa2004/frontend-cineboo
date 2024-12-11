@@ -160,7 +160,7 @@
 }
 
 .movie-button input:hover {
-    background-color: var(--first-color);
+    background-color: black;
 }
 
 .movie-form .movie-login-signup {
