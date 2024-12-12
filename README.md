@@ -58,20 +58,37 @@ npm run serve
 
 ## 📁 Cấu trúc thư mục
 ```bash
-src/
-├── api/            # Các thành phần quản lý nạp api
-├── assets/         # Các tài nguyên như hình ảnh, font
-├── components/     # Các thành phần tái sử dụng
-├── config/         # Các thành phần cấu hình cho dự án
-├── directives/     # Các thành phần cấu hình chỉ thị UI
-├── layout/         # Các layout chính của ứng dụng
-├── plugins/        # Các tiện ích, cấu hình khác cho dự án
-├── router/         # Định tuyến của ứng dụng
-├── store/          # Quản lý trạng thái với Pinia
-├── style/          # Quản lý css trọng điểm dự án
-├── utils/          # Các hàm tiện ích (utility functions)
-├── views/          # Các trang hiển thị chính
-└── App.vue         # Thành phần root của ứng dụng
+frontend-cineboo/
+├── .vscode/               # Cấu hình editor (VS Code settings, extensions, ...).
+├── node_modules/          # Thư viện và dependencies được cài bằng npm/yarn.
+├── public/                # Tài nguyên tĩnh (static assets).
+├── src/                   # Mã nguồn chính của dự án.
+│   ├── api/               # Quản lý các API (file gọi API, config axios,...).
+│   ├── assets/            # Tài nguyên như ảnh, video, font, biểu tượng,...
+│   ├── components/        # Các thành phần (component) tái sử dụng.
+│   ├── config/            # Cấu hình toàn cục (base URL, constants, env, ...).
+│   ├── directives/        # Custom directives (VD: v-focus, v-scroll,...).
+│   ├── layout/            # Các layout chung (VD: Header, Footer, Sidebar).
+│   ├── locales/           # Đa ngôn ngữ (i18n configuration và các file JSON).
+│   ├── plugins/           # Đăng ký và cấu hình các plugin (VD: vuetify, vue-toast, ...).
+│   ├── router/            # Cấu hình route (vue-router).
+│   ├── store/             # State management (Vuex, Pinia, ...).
+│   ├── style/             # CSS/SCSS/LESS cho dự án (chung và theo module).
+│   ├── utils/             # Hàm tiện ích dùng chung (format data, xử lý ngày giờ,...).
+│   ├── views/             # Các trang (page) chính của ứng dụng.
+│   ├── App.vue            # File gốc của Vue.js (root component).
+│   └── main.ts            # Entry point chính của dự án (khởi chạy app).
+├── .gitattributes         # File cấu hình Git (encoding, line endings,...).
+├── .gitignore             # Danh sách file/thư mục cần bỏ qua khi commit.
+├── index.html             # File HTML chính (template khi build).
+├── package-lock.json      # File lock cho npm (quản lý version dependencies).
+├── package.json           # File cấu hình dự án (dependencies, scripts,...).
+├── README.md              # Tài liệu mô tả dự án.
+├── robots.txt             # File cấu hình cho bot tìm kiếm.
+├── tsconfig.app.json      # Cấu hình TypeScript cho ứng dụng.
+├── tsconfig.json          # Cấu hình chung cho TypeScript.
+├── tsconfig.node.json     # Cấu hình TypeScript cho môi trường Node.js.
+└── vite.config.ts         # File cấu hình cho Vite (tool build ứng dụng).
 ```
 
 ## 🎨 Tùy chỉnh giao diện
