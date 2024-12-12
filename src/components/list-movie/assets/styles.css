@@ -102,15 +102,3 @@ tr:hover {
 .movie-detail .button-container button:last-child:hover {
   background-color: black;
 }
-
-.the-loai-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-}
-
-.the-loai-item {
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-}

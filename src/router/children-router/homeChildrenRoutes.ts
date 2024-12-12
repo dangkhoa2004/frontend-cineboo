@@ -72,21 +72,6 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
       listComponent: () => import("@/components/list-voucher/detail.vue"),
     },
   },
-  // Liên quan phương thức thanh toán
-  {
-    path: "phuong-thuc-thanh-toan",
-    name: "pttts",
-    components: {
-      listComponent: () => import("@/components/list-voucher/index.vue"),
-    },
-  },
-  {
-    path: "phuong-thuc-thanh-toan/:id",
-    name: "thay-doi-thong-tin-pttt",
-    components: {
-      listComponent: () => import("@/components/list-voucher/detail.vue"),
-    },
-  },
   // Liên quan đến khách hàng
   {
     path: "thong-tin-khach-hang",
@@ -131,7 +116,15 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     components: {
       listComponent: () => import("@/components/list-application/index.vue"),
     },
-  }
+  },
+  // Liên quan đến thuộc tính và hỗ trợ
+  {
+    path: "ho-tro",
+    name: "ho-tro",
+    components: {
+      listComponent: () => import("@/components/list-contact/index.vue"),
+    },
+  },
 ];
 
 export default homeChildrenRoutes;

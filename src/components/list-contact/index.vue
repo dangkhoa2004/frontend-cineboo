@@ -4,11 +4,6 @@
     <button @click="activeTab = 'customers'">Quản lý khách hàng</button>
     <button @click="activeTab = 'employees'">Quản lý nhân viên</button>
   </div>
-
-  <div class="search-container">
-    <input v-model="searchQuery" type="text" placeholder="Tìm kiếm..." class="search-input" />
-  </div>
-
   <div v-if="activeTab === 'customers'" class="customer-manager">
     <table>
       <thead>
@@ -22,9 +17,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="customer in filteredCustomers" :key="customer.id">
+        <tr v-for="customer in customers" :key="customer.id">
           <td>{{ customer.id }}</td>
-          <td>{{ customer.ho }} {{ customer.tenDem }} {{ customer.ten }}</td>
+          <td>{{ customer.ho }} {{ customer.ten }} {{ customer.tenDem }}</td>
           <td>{{ formatDate(customer.ngaySinh) }}</td>
           <td>{{ customer.soDienThoai }}</td>
           <td>{{ customer.email }}</td>
@@ -41,33 +36,23 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Mã Nhân Viên</th>
-          <th>Tên</th>
-          <th>Tên Đệm</th>
-          <th>Họ</th>
+          <th>Ảnh</th>
+          <th>ID Nhân Viên</th>
+          <th>Tên Nhân Viên</th>
           <th>Ngày Sinh</th>
-          <th>Giới Tính</th>
-          <th>Email</th>
-          <th>Dân Tộc</th>
-          <th>Địa Chỉ</th>
-          <th>Trạng Thái Nhân Viên</th>
+          <th>Chức Vụ</th>
           <th>Thao Tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="employee in filteredEmployees" :key="employee.id">
-          <td>{{ employee.id }}</td>
+        <tr v-for="employee in employees" :key="employee.id">
+          <td>
+            <img :src="employee.anhNhanVien" alt="Avatar" class="employee-avatar" />
+          </td>
           <td>{{ employee.maNhanVien }}</td>
-          <td>{{ employee.ten }}</td>
-          <td>{{ employee.tenDem }}</td>
-          <td>{{ employee.ho }}</td>
+          <td>{{ employee.ho }} {{ employee.tenDem }} {{ employee.ten }}</td>
           <td>{{ formatDate(employee.ngaySinh) }}</td>
-          <td>{{ employee.gioiTinh }}</td>
-          <td>{{ employee.email }}</td>
-          <td>{{ employee.danToc }}</td>
-          <td>{{ employee.diaChi }}</td>
-          <td>{{ employee.trangThaiNhanVien }}</td>
+          <td>{{ employee.chucVu.tenChucVu }}</td>
           <td>
             <button @click="editEmployee(employee)">Sửa</button>
             <button @click="deleteEmployee(employee.id)">Xoá</button>
@@ -88,28 +73,8 @@ export default {
     return {
       activeTab: 'customers',
       customers: [],
-      employees: [],
-      searchQuery: '',
+      employees: []
     };
-  },
-  computed: {
-    filteredCustomers() {
-      const query = this.searchQuery.toLowerCase();
-      return this.customers.filter(customer =>
-      (`${customer.ho} ${customer.tenDem} ${customer.ten}`.toLowerCase().includes(query) ||
-        customer.email.toLowerCase().includes(query) ||
-        customer.soDienThoai.includes(query) ||
-        customer.id.toString().includes(query))
-      );
-    },
-    filteredEmployees() {
-      const query = this.searchQuery.toLowerCase();
-      return this.employees.filter(employee =>
-      (`${employee.ho} ${employee.tenDem} ${employee.ten}`.toLowerCase().includes(query) ||
-        employee.maNhanVien.toLowerCase().includes(query) ||
-        employee.email.toLowerCase().includes(query))
-      );
-    }
   },
   async mounted() {
     await this.loadCustomers();
@@ -171,25 +136,5 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.tabs {
-  margin-bottom: 15px;
-}
-
-.search-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 15px;
-}
-
-.search-input {
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1;
-}
-</style>
 
 <style src="./assets/styles.css" scoped></style>

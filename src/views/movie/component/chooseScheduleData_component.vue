@@ -31,14 +31,14 @@
       <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
       <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
       <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
-      <!--<div class="movie-format">Ngày chiếu: {{ formatDate(theater.thoiGianChieu) }}</div> //Not needed at all -->
     </button>
   </div>
 </div>
 </template>
+
 <script>
 import { ref, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router"; // import useRouter
+import { useRoute, useRouter } from "vue-router";
 import { fetchShowtimesByMovieId } from "@/api/movie";
 import { requestWithJWT } from '@/api/api.ts';
 
@@ -53,7 +53,7 @@ export default {
     const selectedDate = ref(currentDate);
 
     const route = useRoute();
-    const router = useRouter(); // initialize router
+    const router = useRouter();
     selectedMovieId.value = route.params.id;
 
     const sevenDays = computed(() => {
@@ -61,103 +61,78 @@ export default {
       const today = new Date();
       for (let i = 0; i <= 5; i++) {
         const date = new Date(today);
-		
         date.setDate(today.getDate() + i);
         dates.push(date.toISOString().split("T")[0]);
       }
       return dates;
     });
 
-const fetchShowtimes = async (movieId) => {
-  try {
-    const response = await fetchShowtimesByMovieId(movieId);
-    if (Array.isArray(response) && response.length) {
-      showtimes.value = response.map(theater => {
-        if (typeof theater.thoiGianChieu === 'string') {
-          const localTime = new Date(theater.thoiGianChieu);
-          localTime.setHours(localTime.getHours() + 7); // Adjust to Vietnam Time
-          theater.thoiGianChieu = localTime;
-        } else if (Array.isArray(theater.thoiGianChieu)) {
-          const [year, month, day, hour, minute] = theater.thoiGianChieu;
-          const localTime = new Date(year, month - 1, day, hour, minute);
-          localTime.setHours(localTime.getHours() + 7); // Adjust to Vietnam Time
-          theater.thoiGianChieu = localTime;
-        }
-        return theater;
-      });
-
-      // Fetch and append specific PhongChieu fields
-      const phongChieuPromises = showtimes.value.map(async (theater) => {
-        const tempSuatChieuId = theater.id;
-        if (tempSuatChieuId) {
-          try {
-            const phongChieuResponse = await requestWithJWT(
-              'get',
-              `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`
-            );
-            if (phongChieuResponse && phongChieuResponse.status === 200) {
-              const data = phongChieuResponse.data;
-              theater.phongChieu = {
-                id: data.id || -1,
-                maPhong: data.maPhong || "",
-                tongSoGhe: data.tongSoGhe || 0,
-                trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
-              };
-            } else {
-              throw new Error("PhongChieu fetch failed");
+    const fetchShowtimes = async (movieId) => {
+      try {
+        const response = await fetchShowtimesByMovieId(movieId);
+        if (Array.isArray(response) && response.length) {
+          showtimes.value = response.map(theater => {
+            if (typeof theater.thoiGianChieu === 'string') {
+              theater.thoiGianChieu = new Date(new Date(theater.thoiGianChieu).getTime() + 7 * 60 * 60 * 1000);
+            } else if (Array.isArray(theater.thoiGianChieu)) {
+              const [year, month, day, hour, minute] = theater.thoiGianChieu;
+              theater.thoiGianChieu = new Date(year, month - 1, day, hour, minute);
+              theater.thoiGianChieu.setHours(theater.thoiGianChieu.getHours() + 7);
             }
-          } catch (error) {
-            // Fallback values in case of failure
-            theater.phongChieu = {
-              id: -1,
-              maPhong: "(chưa có)",
-              tongSoGhe: 0,
-              trangThaiPhongChieu: 0,
-            };
-          }
+            return theater;
+          });
+          filterShowtimes();
+        } else {
+          showtimes.value = [];
+          console.error("Không tìm thấy dữ liệu suất chiếu.");
         }
-        return theater;
-      });
-
-      showtimes.value = await Promise.all(phongChieuPromises);
-
-      filterShowtimes(); // Apply initial filter after fetching
-    } else {
-      showtimes.value = [];
-      console.error("Không tìm thấy dữ liệu suất chiếu.");
-    }
-  } catch (error) {
-    console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
-  }
-};
-
-
-
-
-    const filterShowtimes = () => {
-      filteredShowtimes.value = showtimes.value.filter(theater => {
-        const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0]; 
-        return showtimeDate === selectedDate.value;
-      });
-	  console.log(filteredShowtimes.value);//When choosing schedule this one is called to filter out other days
-	  console.log("MEWOO");
-    };
-
-    const updateSelectedDate = (date) => { 
-		router.push("no-showtime-chosen");
-		selectedDate.value = date;
-		filterShowtimes();
-		return;
-      if (date === selectedDate.value) {
-        filteredShowtimes.value = showtimes.value;
-      } else {
-        selectedDate.value = date;
-        filterShowtimes();
-		 
+      } catch (error) {
+        console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
       }
     };
 
-    const logTheaterInfo = (theater) => { 
+    const fetchPhongChieuForShowtime = async (theater) => {
+      try {
+        const tempSuatChieuId = theater.id;
+        const phongChieuResponse = await requestWithJWT('get', `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`);
+        if (phongChieuResponse && phongChieuResponse.status === 200) {
+          const data = phongChieuResponse.data;
+          theater.phongChieu = {
+            id: data.id || -1,
+            maPhong: data.maPhong || "",
+            tongSoGhe: data.tongSoGhe || 0,
+            trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
+          };
+        } else {
+          throw new Error("PhongChieu fetch failed");
+        }
+      } catch (error) {
+        theater.phongChieu = {
+          id: -1,
+          maPhong: "(chưa có)",
+          tongSoGhe: 0,
+          trangThaiPhongChieu: 0,
+        };
+      }
+    };
+
+    const filterShowtimes = () => {
+      filteredShowtimes.value = showtimes.value.filter(theater => {
+        const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
+        return showtimeDate === selectedDate.value;
+      });
+    };
+
+    const updateSelectedDate = (date) => {
+      router.push("no-showtime-chosen");
+      selectedDate.value = date;
+      filterShowtimes();
+      filteredShowtimes.value.forEach(theater => {
+        fetchPhongChieuForShowtime(theater);
+      });
+    };
+
+    const logTheaterInfo = (theater) => {
       const suatChieuId = theater.id;
       if (suatChieuId) {
         router.push(`/phim/${selectedMovieId.value}/suat-chieu/${suatChieuId}`);
@@ -182,8 +157,7 @@ const fetchShowtimes = async (movieId) => {
 
     onMounted(() => {
       if (selectedMovieId.value) {
-        fetchShowtimes(selectedMovieId.value);  
-	 
+        fetchShowtimes(selectedMovieId.value);
       } else {
         console.error("Không tìm thấy ID phim.");
       }
@@ -215,4 +189,3 @@ button:disabled {
   cursor: not-allowed;
 }
 </style>
-<!-- chooseScheduleData_component.vue -->

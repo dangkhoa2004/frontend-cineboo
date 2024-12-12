@@ -1,12 +1,13 @@
 <template>
 <div class="movie-manager">
-  <div>
+  <div class="button-container">
     <button @click="addMovie()">
       Thêm mới
     </button>
     <button @click="MovieSchedual()">
       Quản lý lịch chiếu
     </button>
+    <input v-model="searchQuery" type="text" placeholder="Tìm kiếm phim..." class="" />
   </div>
   <table>
     <thead>
@@ -20,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in paginatedMovies" :key="movie.id">
+      <tr v-for="movie in filteredMovies" :key="movie.id">
         <td>
           <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
         </td>
@@ -35,14 +36,8 @@
       </tr>
     </tbody>
   </table>
-  <div class="pagination">
-    <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
-    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-    <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
-  </div>
 </div>
 </template>
-
 
 <script>
 import { fetchMovies, deleteMovieById } from "@/api/movie";
@@ -50,23 +45,20 @@ import { fetchMovies, deleteMovieById } from "@/api/movie";
 export default {
   data() {
     return {
-      movies: [],
-      currentPage: 1,
-      itemsPerPage: 5, // 8 phim mỗi trang
+      movies: [], // Danh sách phim
+      searchQuery: "", // Từ khoá tìm kiếm
     };
-  },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.movies.length / this.itemsPerPage);
-    },
-    paginatedMovies() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.movies.slice(start, end);
-    },
   },
   async mounted() {
     await this.loadMovies();
+  },
+  computed: {
+    filteredMovies() {
+      const query = this.searchQuery.toLowerCase();
+      return this.movies.filter(movie =>
+        movie.tenPhim.toLowerCase().includes(query)
+      );
+    },
   },
   methods: {
     async addMovie() {
@@ -103,13 +95,8 @@ export default {
         }
       }
     },
-    changePage(page) {
-      if (page > 0 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
   },
 };
-
 </script>
+
 <style src="./assets/styles.css" scoped></style>

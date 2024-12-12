@@ -1,5 +1,8 @@
 <template>
 <div class="invoice-manager">
+  <div class="button-container">
+    <input v-model="searchQuery" type="text" placeholder="Tìm kiếm hoá đơn..." class="search-input" />
+  </div>
   <table>
     <thead>
       <tr>
@@ -15,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="invoice in paginatedInvoices" :key="invoice.id">
+      <tr v-for="invoice in filteredInvoices" :key="invoice.id">
         <td>{{ invoice.maHoaDon }}</td>
         <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.tenDem} ${invoice.khachHang.ten}` }}</td>
         <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
@@ -51,6 +54,7 @@ export default {
       invoices: [],
       currentPage: 1,
       itemsPerPage: 8, // 8 trường mỗi trang
+      searchQuery: "", // Từ khoá tìm kiếm
     };
   },
   computed: {
@@ -60,7 +64,15 @@ export default {
     paginatedInvoices() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
-      return this.invoices.slice(start, end);
+      return this.filteredInvoices.slice(start, end);
+    },
+    filteredInvoices() {
+      const query = this.searchQuery.toLowerCase();
+      return this.invoices.filter(invoice =>
+        invoice.maHoaDon.toLowerCase().includes(query) ||
+        `${invoice.khachHang.ho} ${invoice.khachHang.tenDem} ${invoice.khachHang.ten}`.toLowerCase().includes(query) ||
+        invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim.toLowerCase().includes(query)
+      );
     },
   },
   async mounted() {
@@ -96,4 +108,12 @@ export default {
 };
 
 </script>
-<style src="./assets/styles.css" scoped></style>
+<style src="./assets/styles.css" scoped>
+.search-input {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+</style>

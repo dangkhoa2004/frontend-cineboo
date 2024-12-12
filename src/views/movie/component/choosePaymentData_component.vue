@@ -82,9 +82,7 @@ export default {
     },
   },
   created() {
-    console.log("CREATING ANEW");
     const user = getUserInfo();
-    console.log('User info:', user);
     if (user) {
       this.userInfo = { ...user };
     } else {

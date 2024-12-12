@@ -33,9 +33,9 @@
       <div>
         <h3 class="sidebar__title">{{ $t("message.contact_man") }}</h3>
         <div class="sidebar__list">
-          <router-link to="/quan-ly/tin-nhan" class="sidebar__link" active-class="active-link">
+          <router-link to="/quan-ly/ho-tro" class="sidebar__link" active-class="active-link">
             <i class="ri-chat-3-fill"></i>
-            <span>{{ $t("message.return_man") }}</span>
+            <span>{{ $t("message.contact_man") }}</span>
           </router-link>
           <router-link to="/quan-ly/thong-tin-khach-hang" class="sidebar__link" active-class="active-link">
             <i class="ri-user-3-fill"></i>

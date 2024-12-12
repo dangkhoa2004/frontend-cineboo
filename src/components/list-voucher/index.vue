@@ -1,5 +1,10 @@
 <template>
 <div class="voucher-manager">
+  <div class="button-container">
+    <input v-model="startDate" type="date" placeholder="Từ ngày" class="search-input" />
+    <input v-model="endDate" type="date" placeholder="Đến ngày" class="search-input" />
+    <button @click="filterByDateRange">Tìm kiếm</button>
+  </div>
   <table>
     <thead>
       <tr>
@@ -17,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="voucher in vouchers" :key="voucher.id">
+      <tr v-for="voucher in filteredVouchers" :key="voucher.id">
         <td>{{ voucher.maVoucher }}</td>
         <td>{{ formatCurrency(voucher.giaTriDoi) }}</td>
         <td>{{ voucher.truTienPhanTram }}%</td>
@@ -47,6 +52,9 @@ export default {
   data() {
     return {
       vouchers: [],  // Dữ liệu voucher sẽ được lưu ở đây
+      startDate: "", // Ngày bắt đầu tìm kiếm
+      endDate: "",   // Ngày kết thúc tìm kiếm
+      filteredVouchers: [],
     };
   },
   async mounted() {
@@ -55,12 +63,9 @@ export default {
   methods: {
     async loadVouchers() {
       try {
-        const voucherData = await fetchVouchers();  // Fetch dữ liệu voucher
-        // Đảm bảo chiTietVoucherList luôn là một mảng hợp lệ
-        this.vouchers = voucherData.map(voucher => ({
-          ...voucher,
-          chiTietVoucherList: voucher.chiTietVoucherList || []  // Nếu không có chi tiết thì khởi tạo là mảng rỗng
-        }));
+        const voucherData = await fetchVouchers();
+        this.vouchers = voucherData;
+        this.filteredVouchers = voucherData; // Ban đầu hiển thị tất cả
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu voucher:", error);
       }
@@ -71,10 +76,24 @@ export default {
       }
       return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
     },
-    formatDate(dateString) {
-      const date = new Date(dateString);
+    formatDate(dateArray) {
+      const [year, month, day] = dateArray;
+      const date = new Date(year, month - 1, day);
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       return date.toLocaleDateString("vi-VN", options);
+    },
+    filterByDateRange() {
+      if (!this.startDate || !this.endDate) {
+        alert("Vui lòng chọn khoảng ngày hợp lệ.");
+        return;
+      }
+      const start = new Date(this.startDate);
+      const end = new Date(this.endDate);
+      this.filteredVouchers = this.vouchers.filter(voucher => {
+        const voucherStartDate = new Date(...voucher.ngayBatDau);
+        const voucherEndDate = new Date(...voucher.ngayKetThuc);
+        return voucherStartDate >= start && voucherEndDate <= end;
+      });
     },
     viewVoucherDetails(voucher) {
       this.$router.push({ name: 'thay-doi-thong-tin-voucher', params: { id: voucher.id } });
@@ -85,6 +104,7 @@ export default {
         try {
           await deleteVoucherById(id);
           this.vouchers = this.vouchers.filter(voucher => voucher.id !== id);
+          this.filteredVouchers = this.filteredVouchers.filter(voucher => voucher.id !== id);
           alert("Voucher đã được xoá thành công.");
         } catch (error) {
           console.error("Lỗi khi xoá voucher:", error);
@@ -95,4 +115,13 @@ export default {
   },
 };
 </script>
-<style src="./assets/styles.css" scoped></style>
+<style src="./assets/styles.css" scoped>
+.search-input {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+</style>

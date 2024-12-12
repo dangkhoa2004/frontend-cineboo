@@ -115,17 +115,14 @@ const validateSeatSelection = () => {
     numberPart--;
     numberPart--;
     numberPart--;
-    console.log("AFTER DECREASE" + numberPart);
     if (numberPart % 10 === 0) {// If the selected seat is next to right edge and is the only one selected
       swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error")
       return false;
     }
   }
   if (selectedList.length == 2) {
-    console.log(" 2 seats");
     const previous = selectedList[selectedList.length - 1].replace(/\D/g, '');
     const next = selectedList[selectedList.length - 2].replace(/\D/g, '');
-    console.log(Math.abs(previous - next));
     if (Math.abs(previous - next) == 2) {// Allow two seats inbetween, but not one
       swal("Oops", "Bạn không thể để trống một ghế ở giữa", "error")
       return false;
