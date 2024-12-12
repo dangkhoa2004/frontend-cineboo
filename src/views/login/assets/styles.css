@@ -1,98 +1,100 @@
 .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: black;
-  }
-  
-  .auth-box {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    border-radius: 10px;
-  }
-  
-  .form-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .input-field {
-    position: relative;
-    margin-bottom: 20px;
-  }
-  
-  .input-field input {
-    width: 100%;
-    padding: 10px 35px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-  }
-  
-  .input-field input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .input-field i {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #aaa;
-  }
-  
-  .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-  
-  .auth-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .auth-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .toggle-form-link {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 14px;
-  }
-  
-  .toggle-form-link span {
-    color: #007bff;
-    cursor: pointer;
-  }
-  
-  .auth-form {
-    display: none;
-    opacity: 0;
-    transition: all 0.3s ease;
-  }
-  
-  .auth-form.active {
-    display: block;
-    opacity: 1;
-  }
+  padding-top: 100px;
+  padding-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: black;
+}
+
+.auth-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.input-field {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 10px 35px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.input-field input:focus {
+  border-color: black;
+  outline: none;
+}
+
+.input-field i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--first-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: black;
+}
+
+.toggle-form-link {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.toggle-form-link span {
+  color: var(--first-color);
+  cursor: pointer;
+}
+
+.auth-form {
+  display: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.auth-form.active {
+  display: block;
+  opacity: 1;
+}

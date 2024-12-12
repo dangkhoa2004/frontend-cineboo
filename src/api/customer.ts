@@ -1,14 +1,14 @@
 import { apiClient } from './api';
 import axios from 'axios'; // Ensure Axios is imported
 
-/* Lấy danh sách nhân viên */
-export const fetchnhanviens = async (params = {}) => {
+/* Lấy danh sách khách hàng */
+export const fetchkhachhangs = async (params = {}) => {
     try {
-        const response = await apiClient.get('/nhanvien/get', { params });
+        const response = await apiClient.get('/khachhang/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('API: [Lỗi khi xử lý dữ liệu nhân viên]', error.response ? error.response.data : error.message);
+            console.error('API: [Lỗi khi xử lý dữ liệu khách hàng]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
@@ -16,14 +16,14 @@ export const fetchnhanviens = async (params = {}) => {
     }
 };
 
-/* Lấy nhân viên theo id */
-export const fetchnhanvienById = async (id: string) => {
+/* Lấy khách hàng theo id */
+export const fetchkhachhangById = async (id: string) => {
     try {
-        const response = await apiClient.get(`/nhanvien/find/${id}`);
+        const response = await apiClient.get(`/khachhang/find/${id}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('API: [Lỗi khi xử lý dữ liệu nhân viên]', error.response ? error.response.data : error.message);
+            console.error('API: [Lỗi khi xử lý dữ liệu khách hàng]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
@@ -31,14 +31,14 @@ export const fetchnhanvienById = async (id: string) => {
     }
 };
 
-/* Cập nhật nhân viên theo id */
-export const updatenhanvienById = async (id: string, nhanvienData: any) => {
+/* Cập nhật khách hàng theo id */
+export const updatekhachhangById = async (id: string, khachhangData: any) => {
     try {
-        const response = await apiClient.put(`/nhanvien/update/${id}`, nhanvienData);
+        const response = await apiClient.put(`/khachhang/update/${id}`, khachhangData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('API: [Lỗi khi cập nhật nhân viên]', error.response ? error.response.data : error.message);
+            console.error('API: [Lỗi khi cập nhật khách hàng]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
@@ -46,16 +46,16 @@ export const updatenhanvienById = async (id: string, nhanvienData: any) => {
     }
 };
 
-/* Xoá nhân viên theo id */
-export const deletenhanvienById = async (id: string) => {
+/* Xoá khách hàng theo id */
+export const deletekhachhangById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/nhanvien/delete/${id}`);
+        const response = await apiClient.delete(`/khachhang/delete/${id}`);
         if (!response.status) {
-            throw new Error('Không thể xoá nhân viên');
+            throw new Error('Không thể xoá khách hàng');
         }
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('API: [Lỗi khi xoá nhân viên]', error.response ? error.response.data : error.message);
+            console.error('API: [Lỗi khi xoá khách hàng]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
@@ -63,14 +63,14 @@ export const deletenhanvienById = async (id: string) => {
     }
 };
 
-/* Tạo nhân viên mới */
-export const createnhanvien = async (nhanvienData: any) => {
+/* Tạo khách hàng mới */
+export const createkhachhang = async (khachhangData: any) => {
     try {
-        const response = await apiClient.post('/nhanvien/add', nhanvienData);
+        const response = await apiClient.post('/khachhang/add', khachhangData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('API: [Lỗi khi tạo nhân viên]', error.response ? error.response.data : error.message);
+            console.error('API: [Lỗi khi tạo khách hàng]', error.response ? error.response.data : error.message);
         } else {
             console.error('API: [Lỗi không xác định]', error);
         }
