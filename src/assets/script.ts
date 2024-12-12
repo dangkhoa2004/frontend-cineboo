@@ -8,11 +8,8 @@ export default function mainjs() {
 
         if (toggle && sidebar && header && main) {
             toggle.addEventListener('click', () => {
-                /* Show sidebar */
                 sidebar.classList.toggle('show-sidebar');
-                /* Add padding header */
                 header.classList.toggle('left-pd');
-                /* Add padding main */
                 main.classList.toggle('left-pd');
             });
         }
@@ -27,24 +24,23 @@ export default function mainjs() {
 
     if (menuBtn && navLinks && menuBtnIcon) {
         menuBtn.addEventListener("click", () => {
-            navLinks.classList.toggle("open");
-            const isOpen = navLinks.classList.contains("open");
-            menuBtnIcon.setAttribute("class", isOpen ? "fas fa-times" : "fas fa-bars");
+            const isOpen = navLinks.classList.toggle("open");
+            menuBtnIcon.className = isOpen ? "fas fa-times" : "fas fa-bars";  // Directly toggle class
         });
 
         navLinks.addEventListener("click", () => {
             navLinks.classList.remove("open");
-            menuBtnIcon.setAttribute("class", "fas fa-bars");
+            menuBtnIcon.className = "fas fa-bars"; // Reset icon on link click
         });
     }
 
     /*=============== LINK ACTIVE ===============*/
-    const sidebarLink = document.querySelectorAll<HTMLAnchorElement>('.sidebar__list a');
+    const sidebarLinks = document.querySelectorAll<HTMLAnchorElement>('.sidebar__list a');
 
-    const linkColor = (event: Event) => {
-        sidebarLink.forEach(l => l.classList.remove('active-link'));
-        (event.currentTarget as HTMLAnchorElement).classList.add('active-link');
-    };
-
-    sidebarLink.forEach(l => l.addEventListener('click', linkColor));
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            sidebarLinks.forEach(l => l.classList.remove('active-link'));
+            (event.currentTarget as HTMLAnchorElement).classList.add('active-link');
+        });
+    });
 }
