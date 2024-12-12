@@ -81,14 +81,15 @@
   </div>
 </div>
 </template>
-
 <script>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'; // Thêm import này
 import { login, signup } from '@/api/authService';
 
 export default {
   name: 'AuthForm',
   setup() {
+    const router = useRouter(); // Khởi tạo router
     const isLoginActive = ref(true); // Biến xác định trạng thái của form đăng nhập
     const formData = ref({
       username: '', // Username field
@@ -114,7 +115,7 @@ export default {
     const handleLogin = async () => {
       try {
         await login(formData.value.username, formData.value.password);
-        window.location.href = '/';
+        router.go(-1); // Quay lại trang trước đó sau khi đăng nhập thành công
       } catch (error) {
         errorMessage.value = error.message;
       }
@@ -150,6 +151,4 @@ export default {
   },
 };
 </script>
-
-
 <style src="../assets/styles.css"></style>

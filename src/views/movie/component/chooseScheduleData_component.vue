@@ -1,39 +1,39 @@
 <template>
-<div class="schedule-container">
-  <div class="schedule-header">
-    <h2>Lịch Chiếu</h2>
-    <div class="date-selector">
-      <button v-for="(date, index) in sevenDays" :key="date" @click="updateSelectedDate(date)"
-        :disabled="new Date(date) < new Date(currentDate)">
-        <div>{{ formatDate(date) }}</div>
-        <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
-        <div v-else>{{ `Hôm nay` }}</div>
+  <div class="schedule-container">
+    <div class="schedule-header">
+      <h2>Lịch Chiếu</h2>
+      <div class="date-selector">
+        <button v-for="(date, index) in sevenDays" :key="date" @click="updateSelectedDate(date)"
+          :disabled="new Date(date) < new Date(currentDate)">
+          <div>{{ formatDate(date) }}</div>
+          <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
+          <div v-else>{{ `Hôm nay` }}</div>
+        </button>
+      </div>
+      <div class="filter-options">
+        <select v-model="selectedStreet" @change="filterShowtimes">
+          <option>Toàn quốc</option>
+          <option>Hải Phòng</option>
+          <option>Hà Nội</option>
+        </select>
+        <select v-model="selectedTheater" @change="filterShowtimes">
+          <option>Tất cả rạp</option>
+          <option>CineBoo Nguyễn Du</option>
+          <option>CineBoo Sala</option>
+        </select>
+      </div>
+    </div>
+    <div v-if="filteredShowtimes.length === 0">
+      <p>Chưa có dữ liệu suất chiếu.</p>
+    </div>
+    <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
+      <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
+        <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
+        <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
+        <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
       </button>
     </div>
-    <div class="filter-options">
-      <select v-model="selectedStreet" @change="filterShowtimes">
-        <option>Toàn quốc</option>
-        <option>Hải Phòng</option>
-        <option>Hà Nội</option>
-      </select>
-      <select v-model="selectedTheater" @change="filterShowtimes">
-        <option>Tất cả rạp</option>
-        <option>CineBoo Nguyễn Du</option>
-        <option>CineBoo Sala</option>
-      </select>
-    </div>
   </div>
-  <div v-if="filteredShowtimes.length === 0">
-    <p>Chưa có dữ liệu suất chiếu.</p>
-  </div>
-  <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
-    <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
-      <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
-      <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
-      <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
-    </button>
-  </div>
-</div>
 </template>
 
 <script>
@@ -41,6 +41,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchShowtimesByMovieId } from "@/api/movie";
 import { requestWithJWT } from '@/api/api.ts';
+import { isLoggedIn } from "@/api/authService";  // Import the function
 
 export default {
   setup() {
@@ -91,31 +92,6 @@ export default {
       }
     };
 
-    const fetchPhongChieuForShowtime = async (theater) => {
-      try {
-        const tempSuatChieuId = theater.id;
-        const phongChieuResponse = await requestWithJWT('get', `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`);
-        if (phongChieuResponse && phongChieuResponse.status === 200) {
-          const data = phongChieuResponse.data;
-          theater.phongChieu = {
-            id: data.id || -1,
-            maPhong: data.maPhong || "",
-            tongSoGhe: data.tongSoGhe || 0,
-            trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
-          };
-        } else {
-          throw new Error("PhongChieu fetch failed");
-        }
-      } catch (error) {
-        theater.phongChieu = {
-          id: -1,
-          maPhong: "(chưa có)",
-          tongSoGhe: 0,
-          trangThaiPhongChieu: 0,
-        };
-      }
-    };
-
     const filterShowtimes = () => {
       filteredShowtimes.value = showtimes.value.filter(theater => {
         const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
@@ -132,7 +108,14 @@ export default {
       });
     };
 
+    // Add the check for login status in the logTheaterInfo method
     const logTheaterInfo = (theater) => {
+      if (!isLoggedIn()) {
+        alert("Bạn cần đăng nhập để xem chi tiết suất chiếu.");
+        router.push("/dang-nhap");  // Navigate to the login page
+        return;
+      }
+
       const suatChieuId = theater.id;
       if (suatChieuId) {
         router.push(`/phim/${selectedMovieId.value}/suat-chieu/${suatChieuId}`);
@@ -176,16 +159,9 @@ export default {
       formatDate,
       formatTime,
       getDayOfWeek,
-      logTheaterInfo,
+      logTheaterInfo,  // Make sure it's returned here
       updateSelectedDate,
     };
   },
 };
 </script>
-<style scoped>
-button:disabled {
-  background-color: #ffffff;
-  color: black;
-  cursor: not-allowed;
-}
-</style>
