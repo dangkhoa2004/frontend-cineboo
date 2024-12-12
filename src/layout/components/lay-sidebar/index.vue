@@ -81,5 +81,9 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+button {
+  all: unset;
+}
+</style>
 <style src="./assets/styles.css"></style>

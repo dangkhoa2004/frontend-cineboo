@@ -47,10 +47,6 @@ img {
   height: auto;
 }
 
-button {
-  all: unset;
-}
-
 .container {
   margin-inline: 1.5rem;
 }

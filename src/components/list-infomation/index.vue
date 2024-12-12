@@ -4,46 +4,49 @@
         <form @submit.prevent="updateUserInfo">
             <div>
                 <label>Họ:</label>
-                <input type="text" v-model="userInfo.ho" disabled />
+                <input type="text" v-model="userInfo.ho" :disabled="true" />
             </div>
             <div>
                 <label>Tên đệm:</label>
-                <input type="text" v-model="userInfo.tenDem" disabled />
+                <input type="text" v-model="userInfo.tenDem" :disabled="true" />
             </div>
             <div>
                 <label>Tên:</label>
-                <input type="text" v-model="userInfo.ten" disabled />
+                <input type="text" v-model="userInfo.ten" :disabled="true" />
             </div>
             <div>
                 <label>Email:</label>
-                <input type="email" v-model="userInfo.email" disabled />
+                <input type="email" v-model="userInfo.email" :disabled="true" />
             </div>
             <div>
                 <label>Địa chỉ:</label>
-                <input type="text" v-model="userInfo.diaChi" disabled />
+                <input type="text" v-model="userInfo.diaChi" :disabled="true" />
             </div>
             <div>
                 <label>Ngày sinh:</label>
-                <input type="date" v-model="formattedDate" @change="updateDate" disabled />
+                <input type="date" v-model="formattedDate" @change="updateDate" :disabled="true" />
             </div>
             <div>
                 <label>Dân tộc:</label>
-                <input type="text" v-model="userInfo.danToc" disabled />
+                <input type="text" v-model="userInfo.danToc" :disabled="true" />
             </div>
             <div class="gender-selection">
                 <label>Giới tính:</label>
-                <select v-model="userInfo.gioiTinh">
+                <select v-model="userInfo.gioiTinh" :disabled="true">
                     <option value="1">Nam</option>
                     <option value="0">Nữ</option>
                 </select>
             </div>
-            <div>
+
+            <!-- Hiển thị Chức vụ chỉ khi là nhân viên -->
+            <div v-if="userInfo.taiKhoan.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien' && userInfo.chucVu">
                 <label>Chức vụ:</label>
-                <input type="text" v-model="userInfo.chucVu.tenChucVu" disabled />
+                <input type="text" v-model="userInfo.chucVu.tenChucVu" :disabled="true" />
             </div>
+
             <div>
                 <label>Ghi chú:</label>
-                <input type="text" v-model="userInfo.taiKhoan.ghiChu" disabled />
+                <input type="text" v-model="userInfo.taiKhoan.ghiChu" :disabled="true" />
             </div>
             <button type="submit">Cập nhật thông tin</button>
         </form>
@@ -67,8 +70,12 @@ interface User {
     ngaySinh: [number, number, number];
     danToc: string;
     gioiTinh: number;
-    chucVu: { tenChucVu: string };
-    taiKhoan: { tenDangNhap: string, ghiChu: string };
+    chucVu?: { tenChucVu: string }; // Chức vụ có thể không có cho khách hàng
+    taiKhoan: {
+        tenDangNhap: string,
+        ghiChu: string,
+        phanLoaiTaiKhoan: { tenLoaiTaiKhoan: string }, // 'NhanVien' hoặc 'KhachHang'
+    };
 }
 
 export default {

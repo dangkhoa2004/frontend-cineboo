@@ -1,169 +1,98 @@
-.extend_header {
-    background-color: black;
-}
-
-.body-container-form {
+.auth-container {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     background-color: black;
-}
-
-.movie-container {
-    position: relative;
+  }
+  
+  .auth-box {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 1.5rem;
-}
-
-.movie-container .movie-forms {
-    display: flex;
-    align-items: center;
-    height: 440px;
-    width: 200%;
-    transition: height 0.2s ease;
-}
-
-.movie-container .movie-form {
-    width: 50%;
-    padding: 30px;
+    width: 100%;
+    max-width: 400px;
     background-color: #fff;
-    transition: margin-left 0.18s ease;
-}
-
-.movie-container.active .login {
-    margin-left: -50%;
-    opacity: 0;
-    transition: margin-left 0.18s ease, opacity 0.15s ease;
-}
-
-.movie-container .signup {
-    opacity: 0;
-    transition: opacity 0.09s ease;
-}
-
-.movie-container.active .signup {
-    opacity: 1;
-    transition: opacity 0.2s ease;
-}
-
-.movie-container.active .movie-forms {
-    height: 600px;
-}
-
-.movie-container .movie-form .movie-title {
-    position: relative;
-    font-size: 27px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+  }
+  
+  .form-title {
+    font-size: 24px;
     font-weight: 600;
-}
-
-.movie-form .movie-title::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 30px;
-    background-color: var(--first-color);
-    border-radius: 25px;
-}
-
-.movie-form .movie-input-field {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .input-field {
     position: relative;
-    height: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .input-field input {
     width: 100%;
-    margin-top: 30px;
-}
-
-.movie-input-field input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    padding: 0 35px;
-    border: none;
-    outline: none;
+    padding: 10px 35px;
     font-size: 16px;
-    border-bottom: 2px solid #ccc;
-    border-top: 2px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.movie-input-field input:is(:focus, :valid) {
-    border-bottom-color: var(--first-color);
-}
-
-.movie-input-field i {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .input-field input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .input-field i {
     position: absolute;
     top: 50%;
+    left: 10px;
     transform: translateY(-50%);
-    color: #999;
-    font-size: 23px;
-    transition: all 0.2s ease;
-}
-
-.movie-input-field input:is(:focus, :valid)~i {
-    color: var(--first-color);
-}
-
-.movie-input-field i.icon {
-    left: 0;
-}
-
-.movie-input-field i.showHidePw {
-    right: 0;
+    color: #aaa;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
     cursor: pointer;
-    padding: 10px;
-}
-
-.movie-form .movie-checkbox-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.movie-checkbox-text .movie-checkbox-content {
-    display: flex;
-    align-items: center;
-}
-
-.movie-checkbox-content input {
-    margin-right: 10px;
-    accent-color: var(--first-color);
-}
-
-.movie-form .movie-text {
-    color: #333;
-    font-size: 14px;
-}
-
-.movie-form a.movie-text {
-    color: var(--first-color);
-    text-decoration: none;
-}
-
-.movie-form a:hover {
-    text-decoration: none;
-}
-
-.movie-form .movie-button input {
-    border: none;
+  }
+  
+  .auth-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
     color: #fff;
-    font-size: 17px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    border-radius: 6px;
-    background-color: var(--first-color);
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.movie-button input:hover {
-    background-color: black;
-}
-
-.movie-form .movie-login-signup {
-    margin-top: 30px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .toggle-form-link {
     text-align: center;
-}
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .toggle-form-link span {
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .auth-form {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-form.active {
+    display: block;
+    opacity: 1;
+  }

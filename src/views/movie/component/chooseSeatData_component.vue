@@ -47,6 +47,7 @@ import EventBus from "@/store/eventBus";
 import { useRoute } from 'vue-router';
 import swal from 'sweetalert';
 import { requestWithJWT } from "@/api/api.ts"
+
 const prebookedSeats = ref([]); // Dynamic seat data
 const selectedSeats = ref([]); // Seat selection array
 const ticketCount = ref(0); // Total selected tickets
@@ -54,16 +55,32 @@ const totalAmount = ref(0); // Total price
 const ticketPrice = ref(0); // Price per ticket
 const showtimeId = ref(useRoute().params.idSuatChieu); // Access the showtime ID from route
 
+// Mock data for 60 seats before fetching real data
+const mockSeats = Array.from({ length: 60 }, (_, index) => ({
+  id: index + 1,
+  maGhe: `S${index + 1}`,
+  giaTien: 50000, // Giả sử mỗi ghế có giá 50,000
+  id_PhongChieu: 1,
+  trangThaiGhe: "AVAILABLE", // Tình trạng ghế có thể thay đổi
+  booked: false,
+}));
+
 // Load seat data from the database
 const loadSeats = async (showtimeId) => {
   try {
+    // Temporarily use mock data
+    prebookedSeats.value = mockSeats;
+    selectedSeats.value = Array(mockSeats.length).fill(false); // Reset selected seats
+
     const token = sessionStorage.getItem("token").slice(1, -1);
     const response = await requestWithJWT("get", `http://localhost:8080/ghe/findWithBooking/${showtimeId}`);
     const seatsData = response.data;
+
     if (seatsData.length == 0) {
-      prebookedSeats.value = [];
       return;
     }
+
+    // Update with real data
     prebookedSeats.value = seatsData
       .map((seat) => ({
         id: seat.id,
@@ -74,57 +91,48 @@ const loadSeats = async (showtimeId) => {
         booked: seat.trangThaiGheAndSuatChieu === 1 || seat.trangThaiGheAndSuatChieu == 2,
       }))
       .sort((a, b) => {
-        const numA = parseInt(a.maGhe.replace(/\D/g, ""), 10); // Extract numeric part
-        const numB = parseInt(b.maGhe.replace(/\D/g, ""), 10); // Extract numeric part
-        return numA - numB; // Sort numerically
+        const numA = parseInt(a.maGhe.replace(/\D/g, ""), 10);
+        const numB = parseInt(b.maGhe.replace(/\D/g, ""), 10);
+        return numA - numB;
       });
 
-    selectedSeats.value = Array(prebookedSeats.value.length).fill(false);
-
-    if (seatsData.length > 0) {
-      ticketPrice.value = seatsData[0].giaTien;
-    }
+    ticketPrice.value = seatsData[0].giaTien;
   } catch (error) {
     console.error("Error loading seats:", error);
   }
 };
 
-//Method to (un)check inputs and dealing with lists
+// Method to (un)check inputs and dealing with lists
 const handleSeatChange = (event, seat, index) => {
-  if (!validateSeatSelection()) {//Say user select S24,25,26 and unselect S25. S25 will magically(?) uncheck itself
-    //which i dunno how to fix, so i will just check the checkbox again
-    //Which equally makes the input go back to the state before user input(removing S25)
+  if (!validateSeatSelection()) {
     event.target.checked = !event.target.checked;
     selectedSeats.value[index] = !selectedSeats.value[index];
   }
 };
 
-//Method to check seat selection logic
+// Method to check seat selection logic
 const validateSeatSelection = () => {
-  //All of this will assume that all seats are distributed in 10 columns
   const selectedList = getSelectedSeats();
   if (selectedList.length == 1) {
-    //Check edge
-    //get number part
     let numberPart = selectedList[0].replace(/\D/g, '');
     numberPart++;
-    if (numberPart % 10 === 0) {// If the selected seat is next to right edge and is the only one selected
-      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error")
+    if (numberPart % 10 === 0) {
+      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error");
       return false;
     }
     numberPart--;
     numberPart--;
     numberPart--;
-    if (numberPart % 10 === 0) {// If the selected seat is next to right edge and is the only one selected
-      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error")
+    if (numberPart % 10 === 0) {
+      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error");
       return false;
     }
   }
   if (selectedList.length == 2) {
     const previous = selectedList[selectedList.length - 1].replace(/\D/g, '');
     const next = selectedList[selectedList.length - 2].replace(/\D/g, '');
-    if (Math.abs(previous - next) == 2) {// Allow two seats inbetween, but not one
-      swal("Oops", "Bạn không thể để trống một ghế ở giữa", "error")
+    if (Math.abs(previous - next) == 2) {
+      swal("Oops", "Bạn không thể để trống một ghế ở giữa", "error");
       return false;
     }
   }
@@ -162,6 +170,7 @@ onMounted(() => {
   }
 });
 </script>
+
 
 <style scoped>
 .movie_seat-seat {

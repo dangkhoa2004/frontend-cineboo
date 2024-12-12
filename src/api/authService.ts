@@ -1,5 +1,5 @@
 // api/authService.ts
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // Định nghĩa các khóa lưu trữ trong sessionStorage
 const TOKEN_KEY = "token";
@@ -46,19 +46,19 @@ function sessionStorageUtil() {
         }
     };
 }
-
-// Định nghĩa interface cho tham số truyền vào khi đăng ký người dùng
+// Định nghĩa kiểu dữ liệu cho `data` khi đăng ký
 interface SignUpData {
     username: string;
     password: string;
     ten: string;
+    tenDem?: string;
     ho: string;
-    tendem: string;
-    diaChi: string;
+    ngaySinh?: string;
+    soDienThoai?: string;
+    gioiTinh?: number;
     email: string;
-    soDienThoai: string;
-    ngaySinh: string;
-    danToc: number;
+    danToc?: string;
+    diaChi?: string;
 }
 
 /**
@@ -69,18 +69,35 @@ interface SignUpData {
  */
 export async function signup(data: SignUpData) {
     try {
-        // Tạo URL với query parameters từ dữ liệu người dùng
+        // Tạo URL với query parameters từ dữ liệu người dùng (username và password)
         const queryParams = new URLSearchParams({
             username: data.username,
             password: data.password,
         }).toString();
 
-        // Gửi yêu cầu POST đến API
-        const response = await axios.post(`http://localhost:8080/khachhang/add?${queryParams}`, null, {
-            headers: {
-                'Content-Type': 'application/json', // Đảm bảo định dạng JSON
+        // Dữ liệu còn lại (ten, ho, email, ...) sẽ được gửi qua body dưới dạng JSON
+        const bodyData = {
+            ten: data.ten,
+            tenDem: data.tenDem || '', // Nếu không có tên đệm thì có thể để trống
+            ho: data.ho,
+            ngaySinh: data.ngaySinh || '', // Nếu không có ngày sinh, có thể để trống hoặc gửi null
+            soDienThoai: data.soDienThoai || '',
+            gioiTinh: data.gioiTinh || 0,
+            email: data.email,
+            danToc: data.danToc || '',
+            diaChi: data.diaChi || ''
+        };
+
+        // Gửi yêu cầu POST đến API với query parameters và body
+        const response = await axios.post(
+            `http://localhost:8080/khachhang/add?${queryParams}`,
+            bodyData,
+            {
+                headers: {
+                    'Content-Type': 'application/json', // Đảm bảo định dạng JSON
+                }
             }
-        });
+        );
 
         // Kiểm tra kết quả trả về từ API
         if (response.status === 200) {
@@ -90,10 +107,18 @@ export async function signup(data: SignUpData) {
         } else {
             throw new Error("Đăng ký thất bại");
         }
-    } catch (error: any) {
-        throw new Error(error.response?.data?.message || "Đăng ký thất bại");
+    } catch (error: unknown) {
+        // Kiểm tra lỗi có phải là của Axios không
+        if (error instanceof AxiosError) {
+            // Nếu là lỗi của axios, có thể truy cập vào error.response để lấy thông tin chi tiết
+            throw new Error(error.response?.data?.message || "Đăng ký thất bại");
+        } else {
+            // Nếu không phải lỗi của axios, throw lỗi chung
+            throw new Error("Đăng ký thất bại");
+        }
     }
 }
+
 
 /**
  * Hàm đăng nhập người dùng và lưu token cùng thông tin người dùng.
