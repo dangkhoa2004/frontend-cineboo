@@ -41,5 +41,6 @@ export default {
     pttt_man: "Quản lý PTTT",
     employee_man: "Quản lý nhân viên",
     customer_man: "Quản lý khách hàng",
+    report_man: "Báo cáo & Thống kê",
   },
 };

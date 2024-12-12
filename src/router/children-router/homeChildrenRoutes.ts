@@ -143,6 +143,14 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     components: {
       listComponent: () => import('@/components/list-contact/detail_pttt.vue')
     }
+  },
+  // Các route liên quan đến hỗ trợ và liên hệ
+  {
+    path: "bao-cao-thong-ke",
+    name: "bao-cao-thong-ke",
+    components: {
+      listComponent: () => import('@/components/statisticsComponents/index.vue')
+    }
   }
 ];
 

@@ -7,9 +7,11 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";  // Thư viện NProgress để hiển thị thanh tiến trình khi chuyển trang
 import { isLoggedIn, getUserInfo } from "@/api/authService"; // Hàm kiểm tra đăng nhập và lấy thông tin người dùng
 import notFoundComponent from '@/components/notFoundComponent/index.vue'; // Trang 404 nếu không tìm thấy route
+
 import BarView from "@/views/statistic/BarView.vue";  // Thành phần hiển thị biểu đồ cột
 import ScatterView from "@/views/statistic/ScatterView.vue";  // Thành phần hiển thị biểu đồ phân tán
 import PieView from "@/views/statistic/PieView.vue";  // Thành phần hiển thị biểu đồ bánh
+
 import QRScannerView from "@/views/ticket/QRScannerView.vue";
 import ConfirmPrintTicketView from "@/views/ticket/ConfirmPrintTicketView.vue";
 // Định nghĩa các routes chính cho ứng dụng

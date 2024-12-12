@@ -41,5 +41,6 @@ export default {
     pttt_man: "Manage type of payment",
     employee_man: "Manage Employee",
     customer_man: "Manage Customer",
+    report_man: "Reports & Statistics",
   },
 };

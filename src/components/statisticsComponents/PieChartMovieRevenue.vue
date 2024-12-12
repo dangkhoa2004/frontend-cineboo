@@ -1,14 +1,16 @@
 <template>
+<div class="chart-container">
   <Pie id="my-pie-chart" :options="chartOptions" :data="chartData" />
+</div>
 </template>
-  
-  <script setup>
-  import {requestWithJWT} from "@/api/api.ts";
-import { ref,onMounted } from 'vue'
-import { Pie } from 'vue-chartjs'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import axios from 'axios'
-ChartJS.register(ArcElement, Tooltip, Legend)
+
+<script setup>
+import { requestWithJWT } from "@/api/api.ts";
+import { ref, onMounted } from 'vue';
+import { Pie } from 'vue-chartjs';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const chartData = ref({
   labels: [],
@@ -16,68 +18,62 @@ const chartData = ref({
     {
       backgroundColor: [],
       data: [],
+      luotMua: []
     },
   ],
-})
+});
 
 const chartOptions = ref({
-  options: {
-  hover: {
-    mode: 'nearest'
-  }
-},
   responsive: true,
-  maintainAspectRatio: true,
+  maintainAspectRatio: false,
   plugins: {
     tooltip: {
       callbacks: {
-        label: function(context) {
+        label: function (context) {
           const dataset = context.dataset;
-          const point = context.raw; // Access the raw data point
+          const point = context.raw;
           const index = context.dataIndex;
-          const luotMua =dataset.luotMua[index];
-           
-          return `Số lượng vé bán ra: ${luotMua}. \nTổng doanh thu:  ${point} VNĐ`;
+          const luotMua = dataset.luotMua[index];
+          return `Số lượng vé bán ra: ${luotMua}. Tổng doanh thu:  ${point} VNĐ`;
+        },
+      },
+    },
+    legend: {
+      position: 'top',
+      labels: {
+        color: 'black',
+        font: {
+          size: 14,
         },
       },
     },
   },
-})
+  hover: {
+    mode: 'nearest'
+  }
+});
 
- 
 const fetchData = async () => {
   try {
-    const response = await requestWithJWT("GET",'http://localhost:8080/thongke/pie')
-    const responseData = await response.data
+    const response = await requestWithJWT("GET", 'http://localhost:8080/thongke/pie');
+    const responseData = response.data;
 
-    //Replace the entire thing since
-    //Cuz iteraing data doesnt work
-    let newDataSet = ref({
-      labels: [],
+    const newDataSet = {
+      labels: responseData.map(item => item.tenPhim),
       datasets: [
         {
-          backgroundColor: [],
-          data: [],
-          luotMua:[]
-        },
-      ],
-    })
-    for (let i = 0; i < responseData.length; i++) {
-      newDataSet.value.labels.push(responseData[i]['tenPhim']);//Pie name
+          backgroundColor: responseData.map(() => `#${Math.floor(Math.random() * 16777215).toString(16)}`),
+          data: responseData.map(item => item.doanhThu),
+          luotMua: responseData.map(item => item.luotMua)
+        }
+      ]
+    };
 
-      var randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
-      
-      newDataSet.value.datasets[0].backgroundColor.push(randomColor);//Pie color
-
-      newDataSet.value.datasets[0].data.push(responseData[i]['doanhThu']);
-      newDataSet.value.datasets[0].luotMua.push(responseData[i]['luotMua']);
-    }
-
-    chartData.value = newDataSet.value
+    chartData.value = newDataSet;
   } catch (error) {
-    console.error('Error fetching data:', error)
+    console.error('Error fetching data:', error);
   }
-}
+};
+
 onMounted(fetchData);
 </script>
-  
