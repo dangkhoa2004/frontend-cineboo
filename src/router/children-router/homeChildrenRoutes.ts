@@ -79,8 +79,8 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
 
   // Các route liên quan đến khách hàng
   {
-    path: "thong-tin-khach-hang",
-    name: "thong-tin-khach-hang",
+    path: "thong-tin-nguoi-dung",
+    name: "thong-tin-nguoi-dung",
     components: {
       listComponent: () => import('@/components/list-user/index.vue')
     }
@@ -89,26 +89,16 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     path: "thong-tin-khach-hang/:id",
     name: "thay-doi-thong-tin-khach-hang",
     components: {
-      listComponent: () => import('@/components/list-user/detail.vue')
-    }
-  },
-
-  // Các route liên quan đến nhân viên
-  {
-    path: "thong-tin-nhan-vien",
-    name: "thong-tin-nhan-vien",
-    components: {
-      listComponent: () => import('@/components/list-user/index.vue')
+      listComponent: () => import('@/components/list-user/customer_detail.vue')
     }
   },
   {
     path: "thong-tin-nhan-vien/:id",
     name: "thay-doi-thong-tin-nhan-vien",
     components: {
-      listComponent: () => import('@/components/list-user/detail.vue')
+      listComponent: () => import('@/components/list-user/employe_detail.vue')
     }
   },
-
   // Các route liên quan đến tài khoản cá nhân và cài đặt ứng dụng
   {
     path: "thong-tin",
@@ -131,6 +121,27 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     name: "ho-tro",
     components: {
       listComponent: () => import('@/components/list-contact/index.vue')
+    }
+  },
+  {
+    path: "thay-doi-thong-tin-hoan-ve/:id",
+    name: "thay-doi-thong-tin-hoan-ve",
+    components: {
+      listComponent: () => import('@/components/list-contact/detail_rufund.vue')
+    }
+  },
+  {
+    path: "thay-doi-thong-tin-do-tuoi/:id",
+    name: "thay-doi-thong-tin-do-tuoi",
+    components: {
+      listComponent: () => import('@/components/list-contact/detail_dotuoi.vue')
+    }
+  },
+  {
+    path: "thay-doi-thong-tin-pttt/:id",
+    name: "thay-doi-thong-tin-pttt",
+    components: {
+      listComponent: () => import('@/components/list-contact/detail_pttt.vue')
     }
   }
 ];

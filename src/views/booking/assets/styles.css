@@ -1,5 +1,3 @@
-
-
 .section {
     max-width: 1200px;
     margin: auto;
@@ -302,7 +300,8 @@
     color: var(--black);
 }
 
-.input_with_icon input {
+.input_with_icon input,
+select {
     display: block;
     width: 100%;
     padding-left: 40px;
@@ -704,4 +703,31 @@
 
 .movie_checkout_payment__type+.movie_checkout_payment__type {
     margin-left: 10px;
+}
+
+#input_movie {
+    -webkit-appearance: none;
+    /* Dành cho trình duyệt WebKit (Chrome, Safari) */
+    -moz-appearance: none;
+    /* Dành cho Firefox */
+    appearance: none;
+    /* Các trình duyệt khác */
+    background-color: white;
+    /* Nền dropdown */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Nếu cần thêm biểu tượng khác để thay thế mũi tên */
+#input_movie::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
+    /* Màu của mũi tên */
 }

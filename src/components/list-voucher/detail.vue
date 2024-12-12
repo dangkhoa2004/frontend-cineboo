@@ -33,11 +33,13 @@
             </div>
             <div>
                 <label>Ngày bắt đầu:</label>
-                <input type="date" v-model="formattedStartDate" :placeholder="formattedStartDate ? '' : '<trống>'" />
+                <input type="date" v-model="formattedStartDate" @input="updateStartDate($event.target.value)"
+                    :placeholder="formattedStartDate ? '' : '<trống>'" />
             </div>
             <div>
                 <label>Ngày kết thúc:</label>
-                <input type="date" v-model="formattedEndDate" :placeholder="formattedEndDate ? '' : '<trống>'" />
+                <input type="date" v-model="formattedEndDate" @input="updateEndDate($event.target.value)"
+                    :placeholder="formattedEndDate ? '' : '<trống>'" />
             </div>
             <div>
                 <label>Số lượng:</label>
@@ -45,7 +47,7 @@
             </div>
             <div>
                 <label>Trạng thái voucher:</label>
-                <input v-model="voucher.trangThaiVoucher" :disabled="true"
+                <input v-model="voucher.trangThaiVoucher" disabled
                     :placeholder="voucher.trangThaiVoucher ? '' : '<trống>'" />
             </div>
         </div>
@@ -57,7 +59,7 @@
 </template>
 
 <script>
-import { fetchVoucherById } from "@/api/voucher"; // Assuming a function to fetch voucher by ID
+import { fetchVoucherById, updateVoucherById } from "@/api/invoice"; // Assuming a function to fetch and update voucher by ID
 
 export default {
     data() {
@@ -69,11 +71,21 @@ export default {
         await this.loadVoucher();
     },
     computed: {
-        formattedStartDate() {
-            return this.voucher?.ngayBatDau ? this.formatDate(this.voucher.ngayBatDau) : '';
+        formattedStartDate: {
+            get() {
+                return this.voucher?.ngayBatDau ? this.formatDateForInput(this.voucher.ngayBatDau) : '';
+            },
+            set(newValue) {
+                this.voucher.ngayBatDau = newValue;
+            }
         },
-        formattedEndDate() {
-            return this.voucher?.ngayKetThuc ? this.formatDate(this.voucher.ngayKetThuc) : '';
+        formattedEndDate: {
+            get() {
+                return this.voucher?.ngayKetThuc ? this.formatDateForInput(this.voucher.ngayKetThuc) : '';
+            },
+            set(newValue) {
+                this.voucher.ngayKetThuc = newValue;
+            }
         },
     },
     methods: {
@@ -86,10 +98,12 @@ export default {
                 console.error("Lỗi khi tải thông tin voucher:", error);
             }
         },
-        formatDate(dateString) {
+        formatDateForInput(dateString) {
             const date = new Date(dateString);
-            const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-            return date.toLocaleDateString("vi-VN", options);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
         },
         formatCurrency(amount) {
             if (amount === null || amount === undefined || isNaN(amount)) {
@@ -97,9 +111,27 @@ export default {
             }
             return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
         },
-        goBack() {
-            this.$router.go(-1); // Quay lại trang trước
+        updateStartDate(value) {
+            this.voucher.ngayBatDau = new Date(value).toISOString();
         },
+        updateEndDate(value) {
+            this.voucher.ngayKetThuc = new Date(value).toISOString();
+        },
+        goBack() {
+            this.$router.go(-1);
+        },
+        async saveVoucher() {
+            if (this.voucher) {
+                try {
+                    await updateVoucherById(this.voucher.id, this.voucher);
+                    alert("Voucher đã được cập nhật thành công!");
+                    this.$router.go(-1);
+                } catch (error) {
+                    console.error("Lỗi khi cập nhật voucher:", error);
+                    alert("Có lỗi xảy ra khi cập nhật voucher.");
+                }
+            }
+        }
     },
 };
 </script>

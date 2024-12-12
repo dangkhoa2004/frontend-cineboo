@@ -4,7 +4,6 @@
     <button @click="goBack">Trở về</button>
     <button @click="saveMovie">Lưu lại</button>
   </div>
-  <h2>Thông tin phim</h2>
   <div v-if="movie">
     <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
     <div>

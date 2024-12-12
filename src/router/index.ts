@@ -53,12 +53,12 @@ const routes = [
     path: '/print-ticket-confirm',
     name: 'print-ticket-confirm',
     component: ConfirmPrintTicketView,
-},
+  },
   {
     path: '/qr',
     name: 'qr',
     component: QRScannerView,
-}
+  }
 
 ];
 

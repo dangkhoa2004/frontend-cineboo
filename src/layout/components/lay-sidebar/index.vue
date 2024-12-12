@@ -37,7 +37,7 @@
             <i class="ri-chat-3-fill"></i>
             <span>{{ $t("message.contact_man") }}</span>
           </router-link>
-          <router-link to="/quan-ly/thong-tin-khach-hang" class="sidebar__link" active-class="active-link">
+          <router-link to="/quan-ly/thong-tin-nguoi-dung" class="sidebar__link" active-class="active-link">
             <i class="ri-user-3-fill"></i>
             <span>{{ $t("message.customer_man") }}</span>
           </router-link>

@@ -1,39 +1,39 @@
 <template>
-  <div class="schedule-container">
-    <div class="schedule-header">
-      <h2>Lịch Chiếu</h2>
-      <div class="date-selector">
-        <button v-for="(date, index) in sevenDays" :key="date" @click="updateSelectedDate(date)"
-          :disabled="new Date(date) < new Date(currentDate)">
-          <div>{{ formatDate(date) }}</div>
-          <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
-          <div v-else>{{ `Hôm nay` }}</div>
-        </button>
-      </div>
-      <div class="filter-options">
-        <select v-model="selectedStreet" @change="filterShowtimes">
-          <option>Toàn quốc</option>
-          <option>Hải Phòng</option>
-          <option>Hà Nội</option>
-        </select>
-        <select v-model="selectedTheater" @change="filterShowtimes">
-          <option>Tất cả rạp</option>
-          <option>CineBoo Nguyễn Du</option>
-          <option>CineBoo Sala</option>
-        </select>
-      </div>
-    </div>
-    <div v-if="filteredShowtimes.length === 0">
-      <p>Chưa có dữ liệu suất chiếu.</p>
-    </div>
-    <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
-      <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
-        <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
-        <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
-        <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
+<div class="schedule-container">
+  <div class="schedule-header">
+    <h2>Lịch Chiếu</h2>
+    <div class="date-selector">
+      <button v-for="(date, index) in sevenDays" :key="date" @click="updateSelectedDate(date)"
+        :disabled="new Date(date) < new Date(currentDate)">
+        <div>{{ formatDate(date) }}</div>
+        <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
+        <div v-else>{{ `Hôm nay` }}</div>
       </button>
     </div>
+    <div class="filter-options">
+      <select v-model="selectedStreet" @change="filterShowtimes">
+        <option>Toàn quốc</option>
+        <option>Hải Phòng</option>
+        <option>Hà Nội</option>
+      </select>
+      <select v-model="selectedTheater" @change="filterShowtimes">
+        <option>Tất cả rạp</option>
+        <option>CineBoo Nguyễn Du</option>
+        <option>CineBoo Sala</option>
+      </select>
+    </div>
   </div>
+  <div v-if="filteredShowtimes.length === 0">
+    <p>Chưa có dữ liệu suất chiếu.</p>
+  </div>
+  <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
+    <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
+      <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
+      <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
+      <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
+    </button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -159,7 +159,7 @@ export default {
       formatDate,
       formatTime,
       getDayOfWeek,
-      logTheaterInfo,  // Make sure it's returned here
+      logTheaterInfo,
       updateSelectedDate,
     };
   },

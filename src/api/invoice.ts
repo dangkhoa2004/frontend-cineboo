@@ -137,7 +137,6 @@ export const setPaymentMethod = async (invoiceId: any, paymentMethodId: any) => 
     }
 };
 
-
 /* Lấy danh sách mã giảm giá */
 export const fetchVouchers = async (params = {}) => {
     try {
@@ -148,7 +147,26 @@ export const fetchVouchers = async (params = {}) => {
         throw error;
     }
 };
-
+/* Lấy voucher theo id */
+export const fetchVoucherById = async (id: string) => {
+    try {
+        const response = await apiClient.get(`/voucher/find/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('API: [Lỗi khi xử lý dữ liệu voucher]', error instanceof Error ? error.message : error);
+        throw error;
+    }
+};
+/* Cập nhật voucher theo id */
+export const updateVoucherById = async (id: string, voucherData: any) => {
+    try {
+        const response = await apiClient.put(`/voucher/update/${id}`, voucherData);
+        return response.data;
+    } catch (error) {
+        console.error('API: [Lỗi khi cập nhật voucher]', error instanceof Error ? error.message : error);
+        throw error;
+    }
+};
 /* Xoá mã giảm giá theo id */
 export const deleteVoucherById = async (id: string) => {
     try {

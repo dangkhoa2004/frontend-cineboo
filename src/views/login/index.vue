@@ -1,6 +1,6 @@
 <template>
 <div style="overflow: hidden">
-  <!-- <div id="stars"></div> -->
+  <div id="stars"></div>
   <!-- Header -->
   <onlyPageHeader_component />
   <!-- MOVIE DATA LIST -->

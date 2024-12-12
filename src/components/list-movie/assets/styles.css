@@ -102,3 +102,6 @@ tr:hover {
 .movie-detail .button-container button:last-child:hover {
   background-color: black;
 }
+.the-loai-container{
+  display: flex;
+}
