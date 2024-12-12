@@ -92,14 +92,14 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     path: "thong-tin-khach-hang",
     name: "thong-tin-khach-hang",
     components: {
-      listComponent: () => import("@/components/list-customer/index.vue"),
+      listComponent: () => import("@/components/list-user/index.vue"),
     },
   },
   {
     path: "thong-tin-khach-hang/:id",
     name: "thay-doi-thong-tin-khach-hang",
     components: {
-      listComponent: () => import("@/components/list-customer/detail.vue"),
+      listComponent: () => import("@/components/list-user/detail.vue"),
     },
   },
   // Liên quan đến nhân viên
@@ -107,14 +107,14 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     path: "thong-tin-nhan-vien",
     name: "thong-tin-nhan-vien",
     components: {
-      listComponent: () => import("@/components/list-employee/index.vue"),
+      listComponent: () => import("@/components/list-user/index.vue"),
     },
   },
   {
     path: "thong-tin-nhan-vien/:id",
     name: "thay-doi-thong-tin-nhan-vien",
     components: {
-      listComponent: () => import("@/components/list-employee/detail.vue"),
+      listComponent: () => import("@/components/list-user/detail.vue"),
     },
   },
   // Liên quan đến tài khoản cá nhân và cài đặt ứng dụng
@@ -131,14 +131,7 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     components: {
       listComponent: () => import("@/components/list-application/index.vue"),
     },
-  },
-  {
-    path: "testing",
-    name: "testing",
-    components: {
-      listComponent: () => import("@/components/payment-component/paymentSuccess_component.vue"),
-    },
-  },
+  }
 ];
 
 export default homeChildrenRoutes;

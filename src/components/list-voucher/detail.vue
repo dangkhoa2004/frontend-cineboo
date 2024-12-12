@@ -1,6 +1,9 @@
 <template>
 <div class="voucher-detail">
-    <h2>Chi tiết voucher</h2>
+    <div class="button-container">
+        <button @click="goBack">Trở về</button>
+        <button @click="saveVoucher">Lưu lại</button>
+    </div>
     <div v-if="voucher">
         <div class="card voucher-info">
             <div>
@@ -45,10 +48,6 @@
                 <input v-model="voucher.trangThaiVoucher" :disabled="true"
                     :placeholder="voucher.trangThaiVoucher ? '' : '<trống>'" />
             </div>
-        </div>
-        <div class="button-container">
-            <button @click="goBack">Trở về</button>
-            <button @click="saveVoucher">Lưu lại</button>
         </div>
     </div>
     <div v-else>

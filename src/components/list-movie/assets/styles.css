@@ -4,6 +4,7 @@ h3 {
 }
 
 button {
+  margin: 10px 5px;
   background-color: var(--first-color);
   color: #fff;
   padding: 8px 16px;
@@ -34,10 +35,6 @@ input:disabled {
 textarea {
   resize: vertical;
   min-height: 100px;
-}
-
-button {
-  margin: 10px 10px 10px 0;
 }
 
 .movie-manager {
@@ -79,7 +76,6 @@ tr:hover {
 
 .movie-detail {
   width: 100%;
-  max-width: 1000px;
 }
 
 .movie-detail .movie-poster {
@@ -97,11 +93,6 @@ tr:hover {
 
 .movie-detail .button-container {
   display: flex;
-  justify-content: space-between;
-}
-
-.movie-detail .button-container button {
-  width: 48%;
 }
 
 .movie-detail .button-container button:last-child {
@@ -120,36 +111,6 @@ tr:hover {
 
 .the-loai-item {
   margin-bottom: 10px;
-  /* Khoảng cách dưới mỗi item */
   display: flex;
   align-items: center;
-}
-
-@media (max-width: 768px) {
-  .movie-manager table {
-    font-size: 14px;
-  }
-
-  .movie-detail {
-    padding: 15px;
-  }
-
-  .movie-detail .movie-poster {
-    width: 120px;
-    height: 180px;
-  }
-
-  input,
-  textarea {
-    font-size: 14px;
-  }
-
-  button {
-    padding: 6px 12px;
-  }
-
-  .movie-detail .button-container button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
 }

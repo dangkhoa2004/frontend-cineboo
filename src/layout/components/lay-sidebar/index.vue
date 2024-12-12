@@ -41,10 +41,6 @@
             <i class="ri-user-3-fill"></i>
             <span>{{ $t("message.customer_man") }}</span>
           </router-link>
-          <router-link to="/quan-ly/thong-tin-nhan-vien" class="sidebar__link" active-class="active-link">
-            <i class="ri-user-3-fill"></i>
-            <span>{{ $t("message.employee_man") }}</span>
-          </router-link>
         </div>
       </div>
       <div>

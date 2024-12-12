@@ -1,9 +1,9 @@
-h2,
 h3 {
-    color: #2c3e50;
+    color: var(--first-color);
 }
 
 button {
+    margin: 10px 5px;
     background-color: var(--first-color);
     color: #fff;
     padding: 8px 16px;
@@ -11,10 +11,6 @@ button {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: black;
 }
 
 input,
@@ -36,12 +32,7 @@ textarea {
     min-height: 100px;
 }
 
-.voucher-manager {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.voucher-manager table {
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
@@ -58,33 +49,26 @@ td {
 
 th {
     background-color: var(--first-color);
-    ;
     color: white;
     font-weight: bold;
+}
+
+button:hover {
+    background-color: black;
 }
 
 tr:hover {
     background-color: #f1f1f1;
 }
 
-.gender-selection {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+.card {
+    background-color: #fff;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.gender-selection label {
-    margin-bottom: 5px;
-}
-
-.gender-selection select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.gender-selection select:focus {
-    border-color: #66afe9;
-    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
-    outline: none;
+.card div {
+    margin-bottom: 10px;
 }

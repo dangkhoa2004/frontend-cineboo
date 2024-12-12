@@ -17,7 +17,7 @@
     <tbody>
       <tr v-for="invoice in paginatedInvoices" :key="invoice.id">
         <td>{{ invoice.maHoaDon }}</td>
-        <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.ten} ${invoice.khachHang.tenDem}` }}</td>
+        <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.tenDem} ${invoice.khachHang.ten}` }}</td>
         <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
         <td>
           {{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.danhSachTLPhims.map(item =>
