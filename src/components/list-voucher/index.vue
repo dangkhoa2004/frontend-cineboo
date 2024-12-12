@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { fetchVouchers, deleteVoucherById } from "@/api/voucher";
+import { fetchVouchers, deleteVoucherById } from "@/api/invoice";
 
 export default {
   data() {

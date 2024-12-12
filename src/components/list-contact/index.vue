@@ -1,61 +1,83 @@
 <template>
 <div>
   <div class="tabs">
-    <button @click="activeTab = 'customers'">Quản lý khách hàng</button>
-    <button @click="activeTab = 'employees'">Quản lý nhân viên</button>
+    <button @click="activeTab = 'refunds'">Quản lý yêu cầu</button>
+    <button @click="activeTab = 'ageGroups'">Quản lý độ tuổi</button>
+    <button @click="activeTab = 'paymentMethods'">Quản lý phương thức thanh toán</button>
   </div>
-  <div v-if="activeTab === 'customers'" class="customer-manager">
+
+  <div v-if="activeTab === 'refunds'" class="refund-manager">
     <table>
       <thead>
         <tr>
-          <th>ID Khách Hàng</th>
-          <th>Tên Khách Hàng</th>
-          <th>Ngày Sinh</th>
-          <th>Số Điện Thoại</th>
-          <th>Email</th>
-          <th>Thao tác</th>
+          <th>Mã Hoàn Vé</th>
+          <th>Khách Hàng</th>
+          <th>Voucher</th>
+          <th>Phim</th>
+          <th>Ngày Hoàn Vé</th>
+          <th>Lý Do Hoàn Vé</th>
+          <th>Trạng Thái</th>
+          <th>Thao Tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="customer in customers" :key="customer.id">
-          <td>{{ customer.id }}</td>
-          <td>{{ customer.ho }} {{ customer.ten }} {{ customer.tenDem }}</td>
-          <td>{{ formatDate(customer.ngaySinh) }}</td>
-          <td>{{ customer.soDienThoai }}</td>
-          <td>{{ customer.email }}</td>
+        <tr v-for="refund in refunds" :key="refund.id">
+          <td>{{ refund.maHoanVe }}</td>
+          <td>{{ `${refund.hoaDon.khachHang.ho} ${refund.hoaDon.khachHang.tenDem} ${refund.hoaDon.khachHang.ten}` }}
+          </td>
+          <td>{{ refund.voucher ? refund.voucher.maVoucher : 'Không có' }}</td>
+          <td>{{ refund.hoaDon.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
+          <td>{{ formatDate(refund.thoiGianHoanVe) }}</td>
+          <td>{{ refund.lyDoHoanVe }}</td>
+          <td>{{ refund.trangThaiHoanVe === 0 ? "Chờ xử lý" : "Đã xử lý" }}</td>
           <td>
-            <button @click="editCustomer(customer)">Sửa</button>
-            <button @click="deleteCustomer(customer.id)">Xoá</button>
+            <button @click="viewRefundDetails(refund)">Xem</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div v-if="activeTab === 'employees'" class="employee-manager">
+  <div v-if="activeTab === 'ageGroups'" class="age-group-manager">
     <table>
       <thead>
         <tr>
-          <th>Ảnh</th>
-          <th>ID Nhân Viên</th>
-          <th>Tên Nhân Viên</th>
-          <th>Ngày Sinh</th>
-          <th>Chức Vụ</th>
+          <th>Mã Độ Tuổi</th>
+          <th>Tên Độ Tuổi</th>
           <th>Thao Tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="employee in employees" :key="employee.id">
+        <tr v-for="ageGroup in ageGroups" :key="ageGroup.id">
+          <td>{{ ageGroup.maDoTuoi }}</td>
+          <td>{{ ageGroup.tenDoTuoi }}</td>
           <td>
-            <img :src="employee.anhNhanVien" alt="Avatar" class="employee-avatar" />
+            <button @click="editAgeGroup(ageGroup)">Sửa</button>
+            <button @click="deleteAgeGroup(ageGroup.id)">Xoá</button>
           </td>
-          <td>{{ employee.maNhanVien }}</td>
-          <td>{{ employee.ho }} {{ employee.tenDem }} {{ employee.ten }}</td>
-          <td>{{ formatDate(employee.ngaySinh) }}</td>
-          <td>{{ employee.chucVu.tenChucVu }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div v-if="activeTab === 'paymentMethods'" class="payment-method-manager">
+    <table>
+      <thead>
+        <tr>
+          <th>Mã PTTT</th>
+          <th>Tên PTTT</th>
+          <th>Trạng Thái</th>
+          <th>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="paymentMethod in paymentMethods" :key="paymentMethod.id">
+          <td>{{ paymentMethod.maPTTT }}</td>
+          <td>{{ paymentMethod.tenPTTT }}</td>
+          <td>{{ paymentMethod.trangThaiPTTT === 0 ? "Không hoạt động" : "Hoạt động" }}</td>
           <td>
-            <button @click="editEmployee(employee)">Sửa</button>
-            <button @click="deleteEmployee(employee.id)">Xoá</button>
+            <button @click="editPaymentMethod(paymentMethod)">Sửa</button>
+            <button @click="deletePaymentMethod(paymentMethod.id)">Xoá</button>
           </td>
         </tr>
       </tbody>
@@ -65,75 +87,88 @@
 </template>
 
 <script>
-import { fetchkhachhangs, deletekhachhangById } from "@/api/customer";
-import { fetchnhanviens, deletenhanvienById } from "@/api/employee";
+import { fetchAgeGroups, deleteAgeGroupById } from "@/api/movie";
+import { fetchPaymentMethods, deletePaymentMethodById, fetchRefunds } from "@/api/invoice";
 
 export default {
   data() {
     return {
-      activeTab: 'customers',
-      customers: [],
-      employees: []
+      activeTab: 'refunds', // Default tab
+      refunds: [], // Refund data
+      ageGroups: [], // Age group data
+      paymentMethods: [] // Payment method data
     };
   },
   async mounted() {
-    await this.loadCustomers();
-    await this.loadNhanViens();
+    await this.loadRefunds();
+    await this.loadAgeGroups();
+    await this.loadPaymentMethods();
   },
   methods: {
-    async loadCustomers() {
+    async loadRefunds() {
       try {
-        const customerData = await fetchkhachhangs();
-        this.customers = customerData;
+        const refundData = await fetchRefunds();
+        this.refunds = refundData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu khách hàng:", error);
+        console.error("Lỗi khi tải dữ liệu yêu cầu hoàn vé:", error);
       }
     },
-    async loadNhanViens() {
+    async loadAgeGroups() {
       try {
-        const employeeData = await fetchnhanviens();
-        this.employees = employeeData;
+        const ageGroupData = await fetchAgeGroups();
+        this.ageGroups = ageGroupData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu nhân viên:", error);
+        console.error("Lỗi khi tải dữ liệu độ tuổi:", error);
+      }
+    },
+    async loadPaymentMethods() {
+      try {
+        const paymentMethodData = await fetchPaymentMethods();
+        this.paymentMethods = paymentMethodData;
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu phương thức thanh toán:", error);
       }
     },
     formatDate(timestamp) {
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       return new Date(timestamp).toLocaleDateString("vi-VN", options);
     },
-    editCustomer(customer) {
-      this.$router.push({ name: 'thay-doi-thong-tin-khach-hang', params: { id: customer.id } });
+    viewRefundDetails(refund) {
+      this.$router.push({ name: 'thay-doi-thong-tin-hoan-ve', params: { id: refund.id } });
     },
-    async deleteCustomer(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá khách hàng này?");
+    editAgeGroup(ageGroup) {
+      this.$router.push({ name: 'thay-doi-thong-tin-do-tuoi', params: { id: ageGroup.id } });
+    },
+    async deleteAgeGroup(id) {
+      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá độ tuổi này?");
       if (confirmDelete) {
         try {
-          await deletekhachhangById(id);
-          this.customers = this.customers.filter(customer => customer.id !== id);
-          alert("Khách hàng đã được xoá thành công.");
+          await deleteAgeGroupById(id);
+          this.ageGroups = this.ageGroups.filter(ageGroup => ageGroup.id !== id);
+          alert("Độ tuổi đã được xoá thành công.");
         } catch (error) {
-          console.error("Lỗi khi xoá khách hàng:", error);
-          alert("Có lỗi xảy ra khi xoá khách hàng.");
+          console.error("Lỗi khi xoá độ tuổi:", error);
+          alert("Có lỗi xảy ra khi xoá độ tuổi.");
         }
       }
     },
-    editEmployee(employee) {
-      this.$router.push({ name: 'thay-doi-thong-tin-nhan-vien', params: { id: employee.id } });
+    editPaymentMethod(paymentMethod) {
+      this.$router.push({ name: 'thay-doi-thong-tin-pttt', params: { id: paymentMethod.id } });
     },
-    async deleteEmployee(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá nhân viên này?");
+    async deletePaymentMethod(id) {
+      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá phương thức thanh toán này?");
       if (confirmDelete) {
         try {
-          await deletenhanvienById(id);
-          this.employees = this.employees.filter(employee => employee.id !== id);
-          alert("Nhân viên đã được xoá thành công.");
+          await deletePaymentMethodById(id);
+          this.paymentMethods = this.paymentMethods.filter(paymentMethod => paymentMethod.id !== id);
+          alert("Phương thức thanh toán đã được xoá thành công.");
         } catch (error) {
-          console.error("Lỗi khi xoá nhân viên:", error);
-          alert("Có lỗi xảy ra khi xoá nhân viên.");
+          console.error("Lỗi khi xoá phương thức thanh toán:", error);
+          alert("Có lỗi xảy ra khi xoá phương thức thanh toán.");
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

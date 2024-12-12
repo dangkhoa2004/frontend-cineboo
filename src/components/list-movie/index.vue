@@ -7,8 +7,8 @@
     <button @click="MovieSchedual()">
       Quản lý lịch chiếu
     </button>
-    <input v-model="searchQuery" type="text" placeholder="Tìm kiếm phim..." class="" />
   </div>
+  <input v-model="searchQuery" type="text" placeholder="Tìm kiếm phim..." class="" />
   <table>
     <thead>
       <tr>

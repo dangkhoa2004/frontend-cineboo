@@ -38,11 +38,6 @@
       </tr>
     </tbody>
   </table>
-  <div class="pagination">
-    <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
-    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-    <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
-  </div>
 </div>
 </template>
 <script>
@@ -52,20 +47,10 @@ export default {
   data() {
     return {
       invoices: [],
-      currentPage: 1,
-      itemsPerPage: 8, // 8 trường mỗi trang
       searchQuery: "", // Từ khoá tìm kiếm
     };
   },
   computed: {
-    totalPages() {
-      return Math.ceil(this.invoices.length / this.itemsPerPage);
-    },
-    paginatedInvoices() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredInvoices.slice(start, end);
-    },
     filteredInvoices() {
       const query = this.searchQuery.toLowerCase();
       return this.invoices.filter(invoice =>
@@ -99,14 +84,8 @@ export default {
     viewInvoiceDetails(invoice) {
       this.$router.push({ name: 'thay-doi-thong-tin-hoa-don', params: { id: invoice.id } });
     },
-    changePage(page) {
-      if (page > 0 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
   },
 };
-
 </script>
 <style src="./assets/styles.css" scoped>
 .search-input {
