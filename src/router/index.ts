@@ -10,7 +10,8 @@ import notFoundComponent from '@/components/notFoundComponent/index.vue'; // Tra
 import BarView from "@/views/statistic/BarView.vue";  // Thành phần hiển thị biểu đồ cột
 import ScatterView from "@/views/statistic/ScatterView.vue";  // Thành phần hiển thị biểu đồ phân tán
 import PieView from "@/views/statistic/PieView.vue";  // Thành phần hiển thị biểu đồ bánh
-
+import QRScannerView from "@/views/ticket/QRScannerView.vue";
+import ConfirmPrintTicketView from "@/views/ticket/ConfirmPrintTicketView.vue";
 // Định nghĩa các routes chính cho ứng dụng
 const routes = [
   // Định nghĩa route chính cho trang chủ, tự động chuyển hướng đến "/trang-chu"
@@ -48,6 +49,17 @@ const routes = [
     name: 'pie',
     component: PieView,  // Thành phần hiển thị biểu đồ bánh
   },
+  {
+    path: '/print-ticket-confirm',
+    name: 'print-ticket-confirm',
+    component: ConfirmPrintTicketView,
+},
+  {
+    path: '/qr',
+    name: 'qr',
+    component: QRScannerView,
+}
+
 ];
 
 // Tạo và cấu hình router với lịch sử web HTML5
