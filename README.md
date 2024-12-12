@@ -44,6 +44,7 @@ npm install vue-i18n@^10.0.4
 npm install vue-router@^4.4.5
 npm install vue3-leaflet@^1.0.50
 npm install vuex@^4.1.0
+npm install jsqr
 ```
 
 Chạy dự án:
