@@ -14,7 +14,7 @@
     "compiler": "^0.1.2",
     "date-fns": "^4.1.0",
     "js-cookie": "^3.0.5",
-    "jsqr": "^1.0.0",
+    "jsqr": "^1.4.0",
     "leaflet": "^1.9.4",
     "nprogress": "^0.2.0",
     "sweetalert": "^2.1.2",
