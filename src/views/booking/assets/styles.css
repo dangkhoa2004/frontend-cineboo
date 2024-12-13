@@ -312,27 +312,6 @@ select {
     border-radius: 5px;
     padding: 10px;
 }
-
-.date-selector {
-    border: none;
-    display: flex;
-    gap: 10px;
-}
-
-.date-selector button {
-    background-color: var(--purple);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.date-selector button.inactive {
-    background-color: white;
-    color: black;
-}
-
 .filter-options {
     display: flex;
     gap: 10px;

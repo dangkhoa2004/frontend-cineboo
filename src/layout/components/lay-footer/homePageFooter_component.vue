@@ -27,9 +27,6 @@
           <li><a href="#">Chi nhánh</a></li>
           <li><a href="#">Quảng cáo trên Royal Corp</a></li>
           <li><a href="#">Đối tác kết nối</a></li>
-          <li><router-link to="/scatter">Scatter</router-link></li>
-          <li><router-link to="/bar">Bar</router-link></li>
-          <li><router-link to="/pie">Pie</router-link></li>
         </ul>
       </div>
       <div class="footer_col">

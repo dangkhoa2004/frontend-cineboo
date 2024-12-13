@@ -72,7 +72,7 @@ export default {
     },
     async fetchShowtimes(movieId) {
       try {
-        const response = await axios.get(`http://localhost:8080/suatchieu/find/phim.maPhim/${movieId}`);
+        const response = await axios.get(`http://localhost:8080/suatchieu/find/ID_Phim/${movieId}`);
         this.showtimes = response.data;
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu suất chiếu:", error);
