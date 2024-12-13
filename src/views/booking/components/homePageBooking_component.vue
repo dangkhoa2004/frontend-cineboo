@@ -15,10 +15,10 @@
     <div class="input_box">
       <div class="input_with_icon">
         <i class="fa-solid fa-clock"></i>
-        <select class="input_movie" id="input_showtime" v-if="showtimes.length" v-model="selectedShowtime">
+        <select class="input_movie" id="input_showtime" v-if="filteredShowtimes.length" v-model="selectedShowtime">
           <option value="" disabled>CHỌN GIỜ CHIẾU</option>
-          <option v-for="time in showtimes" :key="time.id" :value="time.id">
-            {{ time.thoiGianChieu }}
+          <option v-for="time in filteredShowtimes" :key="time.id" :value="time.id">
+            {{ formatDate(time.thoiGianChieu) }}
           </option>
         </select>
         <p v-else class="">Không có suất chiếu khả dụng.</p>
@@ -36,6 +36,7 @@
   </form>
 </section>
 </template>
+
 <script>
 import { fetchMovies } from "@/api/movie";
 import axios from "axios";
@@ -48,6 +49,24 @@ export default {
       showtimes: [],
       selectedShowtime: "",
     };
+  },
+  computed: {
+    filteredShowtimes() {
+      const now = new Date();
+      return this.showtimes
+        .filter(showtime => {
+          const [year, month, day, hours, minutes] = showtime.thoiGianChieu;
+          const showtimeDate = new Date(year, month - 1, day, hours, minutes);
+          return showtimeDate >= now;
+        })
+        .sort((a, b) => {
+          const [yearA, monthA, dayA, hoursA, minutesA] = a.thoiGianChieu;
+          const [yearB, monthB, dayB, hoursB, minutesB] = b.thoiGianChieu;
+          const dateA = new Date(yearA, monthA - 1, dayA, hoursA, minutesA);
+          const dateB = new Date(yearB, monthB - 1, dayB, hoursB, minutesB);
+          return dateA - dateB;
+        });
+    }
   },
   async mounted() {
     await this.loadMovies();
@@ -79,11 +98,15 @@ export default {
         this.showtimes = [];
       }
     },
+    formatDate(dateArray) {
+      const [year, month, day, hours, minutes] = dateArray;
+      return `ngày ${day} - ${month} - ${year} chiếu ${hours}:${minutes.toString().padStart(2, '0')}`;
+    },
     bookTicket() {
       if (this.selectedMovie && this.selectedShowtime) {
         const movieId = this.selectedMovie;
         const showtimeId = this.selectedShowtime;
-        
+
         // Chuyển hướng đến trang đặt vé với ID phim và ID suất chiếu
         this.$router.push(`/phim/${movieId}/suat-chieu/${showtimeId}`);
       } else {

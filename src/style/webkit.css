@@ -25,13 +25,29 @@
     border-left-color: var(--first-color);
 }
 
-/* GPS ONLINE MAP */
-.leaflet-control-container {
-    display: none;
-    opacity: 0;
+#input_movie {
+    -webkit-appearance: none;
+    /* Dành cho trình duyệt WebKit (Chrome, Safari) */
+    -moz-appearance: none;
+    /* Dành cho Firefox */
+    appearance: none;
+    /* Các trình duyệt khác */
+    background-color: white;
+    /* Nền dropdown */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
 }
 
-.leaflet-control-attribution .leaflet-control {
-    display: none;
-    opacity: 0;
+/* Nếu cần thêm biểu tượng khác để thay thế mũi tên */
+#input_movie::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
+    /* Màu của mũi tên */
 }
