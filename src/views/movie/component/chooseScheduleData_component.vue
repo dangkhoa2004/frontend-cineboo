@@ -82,6 +82,7 @@ export default {
             }
             return theater;
           });
+          // Fetch and append specific PhongChieu fields
           const phongChieuPromises = showtimes.value.map(async (theater) => {
             const tempSuatChieuId = theater.id;
             if (tempSuatChieuId) {
@@ -113,6 +114,8 @@ export default {
             }
             return theater;
           });
+
+          showtimes.value = await Promise.all(phongChieuPromises);
           filterShowtimes();
         } else {
           showtimes.value = [];
