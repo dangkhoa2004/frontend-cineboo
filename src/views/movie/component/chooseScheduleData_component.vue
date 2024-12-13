@@ -88,6 +88,7 @@ export default {
             const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
             return showtimeDate === date;
           });
+          // Fetch and append specific PhongChieu fields
           const phongChieuPromises = showtimes.value.map(async (theater) => {
             const tempSuatChieuId = theater.id;
             if (tempSuatChieuId) {
@@ -119,6 +120,8 @@ export default {
             }
             return theater;
           });
+
+          showtimes.value = await Promise.all(phongChieuPromises);
           filterShowtimes();
         } else {
           showtimes.value = [];
