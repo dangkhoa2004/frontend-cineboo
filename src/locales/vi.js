@@ -42,5 +42,6 @@ export default {
     employee_man: "Quản lý nhân viên",
     customer_man: "Quản lý khách hàng",
     report_man: "Báo cáo & Thống kê",
+    qr_man: "Sử dụng QR Code",
   },
 };

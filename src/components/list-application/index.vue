@@ -16,6 +16,10 @@
         <h3>{{ $t('message.performance') }}:</h3>
         <listPerformance />
     </div>
+    <div class="setting-for">
+        <h3>{{ $t('message.qr_man') }}:</h3>
+        <qrSystem />
+    </div>
 </div>
 </template>
 
@@ -24,11 +28,12 @@ import CssManager from '../list-element/index.vue';
 import listPopup from '../list-popup/index.vue';
 import listPerformance from '../list-perfomance/index.vue';
 import listSetting from '../list-settings/index.vue';
+import qrSystem from '../qr-system/index.vue';
 
 export default {
     name: "ChatApp",
     components: {
-        listPopup, listSetting, CssManager, listPerformance
+        listPopup, listSetting, CssManager, listPerformance, qrSystem
     }
 };
 </script>

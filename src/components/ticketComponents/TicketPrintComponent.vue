@@ -1,58 +1,54 @@
 <template>
-  <div class="confirm-print">
-    <div class="card">
-      <h2>🎟️ In Vé Xem Phim</h2>
-      <h1>{{ title }}</h1>
-      <div v-if="ticketInfo && ticketInfo.trangThaiHoaDon == 3" class="ticket-printed-message">
-        <h2><strong>Note:</strong> Vé đã in rồi!</h2>
-      </div>
+<div class="confirm-print">
+  <div class="card">
+    <h2>🎟️ In Vé Xem Phim</h2>
+    <h1>{{ title }}</h1>
+    <div v-if="ticketInfo && ticketInfo.trangThaiHoaDon == 3" class="ticket-printed-message">
+      <h2><strong>Note:</strong> Vé đã in rồi!</h2>
+    </div>
 
-      <!-- Ticket Details -->
-      <div v-if="ticketInfo && ticketInfo.trangThaiHoaDon!=3" class="ticket-details">
-        <h3>Invoice: {{ ticketInfo.maHoaDon }}</h3>
-        <p>
-          <strong>Customer:</strong> {{ ticketInfo.khachHang.ten }} {{ ticketInfo.khachHang.ho }}
-        </p>
-        <p><strong>Total Price:</strong> {{ ticketInfo.tongSoTien.toLocaleString() }} VND</p>
-        <p><strong>Payment Time:</strong> {{ formatDate(ticketInfo.thoiGianThanhToan) }}</p>
+    <!-- Ticket Details -->
+    <div v-if="ticketInfo && ticketInfo.trangThaiHoaDon != 3" class="ticket-details">
+      <h3>Invoice: {{ ticketInfo.maHoaDon }}</h3>
+      <p>
+        <strong>Customer:</strong> {{ ticketInfo.khachHang.ten }} {{ ticketInfo.khachHang.ho }}
+      </p>
+      <p><strong>Total Price:</strong> {{ ticketInfo.tongSoTien.toLocaleString() }} VND</p>
+      <p><strong>Payment Time:</strong> {{ formatDate(ticketInfo.thoiGianThanhToan) }}</p>
 
-        <div class="tickets">
-          <h4>Tickets</h4>
-          <ul>
-            <li
-              v-for="(ticket, index) in ticketInfo.chiTietHoaDonList"
-              :key="index"
-              class="ticket-item"
-            >
-              <p><strong>Seat:</strong> {{ ticket.id_GheAndSuatChieu.id_Ghe.maGhe }}</p>
-              <p>
-                <strong>Movie:</strong> {{ ticket.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}
-              </p>
-              <p>
-                <strong>Showtime:</strong>
-                {{ formatDate(ticket.id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
-              </p>
-              <p>
-                <strong>Price:</strong>
-                {{ ticket.id_GheAndSuatChieu.id_Ghe.giaTien.toLocaleString() }} VND
-              </p>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div v-else class="error-message">
-        <p>No invoice found. Please scan again.</p>
-      </div>
-
-      <div class="actions">
-        <button class="confirm-btn" @click="confirmPrint()" :disabled="!ticketInfo">
-          ✅ Confirm
-        </button>
-        <button class="cancel-btn" @click="cancel()">❌ Go Back</button>
+      <div class="tickets">
+        <h4>Tickets</h4>
+        <ul>
+          <li v-for="(ticket, index) in ticketInfo.chiTietHoaDonList" :key="index" class="ticket-item">
+            <p><strong>Seat:</strong> {{ ticket.id_GheAndSuatChieu.id_Ghe.maGhe }}</p>
+            <p>
+              <strong>Movie:</strong> {{ ticket.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}
+            </p>
+            <p>
+              <strong>Showtime:</strong>
+              {{ formatDate(ticket.id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
+            </p>
+            <p>
+              <strong>Price:</strong>
+              {{ ticket.id_GheAndSuatChieu.id_Ghe.giaTien.toLocaleString() }} VND
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div v-else class="error-message">
+      <p>No invoice found. Please scan again.</p>
+    </div>
+
+    <div class="actions">
+      <button class="confirm-btn" @click="confirmPrint()" :disabled="!ticketInfo">
+        ✅ Confirm
+      </button>
+      <button class="cancel-btn" @click="cancel()">❌ Go Back</button>
+    </div>
   </div>
+</div>
 </template>
 
 
@@ -124,11 +120,11 @@ const findInvoice = async (maHoaDon) => {
     const response = await axios.get(`http://localhost:8080/hoadon/find/MaHoaDon/${maHoaDon}`)
     if (response.status === 200 && response.data) {
       ticketInfo.value = response.data
-      if(ticketInfo.value.trangThaiHoaDon!=3){
-      title.value = 'Thông tin chi tiết vé:';
+      if (ticketInfo.value.trangThaiHoaDon != 3) {
+        title.value = 'Thông tin chi tiết vé:';
       }
     }
-  
+
     else {
       title.value = 'No ticket found, please scan again.'
       ticketInfo.value = null
@@ -158,10 +154,6 @@ onMounted(() => {
   findInvoice(MaHoaDon.value)
 })
 </script>
-
-
-
-
 <style scoped>
 .card {
   max-width: 600px;

@@ -42,5 +42,6 @@ export default {
     employee_man: "Manage Employee",
     customer_man: "Manage Customer",
     report_man: "Reports & Statistics",
+    qr_man: "Using QR Code",
   },
 };

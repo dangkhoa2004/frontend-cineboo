@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>Quét mã QR và in vé xem phim</h1>  
-    <h2>Vui lòng hướng màn hình điện thoại có chứa mã QR trước đầu đọc để quét</h2>
+    <h1>Quét mã QR và in vé xem phim</h1>
     <div id="loadingMessage">{{ loadingMessage }}</div>
     <canvas ref="canvas" hidden></canvas>
     <div id="output" v-if="outputVisible">
