@@ -93,7 +93,6 @@
                   );
                   if (phongChieuResponse && phongChieuResponse.status === 200) {
                     const data = phongChieuResponse.data;
-                    console.log(data);
                     theater.phongChieu = {
                       id: data.id || -1,
                       maPhong: data.maPhong || "",
@@ -139,7 +138,7 @@
         selectedDate.value = date;
         filterShowtimes();
         filteredShowtimes.value.forEach(theater => {
-          fetchPhongChieuForShowtime(theater);
+          // fetchPhongChieuForShowtime(theater);
         });
       };
   

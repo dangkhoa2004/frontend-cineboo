@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
         } else if (error.message === 'Network Error') {
             console.error('Network Error: Không thể kết nối với server.');
         } else {
-            console.error('Error:', error);
+            // console.error('Error:', error);
         }
         return Promise.reject(error);
     }
