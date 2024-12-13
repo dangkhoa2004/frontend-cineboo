@@ -1,9 +1,5 @@
 <template>
 <div class="movie-detail">
-  <div class="button-container">
-    <button @click="goBack">Trở về</button>
-    <button @click="saveMovie">Lưu lại</button>
-  </div>
   <div v-if="movie">
     <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
     <div>
@@ -62,6 +58,10 @@
         </div>
       </div>
     </div>
+    <div class="button-container">
+    <button @click="goBack">Trở về</button>
+    <button @click="saveMovie">Lưu lại</button>
+  </div>
   </div>
   <div v-else>
     <p>Đang tải thông tin phim...</p>

@@ -25,7 +25,6 @@
       </div>
     </div>
     <div class="booking-movie-desc" v-if="movie">
-      <h2>Nội dung</h2>
       <p>{{ movie.noiDung }}</p>
     </div>
   </div>

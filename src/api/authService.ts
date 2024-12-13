@@ -102,6 +102,9 @@ export function setToken(token: string): void {
 export function logout(): void {
     sessionStorageUtil().removeItem(TOKEN_KEY);
     sessionStorageUtil().removeItem(USER_INFO_KEY);
+    localStorage.clear();
+    sessionStorage.clear();
+
 }
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
