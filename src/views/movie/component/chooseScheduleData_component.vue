@@ -88,6 +88,37 @@ export default {
             const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
             return showtimeDate === date;
           });
+          const phongChieuPromises = showtimes.value.map(async (theater) => {
+            const tempSuatChieuId = theater.id;
+            if (tempSuatChieuId) {
+              try {
+                const phongChieuResponse = await requestWithJWT(
+                    'get',
+                    `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`
+                );
+                if (phongChieuResponse && phongChieuResponse.status === 200) {
+                  const data = phongChieuResponse.data;
+                  theater.phongChieu = {
+                    id: data.id || -1,
+                    maPhong: data.maPhong || "",
+                    tongSoGhe: data.tongSoGhe || 0,
+                    trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
+                  };
+                } else {
+                  throw new Error("PhongChieu fetch failed");
+                }
+              } catch (error) {
+                // Fallback values in case of failure
+                theater.phongChieu = {
+                  id: -1,
+                  maPhong: "(chưa có)",
+                  tongSoGhe: 0,
+                  trangThaiPhongChieu: 0,
+                };
+              }
+            }
+            return theater;
+          });
           filterShowtimes();
         } else {
           showtimes.value = [];
