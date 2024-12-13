@@ -54,6 +54,24 @@ import movieCardData_component from "./component/movieCardData_component.vue";
 import onlyPageHeader_component from "@/layout/components/lay-header/onlyPageHeader_component.vue";
 import onlyPageFooter_component from "@/layout/components/lay-footer/onlyPageFooter_component.vue";
 
+interface Movie {
+  id: number;
+  anhPhim: string;
+  tenPhim: string;
+  noiDungMoTa: string;
+  danhGia?: string;
+  luotXem?: number;
+  dienVien: string;
+  nam: number;
+  thoiLuong: number;
+  quocGia: string;
+  gioiHanDoTuoi: {
+    tenDoTuoi: string;
+  };
+  ngayRaMat: number;
+  trailer: string;
+}
+
 export default {
   name: "moviePageData_component",
   components: {
@@ -62,15 +80,17 @@ export default {
     movieCardData_component,
   },
   setup() {
-    const movies = ref<any[]>([]);
-    const upcomingMovies = ref<any[]>([]);
+    const movies = ref<Movie[]>([]);
+    const upcomingMovies = ref<Movie[]>([]);
     const currentTab = ref("now-playing");
     const searchQuery = ref("");
 
     onMounted(async () => {
       try {
-        movies.value = await fetchMovies();
-        upcomingMovies.value = await fetchMovies();
+        const allMovies = await fetchMovies();
+        const now = new Date();
+        movies.value = allMovies.filter((movie: Movie) => new Date(movie.ngayRaMat) <= now);
+        upcomingMovies.value = allMovies.filter((movie: Movie) => new Date(movie.ngayRaMat) > now);
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu phim:", error);
       }
@@ -78,14 +98,14 @@ export default {
 
     // Lọc các bộ phim hiện tại theo tên
     const filteredMovies = computed(() => {
-      return movies.value.filter((movie) =>
+      return movies.value.filter((movie: Movie) =>
         movie.tenPhim.toLowerCase().includes(searchQuery.value.toLowerCase())
       );
     });
 
     // Lọc các bộ phim sắp chiếu theo tên
     const filteredUpcomingMovies = computed(() => {
-      return upcomingMovies.value.filter((movie) =>
+      return upcomingMovies.value.filter((movie: Movie) =>
         movie.tenPhim.toLowerCase().includes(searchQuery.value.toLowerCase())
       );
     });

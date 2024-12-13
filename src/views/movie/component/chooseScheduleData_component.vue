@@ -23,7 +23,10 @@
       </select>
     </div>
   </div>
-  <div v-if="filteredShowtimes.length === 0">
+  <div v-if="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </div>
+  <div v-else-if="filteredShowtimes.length === 0">
     <p>Chưa có dữ liệu suất chiếu.</p>
   </div>
   <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
@@ -37,11 +40,10 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchShowtimesByMovieId } from "@/api/movie";
-import { requestWithJWT } from '@/api/api.ts';
-import { isLoggedIn } from "@/api/authService";  // Import the function
+import { isLoggedIn } from "@/api/authService";
 
 export default {
   setup() {
@@ -52,6 +54,7 @@ export default {
     const selectedMovieId = ref("");
     const currentDate = new Date().toISOString().split("T")[0];
     const selectedDate = ref(currentDate);
+    const errorMessage = ref("");
 
     const route = useRoute();
     const router = useRouter();
@@ -68,7 +71,7 @@ export default {
       return dates;
     });
 
-    const fetchShowtimes = async (movieId) => {
+    const fetchShowtimes = async (movieId, date) => {
       try {
         const response = await fetchShowtimesByMovieId(movieId);
         if (Array.isArray(response) && response.length) {
@@ -81,14 +84,23 @@ export default {
               theater.thoiGianChieu.setHours(theater.thoiGianChieu.getHours() + 7);
             }
             return theater;
+          }).filter(theater => {
+            const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
+            return showtimeDate === date;
           });
           filterShowtimes();
         } else {
           showtimes.value = [];
-          console.error("Không tìm thấy dữ liệu suất chiếu.");
+          errorMessage.value = "Hiện tại chưa có lịch chiếu cho phim này.";
         }
       } catch (error) {
-        console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
+        if (error.response && (error.response.status === 404 || error.response.status === 400)) {
+          alert("Hiện tại chưa có lịch chiếu cho phim này.");
+          errorMessage.value = "Hiện tại chưa có lịch chiếu cho phim này.";
+          location.reload();
+        } else {
+          console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
+        }
       }
     };
 
@@ -100,19 +112,14 @@ export default {
     };
 
     const updateSelectedDate = (date) => {
-      router.push("no-showtime-chosen");
       selectedDate.value = date;
-      filterShowtimes();
-      filteredShowtimes.value.forEach(theater => {
-        fetchPhongChieuForShowtime(theater);
-      });
+      fetchShowtimes(selectedMovieId.value, date);
     };
 
-    // Add the check for login status in the logTheaterInfo method
     const logTheaterInfo = (theater) => {
       if (!isLoggedIn()) {
         alert("Bạn cần đăng nhập để xem chi tiết suất chiếu.");
-        router.push("/dang-nhap");  // Navigate to the login page
+        router.push("/dang-nhap");
         return;
       }
 
@@ -138,20 +145,13 @@ export default {
       return dayNames[new Date(date).getDay()];
     };
 
-    onMounted(() => {
-      if (selectedMovieId.value) {
-        fetchShowtimes(selectedMovieId.value);
-      } else {
-        console.error("Không tìm thấy ID phim.");
-      }
-    });
-
     return {
       showtimes,
       filteredShowtimes,
       selectedStreet,
       selectedTheater,
       selectedDate,
+      errorMessage,
       fetchShowtimes,
       filterShowtimes,
       currentDate,

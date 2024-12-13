@@ -194,11 +194,16 @@
     border-radius: 5px;
 }
 
+.booking-movie-desc {
+    padding: 10px;
+    background-color: none;
+    width: 100%;
+}
+
 .booking-movie-description {
     padding: 10px;
     background-color: none;
     width: 100%;
-    margin-top: 30px;
 }
 
 .booking-movie-description h2 {

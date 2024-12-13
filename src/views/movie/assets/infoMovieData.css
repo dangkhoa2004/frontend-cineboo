@@ -73,21 +73,3 @@
     background-color: var(--purple);
     border-radius: 5px;
 }
-
-.booking-movie-description {
-    padding: 10px;
-    background-color: none;
-    width: 100%;
-    margin-top: 30px;
-}
-
-.booking-movie-description h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.booking-movie-description h2 {
-    padding-bottom: 10px;
-    font-size: 26px;
-    margin: 0;
-}

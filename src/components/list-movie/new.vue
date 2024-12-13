@@ -1,85 +1,77 @@
 <template>
 <div class="movie-detail">
+    <div>
+        <label>Tên phim:</label>
+        <input v-model="movie.tenPhim" placeholder="Nhập tên phim" />
+    </div>
+    <!-- Hiển thị ảnh khi người dùng nhập link -->
+    <div v-if="movie.anhPhim">
+        <img :src="movie.anhPhim" alt="Ảnh xem trước của phim" style="max-width: 100%; height: auto;" />
+    </div>
+    <div>
+        <label>Ảnh phim:</label>
+        <input v-model="movie.anhPhim" placeholder="Nhập link ảnh phim" />
+    </div>
+    <div>
+        <label>Diễn viên:</label>
+        <input v-model="movie.dienVien" placeholder="Nhập tên diễn viên" />
+    </div>
+    <div>
+        <label>Năm phát hành:</label>
+        <input type="number" v-model="movie.nam" placeholder="Nhập năm phát hành" />
+    </div>
+    <div>
+        <label>Nội dung mô tả:</label>
+        <textarea v-model="movie.noiDungMoTa" placeholder="Nhập nội dung mô tả"></textarea>
+    </div>
+    <div>
+        <label>Trailer:</label>
+        <input v-model="movie.trailer" placeholder="Nhập link trailer" />
+    </div>
+    <div>
+        <label>Ngày ra mắt:</label>
+        <input type="date" v-model="movie.ngayRaMat" />
+    </div>
+    <div>
+        <label>Thời lượng (phút):</label>
+        <input type="number" v-model="movie.thoiLuong" placeholder="Nhập thời lượng phim" />
+    </div>
+    <div>
+        <label>Quốc gia:</label>
+        <input v-model="movie.quocGia" placeholder="Nhập quốc gia" />
+    </div>
+    <div>
+        <label>Nội dung:</label>
+        <textarea v-model="movie.noiDung" placeholder="Nhập nội dung chi tiết"></textarea>
+    </div>
+    <div>
+        <label>Điểm đánh giá:</label>
+        <input type="number" step="0.1" v-model="movie.diem" placeholder="Nhập điểm đánh giá (1-10)" />
+    </div>
+    <!-- Checkbox danh sách thể loại -->
+    <div>
+        <label>Danh sách thể loại phim:</label>
+        <div class="the-loai-container">
+            <div v-for="(theLoai, index) in danhSachTheLoai" :key="index" class="the-loai-item">
+                <input type="checkbox" :value="theLoai.id" v-model="selectedTheLoaiIds" />
+                <span>{{ theLoai.tenTheLoai }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- Checkbox danh sách độ tuổi -->
+    <div>
+        <label>Danh sách độ tuổi phim:</label>
+        <div class="the-loai-container">
+            <div v-for="(dotuoi, index) in danhSachDoTuoi" :key="index" class="the-loai-item">
+                <input type="radio" :value="dotuoi.id" v-model="selectedDoTuoiIds" />
+                <span>{{ dotuoi.tenDoTuoi }}</span>
+            </div>
+        </div>
+    </div>
     <!-- Các nút chức năng -->
     <div class="button-container">
         <button @click="goBack">Trở về</button>
         <button @click="saveMovie">Thêm phim</button>
-    </div>
-    <h2>Thêm phim mới</h2>
-    <div>
-        <!-- Các trường nhập liệu -->
-        <div>
-            <label>Mã phim:</label>
-            <input v-model="movie.maPhim" placeholder="Nhập mã phim" />
-        </div>
-        <div>
-            <label>Tên phim:</label>
-            <input v-model="movie.tenPhim" placeholder="Nhập tên phim" />
-        </div>
-        <!-- Hiển thị ảnh khi người dùng nhập link -->
-        <div v-if="movie.anhPhim">
-            <img :src="movie.anhPhim" alt="Ảnh xem trước của phim" style="max-width: 100%; height: auto;" />
-        </div>
-        <div>
-            <label>Ảnh phim:</label>
-            <input v-model="movie.anhPhim" placeholder="Nhập link ảnh phim" />
-        </div>
-        <div>
-            <label>Diễn viên:</label>
-            <input v-model="movie.dienVien" placeholder="Nhập tên diễn viên" />
-        </div>
-        <div>
-            <label>Năm phát hành:</label>
-            <input type="number" v-model="movie.nam" placeholder="Nhập năm phát hành" />
-        </div>
-        <div>
-            <label>Nội dung mô tả:</label>
-            <textarea v-model="movie.noiDungMoTa" placeholder="Nhập nội dung mô tả"></textarea>
-        </div>
-        <div>
-            <label>Trailer:</label>
-            <input v-model="movie.trailer" placeholder="Nhập link trailer" />
-        </div>
-        <div>
-            <label>Ngày ra mắt:</label>
-            <input type="date" v-model="movie.ngayRaMat" />
-        </div>
-        <div>
-            <label>Thời lượng (phút):</label>
-            <input type="number" v-model="movie.thoiLuong" placeholder="Nhập thời lượng phim" />
-        </div>
-        <div>
-            <label>Quốc gia:</label>
-            <input v-model="movie.quocGia" placeholder="Nhập quốc gia" />
-        </div>
-        <div>
-            <label>Nội dung:</label>
-            <textarea v-model="movie.noiDung" placeholder="Nhập nội dung chi tiết"></textarea>
-        </div>
-        <div>
-            <label>Điểm đánh giá:</label>
-            <input type="number" step="0.1" v-model="movie.diem" placeholder="Nhập điểm đánh giá (1-10)" />
-        </div>
-        <!-- Checkbox danh sách thể loại -->
-        <div>
-            <label>Danh sách thể loại phim:</label>
-            <div class="the-loai-container">
-                <div v-for="(theLoai, index) in danhSachTheLoai" :key="index" class="the-loai-item">
-                    <input type="checkbox" :value="theLoai.id" v-model="selectedTheLoaiIds" />
-                    <span>{{ theLoai.tenTheLoai }}</span>
-                </div>
-            </div>
-        </div>
-        <!-- Checkbox danh sách độ tuổi -->
-        <div>
-            <label>Danh sách độ tuổi phim:</label>
-            <div class="the-loai-container">
-                <div v-for="(dotuoi, index) in danhSachDoTuoi" :key="index" class="the-loai-item">
-                    <input type="radio" :value="dotuoi.id" v-model="selectedDoTuoiIds" />
-                    <span>{{ dotuoi.tenDoTuoi }}</span>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </template>
@@ -92,18 +84,17 @@ export default {
     data() {
         return {
             movie: {
-                maPhim: "test",
-                tenPhim: "test",
-                anhPhim: "test.com",
-                dienVien: "test",
+                tenPhim: "",
+                anhPhim: "",
+                dienVien: "",
                 nam: new Date().getFullYear(),
-                noiDungMoTa: "test",
-                trailer: "test.com",
+                noiDungMoTa: "",
+                trailer: "",
                 ngayRaMat: "",
                 thoiLuong: 120,
-                quocGia: "test",
-                noiDung: "test",
-                diem: 9.1,
+                quocGia: "",
+                noiDung: "",
+                diem: 9.9,
                 trangThai: 1,
             },
             danhSachTheLoai: [],

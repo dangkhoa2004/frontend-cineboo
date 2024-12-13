@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { watch } from 'vue'; // Import watch từ Vue
 import { useRoute } from 'vue-router'; // Để theo dõi thay đổi route
 import infoMovieData_component from "./infoMovieData_component.vue";
 import chooseScheduleData_component from "./chooseScheduleData_component.vue";
