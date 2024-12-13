@@ -79,7 +79,7 @@ export default {
             } else if (Array.isArray(theater.thoiGianChieu)) {
               const [year, month, day, hour, minute] = theater.thoiGianChieu;
               theater.thoiGianChieu = new Date(year, month - 1, day, hour, minute);
-              theater.thoiGianChieu.setHours(theater.thoiGianChieu.getHours() + 7);
+              theater.thoiGianChieu.setHours(theater.thoiGianChieu.getHours());
             }
             return theater;
           });
@@ -94,7 +94,6 @@ export default {
                 );
                 if (phongChieuResponse && phongChieuResponse.status === 200) {
                   const data = phongChieuResponse.data;
-                  console.log(data);
                   theater.phongChieu = {
                     id: data.id || -1,
                     maPhong: data.maPhong || "",
