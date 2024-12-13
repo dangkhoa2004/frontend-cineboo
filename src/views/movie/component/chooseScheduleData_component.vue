@@ -1,3 +1,4 @@
+
 <template>
 <div class="schedule-container">
   <div class="schedule-header">
@@ -93,6 +94,7 @@ export default {
                 );
                 if (phongChieuResponse && phongChieuResponse.status === 200) {
                   const data = phongChieuResponse.data;
+                  console.log(data);
                   theater.phongChieu = {
                     id: data.id || -1,
                     maPhong: data.maPhong || "",
