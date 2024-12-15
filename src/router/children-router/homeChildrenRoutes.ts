@@ -36,7 +36,7 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     path: "thay-doi-thong-tin-phim/:id",
     name: "thay-doi-thong-tin-phim",
     components: {
-      listComponent: () => import('@/components/list-movie/detail.vue')
+      listComponent: () => import('@/components/list-movie/movie_detail.vue')
     }
   },
   {
@@ -60,7 +60,13 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
       listComponent: () => import('@/components/list-movie/listSchedual.vue')
     }
   },
-
+  {
+    path: "thay-doi-thong-tin-lich-chieu/:id",
+    name: "thay-doi-thong-tin-lich-chieu",
+    components: {
+      listComponent: () => import('@/components/list-movie/schedual_detail.vue')
+    }
+  },
   // Các route liên quan đến voucher
   {
     path: "vouchers",
