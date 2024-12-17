@@ -35,6 +35,25 @@ interface SignUpData {
     ngaySinh: string;
     danToc: number;
 }
+// API gửi yêu cầu khôi phục mật khẩu
+export async function recoverPassword(email: string) {
+    try {
+        const response = await axios.put(`http://localhost:8080/taikhoan/recovery/send?email=${encodeURIComponent(email)}`, null, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status === 200) {
+            console.log("Yêu cầu khôi phục mật khẩu thành công:", response.data);
+            return response.data;
+        } else {
+            throw new Error("Khôi phục mật khẩu thất bại");
+        }
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Khôi phục mật khẩu thất bại");
+    }
+}
 
 // Hàm đăng ký với kiểu dữ liệu
 export async function signup(data: SignUpData) {

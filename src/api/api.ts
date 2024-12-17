@@ -49,9 +49,9 @@ const requestWithAuth = (method: Method, url: string, data: any = {}) => {//Đ�
 
 const requestWithJWT = (method: Method, url: string, data: any = {}) => {//Method chuẩn để thêm token vào request
     let token = sessionStorage.getItem('token');
-    if(token!=null){
-        token = token.substring(1,token.length-1);
-    }else{
+    if (token != null) {
+        token = token.substring(1, token.length - 1);
+    } else {
         //To be safe, do nothing if token is null
         //Cuz this method REQUIRES token
         return;
@@ -61,9 +61,9 @@ const requestWithJWT = (method: Method, url: string, data: any = {}) => {//Metho
         url,
         data,
         headers: {
-        'Authorization': token,
-        'Content-Type': 'application/json',
-      },
+            'Authorization': token,
+            'Content-Type': 'application/json',
+        },
     });
 };
-export { apiClient, requestWithAuth,requestWithJWT };
+export { apiClient, requestWithAuth, requestWithJWT };
