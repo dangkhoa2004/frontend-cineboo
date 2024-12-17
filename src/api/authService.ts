@@ -41,6 +41,7 @@ export async function recoverPassword(email: string) {
         const response = await axios.put(`http://localhost:8080/taikhoan/recovery/send?email=${encodeURIComponent(email)}`, null, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer`,
             },
         });
 
