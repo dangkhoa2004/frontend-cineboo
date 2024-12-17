@@ -147,8 +147,8 @@ export default {
         return;
       }
 
-      const customerInfo = this.userInfo;
-      const customerID = customerInfo.maKhachHang || customerInfo.id || customerInfo.maNhanVien;
+      const customerInfo = this.userInfo; 
+      const customerID =  customerInfo.id;
       if (!customerID) {
         console.error("Không xác định được ID khách hàng.");
         swal("Oops", "Vui lòng đăng nhập để mua vé.", "error");
@@ -198,7 +198,10 @@ export default {
                 const qrData = await createInvoiceQr(idHoaDon);
                 console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
                 if (qrData && qrData.payment) {
-                  window.location.href = qrData.payment; // Chuyển hướng sang trang thanh toán
+					window.open(qrData.payment, '_blank');
+					setTimeout(() => {
+					window.location.href = 'http://localhost:3000/'; // Redirects the current page
+				}, 100);
                 } else {
                   console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
                 }
