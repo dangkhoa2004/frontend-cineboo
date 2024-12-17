@@ -79,7 +79,7 @@ export default {
             return new Date(timestamp).toLocaleDateString("vi-VN", options);
         },
         editMovie(suatchieu) {
-            this.$router.push({ name: 'thay-doi-thong-tin-phim', params: { id: suatchieu.id } });
+            this.$router.push({ name: 'thay-doi-thong-tin-lich-chieu', params: { id: suatchieu.id } });
         },
         goBack() {
             this.$router.go(-1);
