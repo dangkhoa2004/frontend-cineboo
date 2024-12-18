@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { fetchMovies } from "@/api/movie";
+import { fetchMoviesApiClient } from "@/api/movie";
 import axios from "axios";
 
 export default {
@@ -83,7 +83,7 @@ export default {
   methods: {
     async loadMovies() {
       try {
-        const movieData = await fetchMovies();
+        const movieData = await fetchMoviesApiClient();
         this.movies = movieData;
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu phim:", error);

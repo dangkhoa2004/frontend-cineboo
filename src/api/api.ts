@@ -52,8 +52,6 @@ const requestWithJWT = (method: Method, url: string, data: any = {}) => {//Metho
     if (token != null) {
         token = token.substring(1, token.length - 1);
     } else {
-        //To be safe, do nothing if token is null
-        //Cuz this method REQUIRES token
         return;
     }
     return apiClient({

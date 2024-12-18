@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiClient,requestWithJWT } from './api';
+import { apiClient, requestWithJWT } from './api';
 
 /**
  * Lấy danh sách phim.
@@ -9,7 +9,7 @@ import { apiClient,requestWithJWT } from './api';
  */
 export const fetchMovies = async (params = {}) => {
     try {
-        const response = await requestWithJWT('get','/phim/get', { params });
+        const response = await requestWithJWT('get', '/phim/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -20,7 +20,25 @@ export const fetchMovies = async (params = {}) => {
         throw error;
     }
 };
-
+/**
+ * Lấy danh sách phim.
+ * @param {Object} params - Tham số lọc hoặc phân trang (nếu có).
+ * @returns {Promise<any>} Dữ liệu danh sách phim.
+ * @throws {Error} Nếu có lỗi khi lấy dữ liệu phim.
+ */
+export const fetchMoviesApiClient = async (params = {}) => {
+    try {
+        const response = await apiClient.get('/phim/get', { params });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi xử lý dữ liệu phim]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
 /**
  * Lấy danh sách phòng chiếu.
  * @param {Object} params - Tham số lọc hoặc phân trang (nếu có).
@@ -29,7 +47,7 @@ export const fetchMovies = async (params = {}) => {
  */
 export const fetchPhongChieu = async (params = {}) => {
     try {
-        const response = await requestWithJWT('get','/phongchieu/get', { params });
+        const response = await requestWithJWT('get', '/phongchieu/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -49,7 +67,7 @@ export const fetchPhongChieu = async (params = {}) => {
  */
 export const fetchSuatChieu = async (params = {}) => {
     try {
-        const response = await requestWithJWT('get','/suatchieu/get', { params });
+        const response = await requestWithJWT('get', '/suatchieu/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -69,7 +87,7 @@ export const fetchSuatChieu = async (params = {}) => {
  */
 export const createMovie = async (movieData: any) => {
     try {
-        const response = await requestWithJWT('post',`/phim/add`, movieData);
+        const response = await requestWithJWT('post', `/phim/add`, movieData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -90,7 +108,7 @@ export const createMovie = async (movieData: any) => {
  */
 export const updateMovieById = async (id: string, movieData: any) => {
     try {
-        const response = await requestWithJWT('put',`/phim/update/${id}`, movieData);
+        const response = await requestWithJWT('put', `/phim/update/${id}`, movieData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -110,7 +128,7 @@ export const updateMovieById = async (id: string, movieData: any) => {
  */
 export const fetchMovieById = async (id: string) => {
     try {
-        const response = await requestWithJWT('get',`/phim/find/${id}`);
+        const response = await requestWithJWT('get', `/phim/find/${id}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -130,7 +148,7 @@ export const fetchMovieById = async (id: string) => {
  */
 export const fetchShowtimesByMovieId = async (movieId: string) => {
     try {
-        const response = await requestWithJWT('get',`/suatchieu/find/ID_Phim/${movieId}`);
+        const response = await requestWithJWT('get', `/suatchieu/find/ID_Phim/${movieId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -150,7 +168,7 @@ export const fetchShowtimesByMovieId = async (movieId: string) => {
  */
 export const fetchSeatByShowTime = async (suatchieuId: string) => {
     try {
-        const response = await requestWithJWT('get',`/ghe/find/ID_SuatChieu/${suatchieuId}`);
+        const response = await requestWithJWT('get', `/ghe/find/ID_SuatChieu/${suatchieuId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -169,7 +187,7 @@ export const fetchSeatByShowTime = async (suatchieuId: string) => {
  */
 export const fetchMovieNow = async () => {
     try {
-        const response = await requestWithJWT('get','/api/movie/now');
+        const response = await requestWithJWT('get', '/api/movie/now');
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -188,7 +206,7 @@ export const fetchMovieNow = async () => {
  */
 export const fetchMovieFuture = async () => {
     try {
-        const response = await requestWithJWT('get','/api/movie/future');
+        const response = await requestWithJWT('get', '/api/movie/future');
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -207,7 +225,7 @@ export const fetchMovieFuture = async () => {
  */
 export const fetchAgeGroups = async () => {
     try {
-        const response = await requestWithJWT('get','/dotuoi/get');
+        const response = await requestWithJWT('get', '/dotuoi/get');
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -227,7 +245,7 @@ export const fetchAgeGroups = async () => {
  */
 export const deleteAgeGroupById = async (id: string) => {
     try {
-        const response = await requestWithJWT('delete',`/dotuoi/disable/${id}`);
+        const response = await requestWithJWT('delete', `/dotuoi/disable/${id}`);
         if (!response.status) {
             throw new Error('Không thể xoá khách hàng');
         }
@@ -249,7 +267,7 @@ export const deleteAgeGroupById = async (id: string) => {
  */
 export async function deleteMovieById(movieId: string) {
     try {
-        const response = await requestWithJWT('put',`/phim/disable/${movieId}`);
+        const response = await requestWithJWT('put', `/phim/disable/${movieId}`);
         if (!response.status) {
             throw new Error('Không thể xoá phim');
         }

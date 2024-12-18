@@ -23,98 +23,27 @@
 }
 
 .reset-password {
-    max-width: 500px; /* Cố định chiều rộng form */
-    width: 100%; /* Chiều rộng đầy đủ */
-    margin: 0 auto; /* Căn giữa */
-    background-color: black;
-  }
-  
-
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .text-center {
-    text-align: center;
-  }
-  
-  .text-danger {
-    color: red;
-  }
-  
-  .text-success {
-    color: green;
-  }
-  
-
-/* .reset-password-container {
-    max-width: 400px;
-    align-items: center;
-    text-align: center;
+    max-width: 500px;
+    /* Cố định chiều rộng form */
+    width: 100%;
+    /* Chiều rộng đầy đủ */
     margin: 0 auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    text-align: center;
-    color: #333;
+    /* Căn giữa */
+    background-color: black;
 }
 
 .form-group {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.text-center {
     text-align: center;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
+.text-danger {
+    color: red;
 }
 
-input {
-    width: 50%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+.text-success {
+    color: green;
 }
-
-.btn-request {
-    align-items: center;
-    text-align: center;
-    width: 50%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button.btn:hover {
-    background-color: #0056b3;
-}
-
-.message {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 14px;
-}
-
-.message.success {
-    color: #28a745;
-}
-
-.message.error {
-    color: #dc3545;
-} */
