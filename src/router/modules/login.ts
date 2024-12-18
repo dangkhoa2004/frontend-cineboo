@@ -9,7 +9,7 @@ const authRoutes: RouteRecordRaw[] = [
     },
     {
         path: '/quen-mat-khau',
-        name: 'Lquen-mat-khauogin',
+        name: 'quen-mat-khau',
         component: () => import('@/components/reset-password/index.vue'),
     },
 ];

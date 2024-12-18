@@ -10,7 +10,7 @@
           <i class="fas fa-envelope"></i>
         </div>
         <div class="input-field">
-          <input type="password" placeholder="Mật khẩu" v-model="formData.password" required />
+          <input type="password" placeholder="Mật khẩu" v-model="formData.password"  />
           <i class="fas fa-lock"></i>
           <i class="fas fa-eye-slash toggle-password" @click="togglePasswordVisibility"></i>
         </div>
@@ -18,6 +18,7 @@
         <button type="submit" class="auth-btn">Đăng Nhập</button>
       </form>
       <p class="toggle-form-link">Chưa có tài khoản? <span @click="toggleForm">Đăng ký ngay</span></p>
+      <p class="toggle-form-link">Bạn quên mật khẩu ? <span @click="forgotPassword">Quên Mật Khẩu</span></p>
     </div>
 
     <!-- Form Đăng Ký -->
@@ -110,6 +111,9 @@ export default {
     const toggleForm = () => {
       isLoginActive.value = !isLoginActive.value;
     };
+    const forgotPassword = () => {
+      router.push('/quen-mat-khau');
+    };
 
     // Hàm đăng nhập
     const handleLogin = async () => {
@@ -145,6 +149,7 @@ export default {
       handleLogin,
       handleSignUp,
       toggleForm,
+      forgotPassword,
       togglePasswordVisibility,
       isLoginActive,
     };
