@@ -4,35 +4,35 @@
         <form @submit.prevent="updateUserInfo">
             <div>
                 <label>Họ:</label>
-                <input type="text" v-model="userInfo.ho" :disabled="true" />
+                <input type="text" v-model="userInfo.ho" />
             </div>
             <div>
                 <label>Tên đệm:</label>
-                <input type="text" v-model="userInfo.tenDem" :disabled="true" />
+                <input type="text" v-model="userInfo.tenDem" />
             </div>
             <div>
                 <label>Tên:</label>
-                <input type="text" v-model="userInfo.ten" :disabled="true" />
+                <input type="text" v-model="userInfo.ten" />
             </div>
             <div>
                 <label>Email:</label>
-                <input type="email" v-model="userInfo.email" :disabled="true" />
+                <input type="email" v-model="userInfo.taiKhoan.email" />
             </div>
             <div>
                 <label>Địa chỉ:</label>
-                <input type="text" v-model="userInfo.diaChi" :disabled="true" />
+                <input type="text" v-model="userInfo.diaChi" />
             </div>
             <div>
                 <label>Ngày sinh:</label>
-                <input type="date" v-model="formattedDate" @change="updateDate" :disabled="true" />
+                <input type="date" v-model="formattedDate" @change="updateDate" />
             </div>
             <div>
                 <label>Dân tộc:</label>
-                <input type="text" v-model="userInfo.danToc" :disabled="true" />
+                <input type="text" v-model="userInfo.danToc" />
             </div>
             <div class="gender-selection">
                 <label>Giới tính:</label>
-                <select v-model="userInfo.gioiTinh" :disabled="true">
+                <select v-model="userInfo.gioiTinh">
                     <option value="1">Nam</option>
                     <option value="0">Nữ</option>
                 </select>
@@ -41,12 +41,12 @@
             <!-- Hiển thị Chức vụ chỉ khi là nhân viên -->
             <div v-if="userInfo.taiKhoan.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien' && userInfo.chucVu">
                 <label>Chức vụ:</label>
-                <input type="text" v-model="userInfo.chucVu.tenChucVu" :disabled="true" />
+                <input type="text" v-model="userInfo.chucVu.tenChucVu" />
             </div>
 
             <div>
                 <label>Ghi chú:</label>
-                <input type="text" v-model="userInfo.taiKhoan.ghiChu" :disabled="true" />
+                <input type="text" v-model="userInfo.taiKhoan.ghiChu" />
             </div>
             <button type="submit">Cập nhật thông tin</button>
         </form>

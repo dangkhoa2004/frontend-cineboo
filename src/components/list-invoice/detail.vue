@@ -1,82 +1,93 @@
 <template>
 <div class="invoice-detail">
-    <!-- Save Button -->
     <div class="button-container">
         <button @click="goBack">Trở về</button>
     </div>
-    <div v-if="invoice">
+    <!-- Invoice data -->
+    <div v-if="hoadon">
+        <!-- Customer Information -->
         <h3>Thông tin khách hàng</h3>
         <div class="card customer-info">
-            <div><strong>Họ và tên:</strong>
-                <input v-model="invoice.khachHang.ho" placeholder="Họ" disabled />
-                <input v-model="invoice.khachHang.tenDem" placeholder="Tên đệm" disabled />
-                <input v-model="invoice.khachHang.ten" placeholder="Tên" disabled />
+            <div>
+                <strong>Họ và tên:</strong>
+                <input v-model="hoadon.khachHang.ho" placeholder="Họ" disabled />
+                <input v-model="hoadon.khachHang.tenDem" placeholder="Tên đệm" disabled />
+                <input v-model="hoadon.khachHang.ten" placeholder="Tên" disabled />
             </div>
-            <div><strong>Ngày sinh:</strong>
-                <input v-model="invoice.khachHang.ngaySinh" type="date" disabled />
+            <div>
+                <strong>Ngày sinh:</strong>
+                <input v-model="hoadon.khachHang.ngaySinh" type="date" disabled />
             </div>
             <div><strong>Số điện thoại:</strong>
-                <input v-model="invoice.khachHang.soDienThoai" disabled />
+                <input v-model="hoadon.khachHang.soDienThoai" disabled />
             </div>
             <div><strong>Email:</strong>
-                <input v-model="invoice.khachHang.email" disabled />
+                <input v-model="hoadon.khachHang.email" disabled />
             </div>
             <div><strong>Địa chỉ:</strong>
-                <input v-model="invoice.khachHang.diaChi" disabled />
+                <input v-model="hoadon.khachHang.diaChi" disabled />
             </div>
             <div><strong>Điểm:</strong>
-                <input v-model="invoice.khachHang.diem" type="number" disabled />
+                <input v-model="hoadon.khachHang.diem" type="number" disabled />
             </div>
         </div>
+
+        <!-- Movie Information -->
         <h3>Thông tin phim</h3>
-        <div v-if="invoice && invoice.chiTietHoaDonList.length > 0 && invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim"
+        <div v-if="hoadon.chiTietHoaDonList.length && hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim"
             class="card movie-info">
             <div><strong>Tên phim:</strong>
-                <input v-model="invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim" disabled />
+                <input v-model="hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim" disabled />
             </div>
             <div><strong>Quốc gia:</strong>
-                <input v-model="invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.quocGia" disabled />
+                <input v-model="hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.quocGia" disabled />
             </div>
             <div><strong>Nội dung:</strong>
-                <input v-model="invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.noiDung" disabled />
+                <input v-model="hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.noiDung" disabled />
             </div>
             <div><strong>Điểm:</strong>
-                <input v-model="invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.diem" type="number"
+                <input v-model="hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.diem" type="number"
                     disabled />
             </div>
         </div>
+
+        <!-- Payment Method -->
         <h3>Phương thức thanh toán</h3>
         <div class="card payment-method">
-            <div v-if="invoice.pttt">
+            <div v-if="hoadon.pttt">
                 <div><strong>Hình thức:</strong>
-                    <input v-model="invoice.pttt.tenPTTT" disabled />
+                    <input v-model="hoadon.pttt.tenPTTT" disabled />
                 </div>
             </div>
             <div v-else>
                 <p><strong>Không có phương thức thanh toán</strong></p>
             </div>
         </div>
+
+        <!-- Invoice Information -->
         <h3>Thông tin hoá đơn</h3>
         <div class="card invoice-info">
             <div><strong>Mã hoá đơn:</strong>
-                <input v-model="invoice.maHoaDon" disabled />
+                <input v-model="hoadon.maHoaDon" disabled />
             </div>
             <div><strong>Số lượng:</strong>
-                <input v-model="invoice.soLuong" type="number" disabled />
+                <input v-model="hoadon.soLuong" type="number" disabled />
             </div>
             <div><strong>Tổng tiền:</strong>
-                <input v-model="invoice.tongSoTien" type="number" disabled />
+                <input v-model="hoadon.tongSoTien" type="number" disabled />
             </div>
             <div><strong>Điểm:</strong>
-                <input v-model="invoice.diem" type="number" disabled />
+                <input v-model="hoadon.diem" type="number" disabled />
             </div>
             <div><strong>Thời gian thanh toán:</strong>
                 <input v-model="formattedTime" type="datetime-local" disabled />
             </div>
             <div><strong>Trạng thái hoá đơn:</strong>
-                <input :value="getTrangThaiHoaDonText(invoice.trangThaiHoaDon)" disabled />
+                <input :value="getTrangThaiHoaDonText(hoadon.trangThaiHoaDon)" disabled />
             </div>
         </div>
+
+        <!-- Invoice Details -->
         <h3>Chi tiết hoá đơn</h3>
         <section class="movie_checkout_content">
             <div class="header-ticker">
@@ -85,27 +96,27 @@
             <div class="ticket-container">
                 <div class="col-1">
                     <div class="ticket-info">
-                        <p class="status" :class="statusClass(invoice.trangThaiHoaDon)">
-                            {{ getTrangThaiHoaDonText(invoice.trangThaiHoaDon) }}
+                        <p class="status" :class="statusClass(hoadon.trangThaiHoaDon)">
+                            {{ getTrangThaiHoaDonText(hoadon.trangThaiHoaDon) }}
                         </p>
-                        <h2>{{ invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</h2>
+                        <h2>{{ hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</h2>
                         <p class="movie-details">Thời lượng: {{
-                            invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.thoiLuong }} phút</p>
+                            hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.phim.thoiLuong }} phút</p>
                         <div class="row-1">
                             <p><span>Ngày:</span> {{
-                                formatDate(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
-                                }}</p>
+                                formatDate(hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
+                            </p>
                             <p><span>Giờ:</span> {{
-                                formatTime(invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu)
-                                }}</p>
+                                formatTime(hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
+                            </p>
                             <p><span>Rạp:</span> {{
-                                invoice.chiTietHoaDonList[0].id_GheAndSuatChieu.id_Ghe.phongChieu.maPhong }}</p>
+                                hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_Ghe.phongChieu.maPhong }}</p>
                         </div>
                         <div class="row-1">
                             <p><span>Vị trí ghế: </span>
-                                <span v-for="(item, index) in invoice.chiTietHoaDonList" :key="index">
+                                <span v-for="(item, index) in hoadon.chiTietHoaDonList" :key="index">
                                     {{ item.id_GheAndSuatChieu.id_Ghe.maGhe }}<span
-                                        v-if="index < invoice.chiTietHoaDonList.length - 1">, </span>
+                                        v-if="index < hoadon.chiTietHoaDonList.length - 1">, </span>
                                 </span>
                             </p>
                             <p>Rạp CineBoo Nguyễn Du</p>
@@ -114,8 +125,8 @@
                     </div>
                 </div>
                 <div class="col-1">
-                    <div v-if="invoice.trangThaiHoaDon === 1" class="qr-section">
-                        <img src="@/assets/img/qr.png" alt="QR Code">
+                    <div v-if="hoadon.trangThaiHoaDon === 1" class="qr-section">
+                        <img :src="hoadon.qr" alt="QR Code">
                         <p>Đưa mã QR cho nhân viên soát vé</p>
                         <div class="ticket-code">
                             <p>Mã vé</p>
@@ -126,32 +137,34 @@
             </div>
         </section>
     </div>
+
+    <!-- Loading state -->
     <div v-else>
         <p>Đang tải thông tin hoá đơn...</p>
     </div>
 </div>
 </template>
-
 <script>
 import { fetchInvoiceById } from "@/api/invoice";
+
 export default {
     data() {
         return {
-            invoice: null,
+            hoadon: null,
         };
     },
     computed: {
         formattedTime: {
             get() {
-                if (this.invoice && this.invoice.thoiGianThanhToan) {
-                    const time = this.invoice.thoiGianThanhToan;
+                if (this.hoadon && this.hoadon.thoiGianThanhToan) {
+                    const time = this.hoadon.thoiGianThanhToan;
                     return `${time[0]}-${String(time[1]).padStart(2, '0')}-${String(time[2]).padStart(2, '0')}T${String(time[3]).padStart(2, '0')}:${String(time[4]).padStart(2, '0')}`;
                 }
                 return '';
             },
             set(value) {
                 const date = new Date(value);
-                this.invoice.thoiGianThanhToan = [
+                this.hoadon.thoiGianThanhToan = [
                     date.getFullYear(),
                     date.getMonth() + 1,
                     date.getDate(),
@@ -174,20 +187,14 @@ export default {
             return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
         },
         getTrangThaiHoaDonText(status) {
-            switch (status) {
-                case 0:
-                    return "Hoá đơn chưa thanh toán";
-                case 1:
-                    return "Hoá đơn đã thanh toán";
-                case 2:
-                    return "Hoá đơn đã huỷ thanh toán";
-                case 3:
-                    return "Hoá đơn đã lấy vé thành công";
-                case 4:
-                    return "Đang có yêu cầu hoàn tiền";
-                default:
-                    return "Hoá đơn không xác định";
-            }
+            const statusTexts = {
+                0: "Hoá đơn chưa thanh toán",
+                1: "Hoá đơn đã thanh toán",
+                2: "Hoá đơn đã huỷ thanh toán",
+                3: "Hoá đơn đã lấy vé thành công",
+                4: "Đang có yêu cầu hoàn tiền",
+            };
+            return statusTexts[status] || "Hoá đơn không xác định";
         },
         statusClass(status) {
             switch (status) {
@@ -205,10 +212,27 @@ export default {
         async loadInvoice() {
             const invoiceId = this.$route.params.id;
             try {
-                const invoiceData = await fetchInvoiceById(invoiceId);
-                this.invoice = invoiceData;
+                // Fetch data from API
+                const response = await fetchInvoiceById(invoiceId);
+
+                // Log full response for debugging purposes
+                console.log("API response:", response);
+
+                // Kiểm tra sự tồn tại của response.data và response.data.hoadon
+                if (response && response.qr && response.hoadon) {
+                    // Gán qr vào hoadon để sử dụng cho ảnh QR
+                    this.hoadon = {
+                        ...response.hoadon,
+                        qr: response.qr
+                    };
+                } else {
+                    console.error("Phản hồi từ API không có dữ liệu hoadon!");
+                    this.hoadon = null;  // Gán null nếu không có dữ liệu trong response.data
+                }
             } catch (error) {
+                // Xử lý lỗi nếu có
                 console.error("Lỗi khi tải thông tin hoá đơn:", error);
+                this.hoadon = null;  // Gán null nếu có lỗi
             }
         },
         goBack() {
@@ -218,3 +242,4 @@ export default {
 };
 </script>
 <style src="./assets/styles.css" scoped></style>
+<!-- list-invoice/index.vue -->

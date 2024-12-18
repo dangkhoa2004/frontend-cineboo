@@ -1,10 +1,10 @@
-import { apiClient } from './api';
+import { apiClient,requestWithJWT } from './api';
 import axios from 'axios'; // Ensure Axios is imported
 
 /* Lấy danh sách khách hàng */
 export const fetchkhachhangs = async (params = {}) => {
     try {
-        const response = await apiClient.get('/khachhang/get', { params });
+        const response = await requestWithJWT('get','/khachhang/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -19,7 +19,7 @@ export const fetchkhachhangs = async (params = {}) => {
 /* Lấy khách hàng theo id */
 export const fetchkhachhangById = async (id: string) => {
     try {
-        const response = await apiClient.get(`/khachhang/find/${id}`);
+        const response = await requestWithJWT('get',`/khachhang/find/${id}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -34,7 +34,7 @@ export const fetchkhachhangById = async (id: string) => {
 /* Cập nhật khách hàng theo id */
 export const updatekhachhangById = async (id: string, khachhangData: any) => {
     try {
-        const response = await apiClient.put(`/khachhang/update/${id}`, khachhangData);
+        const response = await requestWithJWT('put',`/khachhang/update/${id}`, khachhangData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -49,7 +49,7 @@ export const updatekhachhangById = async (id: string, khachhangData: any) => {
 /* Xoá khách hàng theo id */
 export const deletekhachhangById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/khachhang/delete/${id}`);
+        const response = await requestWithJWT('put',`/khachhang/disable/${id}`);
         if (!response.status) {
             throw new Error('Không thể xoá khách hàng');
         }
@@ -66,7 +66,7 @@ export const deletekhachhangById = async (id: string) => {
 /* Tạo khách hàng mới */
 export const createkhachhang = async (khachhangData: any) => {
     try {
-        const response = await apiClient.post('/khachhang/add', khachhangData);
+        const response = await requestWithJWT('post','/khachhang/add', khachhangData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

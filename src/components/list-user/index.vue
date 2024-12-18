@@ -27,7 +27,7 @@
           <td>{{ customer.ho }} {{ customer.tenDem }} {{ customer.ten }}</td>
           <td>{{ formatDate(customer.ngaySinh) }}</td>
           <td>{{ customer.soDienThoai }}</td>
-          <td>{{ customer.email }}</td>
+          <td>{{ customer.taiKhoan.email }}</td>
           <td>
             <button @click="editCustomer(customer)">Sửa</button>
             <button @click="deleteCustomer(customer.id)">Xoá</button>

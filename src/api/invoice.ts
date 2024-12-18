@@ -4,7 +4,7 @@ import axios from 'axios';
 /* Lấy danh sách hoá đơn */
 export const fetchInvoices = async (params = {}) => {
     try {
-        const response = await apiClient.get('/hoadon/get', { params });
+        const response = await requestWithJWT('get','/hoadon/get', { params });
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
@@ -15,7 +15,7 @@ export const fetchInvoices = async (params = {}) => {
 /* Lấy danh sách khách hàng */
 export const fetchRefunds = async (params = {}) => {
     try {
-        const response = await apiClient.get('/hoanve/get', { params });
+        const response = await requestWithJWT('get','/hoanve/get', { params });
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu khách hàng]', error instanceof Error ? error.message : error);
@@ -26,7 +26,7 @@ export const fetchRefunds = async (params = {}) => {
 /* Lấy danh sách hoá đơn */
 export const fetchPaymentMethods = async (params = {}) => {
     try {
-        const response = await apiClient.get('/pttt/get', { params });
+        const response = await requestWithJWT('get','/pttt/get', { params });
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
@@ -37,7 +37,7 @@ export const fetchPaymentMethods = async (params = {}) => {
 /* Xoá khách hàng theo id */
 export const deletePaymentMethodById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/khachhang/delete/${id}`);
+        const response = await requestWithJWT('put',`/khachhang/disable/${id}`);
         if (response && !response.status) {
             throw new Error('Không thể xoá khách hàng');
         }
@@ -50,7 +50,7 @@ export const deletePaymentMethodById = async (id: string) => {
 /* Lấy danh sách hoá đơn */
 export const updateInvoice = async (params = {}) => {
     try {
-        const response = await apiClient.get('/hoadon/get', { params });
+        const response = await requestWithJWT('get','/hoadon/get', { params });
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
@@ -61,7 +61,8 @@ export const updateInvoice = async (params = {}) => {
 /* Lấy hoá đơn theo id */
 export const fetchInvoiceById = async (id: string) => {
     try {
-        const response = await apiClient.get(`/hoadon/find/${id}`);
+        const response = await requestWithJWT('get',`/hoadon/find/${id}`);
+ 
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
@@ -72,7 +73,7 @@ export const fetchInvoiceById = async (id: string) => {
 /* Cập nhật hoá đơn theo id */
 export const updateInvoiceById = async (id: string, invoiceData: any) => {
     try {
-        const response = await apiClient.put(`/hoadon/update/${id}`, invoiceData);
+        const response = await requestWithJWT('put',`/hoadon/update/${id}`, invoiceData);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi cập nhật hoá đơn]', error instanceof Error ? error.message : error);
@@ -83,7 +84,7 @@ export const updateInvoiceById = async (id: string, invoiceData: any) => {
 /* Xoá hoá đơn theo id */
 export const deleteInvoiceById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/hoadon/delete/${id}`);
+        const response = await requestWithJWT('put',`/hoadon/disable/${id}`);
         if (response && !response.status) {
             throw new Error('Không thể xoá hoá đơn');
         }
@@ -112,7 +113,7 @@ export const createInvoice = async (invoiceData: any) => {
 /* Tạo hoá đơn mới có qr */
 export const createInvoiceQr = async (id: string) => {
     try {
-        const response = await apiClient.get(`/payos/create-payment-link/url/${id}`);
+        const response = await requestWithJWT('get',`/payos/create-payment-link/url/${id}`);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
@@ -140,7 +141,7 @@ export const setPaymentMethod = async (invoiceId: any, paymentMethodId: any) => 
 /* Lấy danh sách mã giảm giá */
 export const fetchVouchers = async (params = {}) => {
     try {
-        const response = await apiClient.get('/voucher/get', { params });
+        const response = await requestWithJWT('get','/voucher/get', { params });
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu mã giảm giá]', error instanceof Error ? error.message : error);
@@ -150,7 +151,7 @@ export const fetchVouchers = async (params = {}) => {
 /* Lấy voucher theo id */
 export const fetchVoucherById = async (id: string) => {
     try {
-        const response = await apiClient.get(`/voucher/find/${id}`);
+        const response = await requestWithJWT('get',`/voucher/find/${id}`);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu voucher]', error instanceof Error ? error.message : error);
@@ -160,7 +161,7 @@ export const fetchVoucherById = async (id: string) => {
 /* Cập nhật voucher theo id */
 export const updateVoucherById = async (id: string, voucherData: any) => {
     try {
-        const response = await apiClient.put(`/voucher/update/${id}`, voucherData);
+        const response = await requestWithJWT('put',`/voucher/update/${id}`, voucherData);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi cập nhật voucher]', error instanceof Error ? error.message : error);
@@ -170,7 +171,7 @@ export const updateVoucherById = async (id: string, voucherData: any) => {
 /* Xoá mã giảm giá theo id */
 export const deleteVoucherById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/voucher/delete/${id}`);
+        const response = await requestWithJWT('put',`/voucher/disable/${id}`);
         if (response && !response.status) {
             throw new Error('Không thể xoá mã giảm giá');
         }

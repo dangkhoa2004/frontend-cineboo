@@ -1,10 +1,10 @@
-import { apiClient } from './api';
+import { apiClient,requestWithJWT } from './api';
 import axios from 'axios'; // Ensure Axios is imported
 
 /* Lấy danh sách nhân viên */
 export const fetchnhanviens = async (params = {}) => {
     try {
-        const response = await apiClient.get('/nhanvien/get', { params });
+        const response = await requestWithJWT('get','/nhanvien/get', { params });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -19,7 +19,7 @@ export const fetchnhanviens = async (params = {}) => {
 /* Lấy nhân viên theo id */
 export const fetchnhanvienById = async (id: string) => {
     try {
-        const response = await apiClient.get(`/nhanvien/find/${id}`);
+        const response = await requestWithJWT('get',`/nhanvien/find/${id}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -34,7 +34,7 @@ export const fetchnhanvienById = async (id: string) => {
 /* Cập nhật nhân viên theo id */
 export const updatenhanvienById = async (id: string, nhanvienData: any) => {
     try {
-        const response = await apiClient.put(`/nhanvien/update/${id}`, nhanvienData);
+        const response = await requestWithJWT('put',`/nhanvien/update/${id}`, nhanvienData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -49,7 +49,7 @@ export const updatenhanvienById = async (id: string, nhanvienData: any) => {
 /* Xoá nhân viên theo id */
 export const deletenhanvienById = async (id: string) => {
     try {
-        const response = await apiClient.delete(`/nhanvien/delete/${id}`);
+        const response = await apiClient.delete(`/nhanvien/disable/${id}`);
         if (!response.status) {
             throw new Error('Không thể xoá nhân viên');
         }
@@ -66,7 +66,7 @@ export const deletenhanvienById = async (id: string) => {
 /* Tạo nhân viên mới */
 export const createnhanvien = async (nhanvienData: any) => {
     try {
-        const response = await apiClient.post('/nhanvien/add', nhanvienData);
+        const response = await requestWithJWT('post','/nhanvien/add', nhanvienData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

@@ -1,226 +1,227 @@
 <template>
-<div class="movie-manager">
+  <div class="movie-manager">
     <div class="button-group">
-        <button @click="goBack">Trở về</button>
+      <button @click="goBack">Trở về</button>
     </div>
 
     <div class="form-group">
-        <label for="movie-select">Lựa chọn phim</label>
-        <select id="movie-select" v-model="selectedMovie">
-            <option v-for="movie in movies" :key="movie.id" :value="movie.id">
-                {{ movie.tenPhim }}
-            </option>
-        </select>
+      <label for="movie-select">Lựa chọn phim</label>
+      <select id="movie-select" v-model="selectedMovie">
+        <option v-for="movie in movies" :key="movie.id" :value="movie.id">
+          {{ movie.tenPhim }}
+        </option>
+      </select>
     </div>
 
     <div class="form-group">
-        <label for="room-select">Lựa chọn phòng chiếu</label>
-        <select id="room-select" v-model="selectedRoom">
-            <option v-for="room in rooms" :key="room.id" :value="room.id">
-                {{ room.maPhong }}
-            </option>
-        </select>
+      <label for="room-select">Lựa chọn phòng chiếu</label>
+      <select id="room-select" v-model="selectedRoom">
+        <option v-for="room in rooms" :key="room.id" :value="room.id">
+          {{ room.maPhong }}
+        </option>
+      </select>
     </div>
 
     <!-- Chọn khoảng ngày -->
     <div class="form-group date-picker-group">
-        <label>Chọn khoảng ngày</label>
-        <div class="date-inputs">
-            <div>
-                <label for="start-date">Ngày bắt đầu</label>
-                <input type="date" id="start-date" v-model="startDate" />
-            </div>
-            <div>
-                <label for="end-date">Ngày kết thúc</label>
-                <input type="date" id="end-date" v-model="endDate" />
-            </div>
+      <label>Chọn khoảng ngày</label>
+      <div class="date-inputs">
+        <div>
+          <label for="start-date">Ngày bắt đầu</label>
+          <input type="date" id="start-date" v-model="startDate"/>
         </div>
+        <div>
+          <label for="end-date">Ngày kết thúc</label>
+          <input type="date" id="end-date" v-model="endDate"/>
+        </div>
+      </div>
     </div>
 
     <div class="form-group">
-        <label>Lựa chọn giờ chiếu</label>
-        <div class="checkbox-group">
-            <div v-for="time in times" :key="time" class="checkbox-item">
-                <input type="checkbox" :value="time" v-model="selectedTimes" :id="`time-${time}`" />
-                <label :for="`time-${time}`">{{ time }}</label>
-            </div>
+      <label>Lựa chọn giờ chiếu</label>
+      <div class="checkbox-group">
+        <div v-for="time in times" :key="time" class="checkbox-item">
+          <input type="checkbox" :value="time" v-model="selectedTimes" :id="`time-${time}`"/>
+          <label :for="`time-${time}`">{{ time }}</label>
         </div>
+      </div>
     </div>
+
     <button @click="createSchedual">Tạo lịch chiếu</button>
-</div>
+  </div>
 </template>
 
 <script>
-import { fetchMovies, fetchPhongChieu } from "@/api/movie";
-
+import {fetchMovies, fetchPhongChieu} from "@/api/movie";
+import { requestWithJWT } from '@/api/api.ts';
 export default {
-    data() {
-        return {
-            rooms: [],
-            movies: [],
-            selectedMovie: null,
-            selectedRoom: null,
-            selectedTimes: [],
-            startDate: null,
-            endDate: null,
-            times: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"],
-        };
+  data() {
+    return {
+      rooms: [],
+      movies: [],
+      selectedMovie: null,
+      selectedRoom: null,
+      selectedTimes: [],
+      startDate: null,
+      endDate: null,
+      times: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"],
+    };
+  },
+  async mounted() {
+    await this.loadMovies(); // Tải danh sách phim
+    await this.loadRooms();  // Tải danh sách phòng chiếu
+  },
+  methods: {
+    async loadMovies() {
+      try {
+        const movieData = await fetchMovies();
+        this.movies = movieData;
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu phim:", error);
+        alert("Không thể tải danh sách phim. Vui lòng thử lại sau!");
+      }
     },
-    async mounted() {
-        await this.loadMovies(); // Tải danh sách phim
-        await this.loadRooms();  // Tải danh sách phòng chiếu
+    async loadRooms() {
+      try {
+        const roomData = await fetchPhongChieu();
+        this.rooms = roomData;
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu phòng chiếu:", error);
+        alert("Không thể tải danh sách phòng chiếu. Vui lòng thử lại sau!");
+      }
     },
-    methods: {
-        async loadMovies() {
-            try {
-                const movieData = await fetchMovies();
-                this.movies = movieData;
-            } catch (error) {
-                console.error("Lỗi khi tải dữ liệu phim:", error);
-                alert("Không thể tải danh sách phim. Vui lòng thử lại sau!");
-            }
-        },
-        async loadRooms() {
-            try {
-                const roomData = await fetchPhongChieu();
-                this.rooms = roomData;
-            } catch (error) {
-                console.error("Lỗi khi tải dữ liệu phòng chiếu:", error);
-                alert("Không thể tải danh sách phòng chiếu. Vui lòng thử lại sau!");
-            }
-        },
-        goBack() {
-            this.$router.go(-1);
-        },
-        async createSchedual() {
-            if (!this.selectedMovie || !this.selectedRoom || !this.startDate || !this.endDate || this.selectedTimes.length === 0) {
-                alert("Vui lòng chọn đầy đủ thông tin!");
-                return;
-            }
-
-            const thoiGianChieuList = [];
-            const start = new Date(this.startDate);
-            const end = new Date(this.endDate);
-
-            // Lặp qua các ngày trong khoảng
-            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-                // Lấy danh sách giờ chiếu và ghép vào ngày hiện tại
-                this.selectedTimes.forEach((time) => {
-                    const [hours, minutes] = time.split(":");
-                    const dateTime = new Date(d);
-                    dateTime.setHours(hours, minutes, 0); // Thiết lập giờ và phút
-
-                    // Thêm thời gian vào danh sách theo định dạng ISO đầy đủ
-                    thoiGianChieuList.push(dateTime.toISOString());
-                });
-            }
-
-            // Tạo payload
-            const payload = {
-                thoiGianChieuList,
-                id_Phim: this.selectedMovie,
-                id_PhongChieu: this.selectedRoom,
-            };
-
-            console.log("Dữ liệu gửi đến back-end:", payload);
-
-            // Gửi payload đến back-end
-            try {
-                await this.postSchedule(payload);
-                alert("Tạo lịch chiếu thành công!");
-            } catch (error) {
-                console.error("Lỗi khi gửi dữ liệu:", error);
-                alert("Có lỗi xảy ra. Vui lòng thử lại sau!");
-            }
-        },
-        async postSchedule(payload) {
-            const response = await fetch("http://localhost:8080/suatchieu/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-        }
+    goBack() {
+      this.$router.go(-1);
     },
+    async createSchedual() {
+      if (!this.selectedMovie || !this.selectedRoom || !this.startDate || !this.endDate || this.selectedTimes.length === 0) {
+        alert("Vui lòng chọn đầy đủ thông tin!");
+        return;
+      }
+
+      const thoiGianChieuList = [];
+      const start = new Date(this.startDate);
+      const end = new Date(this.endDate);
+
+      // Loop through the date range
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        // For each selected time, set the correct hours and minutes
+        this.selectedTimes.forEach((time) => {
+          console.log("LOOPER: TIME IS: "+time)
+          const [hours, minutes] = time.split(":");
+
+          // Use Date.UTC to create the date in UTC and set the hours
+          const dateTime = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), hours, minutes));
+
+          // Add the time in ISO format (which will be in UTC)
+          thoiGianChieuList.push(dateTime.toISOString());
+        });
+      }
+
+      // Create the payload
+      const payload = {
+        thoiGianChieuList,
+        id_Phim: this.selectedMovie,
+        id_PhongChieu: this.selectedRoom,
+      };
+
+      console.log("Dữ liệu gửi đến back-end:", payload);
+
+      // Send the payload to the backend
+      try {
+        await this.postSchedule(payload);
+        alert("Tạo lịch chiếu thành công!");
+      } catch (error) {
+        console.error("Lỗi khi gửi dữ liệu:", error);
+        alert("Có lỗi xảy ra. Vui lòng thử lại sau!");
+      }
+    }
+,
+    async postSchedule(payload) {
+      console.log("BODY IS: "+JSON.stringify(payload));
+      const response = await requestWithJWT("post",'http://localhost:8080/suatchieu/add/multiple',payload);
+
+      if (response.status != 200 || response.data == null ) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+
+  },
 };
 </script>
 <style scoped>
 /* Container */
 .movie-manager {
-    max-width: 600px;
-    border-radius: 10px;
+  max-width: 600px;
+  border-radius: 10px;
 }
 
 /* Form Group */
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #333;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
 }
 
 .form-group select,
 .form-group input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input[type="date"]:focus,
 .form-group select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Date Picker Group */
 .date-picker-group .date-inputs {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .date-inputs div {
-    flex: 1;
+  flex: 1;
 }
 
 .date-inputs label {
-    margin-bottom: 5px;
-    display: block;
-    font-size: 14px;
-    color: #555;
+  margin-bottom: 5px;
+  display: block;
+  font-size: 14px;
+  color: #555;
 }
 
 /* Checkbox Group */
 .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .checkbox-item {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .checkbox-item input[type="checkbox"] {
-    margin-right: 10px;
-    cursor: pointer;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .checkbox-item label {
-    font-size: 14px;
-    color: #555;
+  font-size: 14px;
+  color: #555;
 }
 </style>
 <style src="./assets/styles.css" scoped></style>
