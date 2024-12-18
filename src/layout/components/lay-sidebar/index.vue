@@ -7,8 +7,8 @@
       </div>
 
       <div class="sidebar__info">
-        <h3>Đăng Khoa</h3>
-        <span>khoacdpp02847@fpt.edu.vn</span>
+        <h3>{{fullname||'Who the F are you?'}}</h3>
+         <span>{{ user?.taiKhoan?.email || 'wHoAreYOu?@email.com' }}</span>
       </div>
     </div>
     <div class="sidebar__content">
@@ -76,15 +76,31 @@
 import { logout as authLogout } from "@/api/authService";
 
 export default {
+  data() {
+    return {
+      user: null,
+      fullname: null,
+    };
+  },
+  mounted() {
+    const savedUser = JSON.parse(sessionStorage.getItem("userInfo") || "{}");
+    this.user = savedUser;
+    this.fullname = `${savedUser.ho || ''} ${savedUser.tenDem || ''} ${savedUser.ten || ''}`.trim();
+    console.log(this.fullname);
+  },
   methods: {
     logout() {
       authLogout();
       window.location.reload();
       this.$router.push('/dang-nhap');
-    }
-  }
+      this.user = null;
+      this.fullname = null;
+    },
+  },
 };
 </script>
+
+
 <style scoped>
 button {
   all: unset;

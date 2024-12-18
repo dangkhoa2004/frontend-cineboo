@@ -16,7 +16,7 @@
             </div>
             <div>
                 <label>Email:</label>
-                <input type="email" v-model="userInfo.email" />
+                <input type="email" v-model="userInfo.taiKhoan.email" />
             </div>
             <div>
                 <label>Địa chỉ:</label>
