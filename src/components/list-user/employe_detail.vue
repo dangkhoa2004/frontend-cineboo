@@ -34,7 +34,7 @@
             <input type="date" v-model="formattedDateOfBirth" />
         </div>
         <div>
-            <label>Giới Tính:</label>
+            <label>Giới Tính: </label>
             <select v-model="employee.gioiTinh">
                 <option value="1">Nam</option>
                 <option value="0">Nữ</option>
@@ -42,7 +42,7 @@
         </div>
         <div>
             <label>Email:</label>
-            <input v-model="employee.email" />
+            <input v-model="employee.taiKhoan.email" />
         </div>
         <div>
             <label>Dân Tộc:</label>
@@ -97,8 +97,17 @@ export default {
         async saveEmployee() {
             try {
                 const updatedEmployee = {
-                    ...this.employee,
-                    ngaySinh: this.formattedDateOfBirth.split('-').map((value, index) => index === 1 ? value - 1 : value), // Convert the formatted date back to the array format
+                "id": this.employee.id,
+  "ten": this.employee.ten,
+  "tenDem": this.employee.tenDem,
+  "ho": this.employee.ho,
+  "gioiTinh": this.employee.gioiTinh,
+  "danToc": this.employee.danToc,
+  "diaChi": this.employee.diaChi,
+  "email": this.employee.taiKhoan.email,
+  "ghiChu": this.employee.taiKhoan.ghiChu,
+  "soDienThoai": this.employee.soDienThoai,
+                    "ngaySinh": this.formattedDateOfBirth // Convert the formatted date back to the array format
                 };
 
                 await updatenhanvienById(this.employee.id, updatedEmployee);
