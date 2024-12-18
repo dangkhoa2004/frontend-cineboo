@@ -38,7 +38,7 @@
             <input v-model="customer.soDienThoai" />
         </div>
         <div>
-            <label>Giới Tính:</label>
+            <label>Giới Tính: 	</label>
             <select v-model="customer.gioiTinh">
                 <option value="1">Nam</option>
                 <option value="0">Nữ</option>
@@ -46,7 +46,7 @@
         </div>
         <div>
             <label>Email:</label>
-            <input v-model="customer.email" />
+            <input v-model="customer.taiKhoan.email" />
         </div>
         <div>
             <label>Dân Tộc:</label>
@@ -105,16 +105,25 @@ export default {
         async saveCustomer() {
             try {
                 const updatedCustomer = {
-                    ...this.customer,
-                    ngaySinh: this.formattedDateOfBirth.split('-').map((value, index) => index === 1 ? value - 1 : value), // Convert the formatted date back to the array format
+                    "id": this.customer.id,
+                   "ten":this.customer.ten,
+                   "tenDem": this.customer.tenDem,
+                  "ho": this.customer.ho,
+                  "soDienThoai": this.customer.soDienThoai,
+                   "gioiTinh": this.customer.gioiTinh,
+                  "danToc": this.customer.danToc,
+                  "diaChi": this.customer.diaChi,
+                   "email": this.customer.taiKhoan.email,
+				   "ghiChu":this.customer.taiKhoan.ghiChu,
+                   "ngaySinh": this.formattedDateOfBirth, // Convert the formatted date back to the array format
                 };
-                console.log(updatedCustomer)
+                console.log(updatedCustomer);
                 await updatekhachhangById(this.customer.id, updatedCustomer);
                 alert("Thông tin khách hàng đã được cập nhật thành công!");
                 this.$router.go(-1);
             } catch (error) {
                 console.error("Lỗi khi cập nhật khách hàng:", error);
-                alert("Có lỗi xảy ra khi cập nhật thông tin khách hàng.");
+                alert("Có lỗi xảy ra khi cập nhật thông tin khách hàng."+error);
             }
         },
         formatDateForInput(dateArray) {
