@@ -1,10 +1,9 @@
-
 <template>
 <div class="schedule-container">
   <div class="schedule-header">
     <h2>Lịch Chiếu</h2>
     <div class="date-selector">
-      <button v-for="(date, index) in sevenDays" :key="date" @click="updateSelectedDate(date)"
+      <button v-for="(date, index) in sevenDays" :key="index" @click="updateSelectedDate(date)"
         :disabled="new Date(date) < new Date(currentDate)">
         <div>{{ formatDate(date) }}</div>
         <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
@@ -27,7 +26,8 @@
   <div v-if="filteredShowtimes.length === 0">
     <p>Chưa có dữ liệu suất chiếu.</p>
   </div>
-  <div v-for="theater in filteredShowtimes" :key="theater.phongChieu?.id || 'unknown'" class="date-selector">
+  <div v-for="theater in filteredShowtimes" :key="theater.id || theater.phongChieu?.id || 'unknown'"
+    class="date-selector">
     <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
       <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
       <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
@@ -41,8 +41,8 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchShowtimesByMovieId } from "@/api/movie";
-import { requestWithJWT } from '@/api/api.ts';
-import { isLoggedIn } from "@/api/authService";  // Import the function
+import { requestWithJWT } from "@/api/api";
+import { isLoggedIn } from "@/api/authService";
 
 export default {
   setup() {
@@ -89,8 +89,8 @@ export default {
             if (tempSuatChieuId) {
               try {
                 const phongChieuResponse = await requestWithJWT(
-                    'get',
-                    `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`
+                  'get',
+                  `http://localhost:8080/phongchieu/find/suatchieu/${tempSuatChieuId}`
                 );
                 if (phongChieuResponse && phongChieuResponse.status === 200) {
                   const data = phongChieuResponse.data;
@@ -135,15 +135,10 @@ export default {
     };
 
     const updateSelectedDate = (date) => {
-      router.push("no-showtime-chosen");
       selectedDate.value = date;
       filterShowtimes();
-      filteredShowtimes.value.forEach(theater => {
-        fetchPhongChieuForShowtime(theater);
-      });
     };
 
-    // Add the check for login status in the logTheaterInfo method
     const logTheaterInfo = (theater) => {
       if (!isLoggedIn()) {
         alert("Bạn cần đăng nhập để xem chi tiết suất chiếu.");

@@ -46,13 +46,10 @@ const loadRandomMovies = async () => {
           i++; // Increment only when a unique movie is added
         }
       }
-
-      console.log(randomMovieList.value);
     }
   } catch (error) {
     console.error("Error fetching random movies. Using default movies.");
     randomMovieList.value = defaultMovies;
-    console.log(randomMovieList.value);
   }
 };
 

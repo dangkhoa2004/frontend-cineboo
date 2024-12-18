@@ -147,8 +147,8 @@ export default {
         return;
       }
 
-      const customerInfo = this.userInfo; 
-      const customerID =  customerInfo.id;
+      const customerInfo = this.userInfo;
+      const customerID = customerInfo.id;
       if (!customerID) {
         console.error("Không xác định được ID khách hàng.");
         swal("Oops", "Vui lòng đăng nhập để mua vé.", "error");
@@ -161,9 +161,6 @@ export default {
         console.error("Không có thông tin phim");
         return;
       }
-
-      const currentTime = new Date();
-      const formattedTime = format(currentTime, "yyyy-MM-dd'T'HH:mm:ss");
 
       const invoiceData = {
         khachHangId: customerID,
@@ -198,10 +195,7 @@ export default {
                 const qrData = await createInvoiceQr(idHoaDon);
                 console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
                 if (qrData && qrData.payment) {
-					window.open(qrData.payment, '_blank');
-					setTimeout(() => {
-					window.location.href = 'http://localhost:3000/'; // Redirects the current page
-				}, 100);
+                  window.open(qrData.payment, '_blank');
                 } else {
                   console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
                 }

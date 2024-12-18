@@ -67,7 +67,13 @@ export default {
     async loadInvoices() {
       try {
         const invoiceData = await fetchInvoices();
-        this.invoices = invoiceData;
+
+        // Sắp xếp hóa đơn theo thứ tự giảm dần của thời gian thanh toán
+        this.invoices = invoiceData.sort((a, b) => {
+          const dateA = new Date(a.thoiGianThanhToan[0], a.thoiGianThanhToan[1] - 1, a.thoiGianThanhToan[2], a.thoiGianThanhToan[3], a.thoiGianThanhToan[4]);
+          const dateB = new Date(b.thoiGianThanhToan[0], b.thoiGianThanhToan[1] - 1, b.thoiGianThanhToan[2], b.thoiGianThanhToan[3], b.thoiGianThanhToan[4]);
+          return dateB - dateA; // Sắp xếp giảm dần
+        });
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu hoá đơn:", error);
       }
