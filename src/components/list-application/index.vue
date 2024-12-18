@@ -20,6 +20,10 @@
         <h3>{{ $t('message.qr_man') }}:</h3>
         <qrSystem />
     </div>
+    <div class="setting-for">
+        <h3>{{ $t('message.qr_man') }}:</h3>
+        <hotMovie />
+    </div>
 </div>
 </template>
 
@@ -29,11 +33,12 @@ import listPopup from '../list-popup/index.vue';
 import listPerformance from '../list-perfomance/index.vue';
 import listSetting from '../list-settings/index.vue';
 import qrSystem from '../qr-system/index.vue';
+import hotMovie from '../hot-movie/index.vue';
 
 export default {
     name: "ChatApp",
     components: {
-        listPopup, listSetting, CssManager, listPerformance, qrSystem
+        listPopup, listSetting, CssManager, listPerformance, qrSystem, hotMovie
     }
 };
 </script>
