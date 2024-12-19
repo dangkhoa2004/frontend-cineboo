@@ -16,9 +16,10 @@ export const fetchInvoices = async (params = {}) => {
     }
 };
 /* Lấy danh sách hoá đơn theo id khách hàng*/
-export const fetchInvoicesByUserID = async (id: string, params = {}) => {
+export const fetchInvoicesByUserID = async (id: string) => {
+    console.log(id)
     try {
-        const response = await requestWithJWT('get', `/hoadon/find/ID_KhachHang/${id}`, { params });
+        const response = await requestWithJWT('get', `/hoadon/find/ID_KhachHang/${id}`);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);

@@ -166,7 +166,6 @@ export function hasToken(): boolean {
 export async function getUserData(): Promise<any> {
     try {
         const userInfo = getUserInfo();
-
         if (!userInfo || !userInfo.id) {
             throw new Error("Không tìm thấy thông tin tài khoản hoặc ID không hợp lệ.");
         }

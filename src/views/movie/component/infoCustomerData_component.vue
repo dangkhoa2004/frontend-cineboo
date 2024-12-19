@@ -111,13 +111,16 @@ const loadPaymentMethod = async () => {
 const loadUserInfo = () => {
   const user = getUserInfo();
   if (user) {
+    // Kiểm tra loại tài khoản (Khách hàng hoặc Nhân viên)
+    const isKhachHang = !!user.khachHang;
+    const isNhanVien = !!user.nhanVien;
     userInfo.value = {
-      email: user.taiKhoan?.email || '',
-      ten: user.ten || '',
-      tenDem: user.tenDem || '',
-      ho: user.ho || '',
-      diaChi: user.diaChi || '',
-      soDienThoai: user.soDienThoai || '',
+      email: user.email || '',
+      ten: isKhachHang ? user.khachHang.ten : isNhanVien ? user.nhanVien.ten : '',
+      tenDem: isKhachHang ? user.khachHang.tenDem : isNhanVien ? user.nhanVien.tenDem : '',
+      ho: isKhachHang ? user.khachHang.ho : isNhanVien ? user.nhanVien.ho : '',
+      diaChi: isKhachHang ? user.khachHang.diaChi : isNhanVien ? user.nhanVien.diaChi : '',
+      soDienThoai: isKhachHang ? user.khachHang.soDienThoai : isNhanVien ? user.nhanVien.soDienThoai : '',
     };
   } else {
     console.log('Không có thông tin người dùng.');

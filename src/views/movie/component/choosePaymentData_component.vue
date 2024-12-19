@@ -52,7 +52,7 @@
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
-import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoicev2"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
+import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
 import swal from 'sweetalert';
 export default {
@@ -148,7 +148,7 @@ export default {
       }
 
       const customerInfo = this.userInfo;
-      const customerID = customerInfo.id;
+      const customerID = customerInfo.khachHang.id;
       if (!customerID) {
         console.error("Không xác định được ID khách hàng.");
         swal("Oops", "Vui lòng đăng nhập để mua vé.", "error");

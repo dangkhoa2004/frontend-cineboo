@@ -78,7 +78,7 @@ export default {
 
         if (userData.khachHang) {
           // Nếu là khách hàng, gọi API lấy hoá đơn theo user ID
-          invoiceData = await fetchInvoicesByUserID(userData.id); // API lấy hoá đơn theo user ID
+          invoiceData = await fetchInvoicesByUserID(userData.khachHang.id); // API lấy hoá đơn theo user ID
         } else if (userData.nhanVien) {
           // Nếu là nhân viên, gọi API lấy hoá đơn cho nhân viên
           invoiceData = await fetchInvoices();
