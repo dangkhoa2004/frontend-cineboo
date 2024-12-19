@@ -47,7 +47,7 @@ export default {
     },
     logout() {
       logout(); // Thực hiện đăng xuất
-      this.$router.push('/dang-nhap'); // Chuyển hướng về trang chính sau khi đăng xuất
+      window.location.href = '/dang-nhap';
     }
   }
 };

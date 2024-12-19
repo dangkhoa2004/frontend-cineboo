@@ -1,49 +1,98 @@
-.form-password {
+.recovery-password {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: black;
+}
+
+.recovery-password-step-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
-    background-color: black;
-}
-
-/* Hiệu ứng hover cho input */
-.form-control:hover,
-.form-control:focus {
-    border-color: #6c5ce7;
-    /* Màu viền khi hover hoặc focus */
-    box-shadow: 0 0 5px rgba(108, 92, 231, 0.5);
-    /* Hiệu ứng bóng nhẹ */
-    transition: all 0.3s ease-in-out;
-    /* Hiệu ứng chuyển động mượt mà */
-}
-
-.forgot-password {
-    background-color: black;
-}
-
-.reset-password {
-    max-width: 500px;
-    /* Cố định chiều rộng form */
     width: 100%;
-    /* Chiều rộng đầy đủ */
-    margin: 0 auto;
-    /* Căn giữa */
-    background-color: black;
+}
+
+.recovery-password-step-card {
+    max-width: 450px;
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(10px);
+}
+
+.recovery-password-step-card:hover {
+    /* transform: translateY(-5px); */
+    box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3);
+}
+
+.recovery-password-step-header {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.text-center {
+.form-control {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    width: 100%;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 8px rgba(37, 117, 252, 0.4);
+}
+
+.btn-primary {
+    background-color: #2575fc;
+    border-color: #2575fc;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1a64d3;
+    transform: translateY(-2px);
+}
+
+.recovery-password-message {
+    margin-top: 1rem;
+    font-size: 0.9rem;
     text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.3s;
 }
 
-.text-danger {
-    color: red;
+.recovery-password-message.text-success {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
 }
 
-.text-success {
-    color: green;
+.recovery-password-message.text-danger {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Đổi màu nền khi hover */
+.recovery-password-step-card:hover {
+    background-color: #f8f9fa;
 }

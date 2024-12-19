@@ -139,6 +139,25 @@ export const fetchMovieById = async (id: string) => {
         throw error;
     }
 };
+/**
+ * Lấy phim theo id.
+ * @param {string} id - Id của phim cần lấy.
+ * @returns {Promise<any>} Dữ liệu thông tin phim.
+ * @throws {Error} Nếu có lỗi khi lấy phim theo id.
+ */
+export const fetchMovieByIdApiClient = async (id: string) => {
+    try {
+        const response = await apiClient.get(`/phim/find/${id}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
 
 /**
  * Lấy danh sách suất chiếu theo id phim.
@@ -149,6 +168,25 @@ export const fetchMovieById = async (id: string) => {
 export const fetchShowtimesByMovieId = async (movieId: string) => {
     try {
         const response = await requestWithJWT('get', `/suatchieu/find/ID_Phim/${movieId}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API [Lỗi khi xử lý dữ liệu ghế theo lịch chiếu]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
+        throw error;
+    }
+};
+/**
+ * Lấy danh sách suất chiếu theo id phim.
+ * @param {string} movieId - Id của phim cần lấy danh sách suất chiếu.
+ * @returns {Promise<any>} Dữ liệu danh sách suất chiếu.
+ * @throws {Error} Nếu có lỗi khi lấy danh sách suất chiếu.
+ */
+export const fetchShowtimesByMovieIdApiClient = async (movieId: string) => {
+    try {
+        const response = await apiClient.get(`/suatchieu/find/ID_Phim/${movieId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

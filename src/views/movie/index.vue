@@ -49,7 +49,7 @@
 </template>
 <script lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { fetchMovies } from "@/api/movie";
+import { fetchMoviesApiClient } from "@/api/movie";
 import movieCardData_component from "./component/movieCardData_component.vue";
 import onlyPageHeader_component from "@/layout/components/lay-header/onlyPageHeader_component.vue";
 import onlyPageFooter_component from "@/layout/components/lay-footer/onlyPageFooter_component.vue";
@@ -87,7 +87,7 @@ export default {
 
     onMounted(async () => {
       try {
-        const allMovies = await fetchMovies();
+        const allMovies = await fetchMoviesApiClient();
         const now = new Date();
         movies.value = allMovies.filter((movie: Movie) => new Date(movie.ngayRaMat) <= now);
         upcomingMovies.value = allMovies.filter((movie: Movie) => new Date(movie.ngayRaMat) > now);

@@ -39,7 +39,14 @@
   border-radius: 5px;
   transition: all 0.3s ease;
 }
-
+select {
+  width: 100%;
+  padding: 10px 35px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
 .input-field input:focus {
   border-color: black;
   outline: none;

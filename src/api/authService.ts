@@ -1,4 +1,3 @@
-// api/authService.ts
 import axios from "axios";
 
 // Hàm sessionStorageUtil để làm việc với sessionStorage
@@ -53,16 +52,13 @@ export async function recoverPassword(email: string): Promise<any> {
         throw new Error(error.response?.data?.message || "Khôi phục mật khẩu thất bại");
     }
 }
-export async function resetPassword(email: string, otp: string, newPassword: string, retypePassword: string) {
+
+// API đặt lại mật khẩu
+export async function resetPassword(email: string, otp: string, newPassword: string, retypePassword: string): Promise<any> {
     try {
         const response = await axios.put(
             "http://localhost:8080/taikhoan/recovery/reset-password",
-            {
-                email,
-                otp,
-                newPassword,
-                retypePassword,
-            },
+            { email, otp, newPassword, retypePassword },
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -74,16 +70,13 @@ export async function resetPassword(email: string, otp: string, newPassword: str
         if (response.status === 200) {
             console.log("Đặt lại mật khẩu thành công:", response.data);
             return response.data;
-        } else {
-            throw new Error("Đặt lại mật khẩu thất bại");
-            console.log("Đăng ký thành công:", response.data);
-            return response.data;
         }
-        throw new Error("Đăng ký thất bại");
+        throw new Error("Đặt lại mật khẩu thất bại");
     } catch (error: any) {
         throw new Error(error.response?.data?.message || "Đặt lại mật khẩu thất bại");
     }
 }
+
 // Hàm đăng ký
 export async function signup(data: Record<string, any>): Promise<any> {
     try {
@@ -94,7 +87,7 @@ export async function signup(data: Record<string, any>): Promise<any> {
 
         const response = await axios.post(
             `http://localhost:8080/khachhang/add?${queryParams}`,
-            null,
+            data, // Truyền dữ liệu JSON vào đây thay vì null
             {
                 headers: { 'Content-Type': 'application/json' },
             }
@@ -115,6 +108,7 @@ export async function signup(data: Record<string, any>): Promise<any> {
 export async function login(username: string, password: string): Promise<any> {
     try {
         const response = await axios.post("http://localhost:8080/api/user/login", {
+            'Authorization': `Bearer`,
             username,
             password,
         });
@@ -122,9 +116,9 @@ export async function login(username: string, password: string): Promise<any> {
         if (response.status === 200) {
             const data = response.data;
 
-            // Lưu token và thông tin người dùng vào sessionStorage
+            // Lưu token và thông tin tài khoản vào sessionStorage
             setToken(data.token);
-            setUserInfo(data.khachHang || data.nhanVien);
+            setUserInfo(data.taiKhoan); // Lưu toàn bộ thông tin tài khoản mới
 
             console.log("Đăng nhập thành công:", data);
             return data;
@@ -136,17 +130,23 @@ export async function login(username: string, password: string): Promise<any> {
     }
 }
 
-const TOKEN_KEY = "token";
-const USER_INFO_KEY = "userInfo";
-
+// Hàm lưu thông tin tài khoản
 export function setUserInfo(userInfo: any): void {
     sessionStorageUtil().setItem(USER_INFO_KEY, userInfo);
 }
 
+// Hàm lấy thông tin tài khoản
+export function getUserInfo(): any | null {
+    return sessionStorageUtil().getItem(USER_INFO_KEY);
+}
+
+// Hàm lưu token
 export function setToken(token: string): void {
     sessionStorageUtil().setItem(TOKEN_KEY, token);
 }
 
+const TOKEN_KEY = "token";
+const USER_INFO_KEY = "userInfo";
 export function logout(): void {
     sessionStorageUtil().removeItem(TOKEN_KEY);
     sessionStorageUtil().removeItem(USER_INFO_KEY);
@@ -158,27 +158,59 @@ export function isLoggedIn(): boolean {
     return sessionStorageUtil().getItem(TOKEN_KEY) !== null;
 }
 
-export function getUserInfo(): any | null {
-    return sessionStorageUtil().getItem(USER_INFO_KEY);
-}
-
 export function hasToken(): boolean {
     return sessionStorageUtil().getItem(TOKEN_KEY) !== null;
 }
 
-export function getUserRole(): string | null {
-    const userInfo = getUserInfo();
-    return userInfo?.role || null;
-}
+// Hàm lấy dữ liệu người dùng qua API
+export async function getUserData(): Promise<any> {
+    try {
+        const userInfo = getUserInfo();
 
-export function canAccessModule(moduleName: string): boolean {
-    const role = getUserRole();
+        if (!userInfo || !userInfo.id) {
+            throw new Error("Không tìm thấy thông tin tài khoản hoặc ID không hợp lệ.");
+        }
+
+        const response = await axios.get(
+            `http://localhost:8080/taikhoan/find/${userInfo.id}`,
+            {
+                headers: {
+                    'Authorization': `Bearer`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            return response.data;
+        }
+        throw new Error("Không thể lấy dữ liệu người dùng.");
+    } catch (error: any) {
+        console.error("Lỗi khi lấy dữ liệu người dùng:", error);
+        throw new Error(error.response?.data?.message || "Lỗi khi lấy dữ liệu người dùng.");
+    }
+}
+export async function canAccessModule(moduleName: string): Promise<boolean> {
+    // Lấy dữ liệu người dùng
+    const userData = await getUserData();  // Lấy toàn bộ dữ liệu người dùng từ API
+
+    // Quyền truy cập cơ bản cho khách hàng và nhân viên
     const permissions: Record<string, string[]> = {
-        khachHang: ["ungDung", "thongTin"],
+        khachHang: ["hoaDon", "ungDung", "thongTin", "hoTro"],
         nhanVien: [
-            "ungDung", "thongTin", "hoaDon", "phims", "vouchers", "tinNhan",
-            "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan"
+            "ungDung", "thongTin", "hoaDon", "phims", "vouchers",
+            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe"
         ],
     };
-    return role ? permissions[role]?.includes(moduleName) || false : false;
+
+    // Kiểm tra quyền của người dùng dựa trên sự tồn tại của khachHang hoặc nhanVien
+    if (userData.khachHang) {
+        // Người dùng là khách hàng
+        const hasPermission = permissions.khachHang.includes(moduleName);
+        return hasPermission;
+    } else if (userData.nhanVien) {
+        // Người dùng là nhân viên
+        const hasPermission = permissions.nhanVien.includes(moduleName);
+        return hasPermission;
+    }
+    return false;
 }

@@ -40,14 +40,17 @@
   </table>
 </div>
 </template>
+
 <script>
-import { fetchInvoices } from "@/api/invoice";
+import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice"; // Thêm import hàm fetchInvoicesByUserID
+import { getUserData } from "@/api/authService"; // Thêm import hàm fetchInvoicesByUserID
 
 export default {
   data() {
     return {
       invoices: [],
       searchQuery: "", // Từ khoá tìm kiếm
+      user: null, // Dữ liệu người dùng
     };
   },
   computed: {
@@ -66,10 +69,34 @@ export default {
   methods: {
     async loadInvoices() {
       try {
-        const invoiceData = await fetchInvoices();
+        // Lấy thông tin người dùng từ API hoặc từ state (tùy vào cách bạn quản lý người dùng)
+        const userData = await getUserData(); // Thêm hàm getUserData để lấy dữ liệu người dùng
+
+        this.user = userData;
+
+        let invoiceData = [];
+
+        if (userData.khachHang) {
+          // Nếu là khách hàng, gọi API lấy hoá đơn theo user ID
+          invoiceData = await fetchInvoicesByUserID(userData.id); // API lấy hoá đơn theo user ID
+        } else if (userData.nhanVien) {
+          // Nếu là nhân viên, gọi API lấy hoá đơn cho nhân viên
+          invoiceData = await fetchInvoices();
+        } else {
+          // Trường hợp người dùng không xác định
+          console.error("Người dùng không xác định");
+        }
+
+        // Kiểm tra dữ liệu trả về có phải là mảng không
+        if (Array.isArray(invoiceData)) {
+          this.invoices = invoiceData;
+        } else {
+          console.error("Dữ liệu hóa đơn không hợp lệ:", invoiceData);
+          this.invoices = []; // Đảm bảo luôn có giá trị mặc định là mảng
+        }
 
         // Sắp xếp hóa đơn theo thứ tự giảm dần của thời gian thanh toán
-        this.invoices = invoiceData.sort((a, b) => {
+        this.invoices.sort((a, b) => {
           const dateA = new Date(a.thoiGianThanhToan[0], a.thoiGianThanhToan[1] - 1, a.thoiGianThanhToan[2], a.thoiGianThanhToan[3], a.thoiGianThanhToan[4]);
           const dateB = new Date(b.thoiGianThanhToan[0], b.thoiGianThanhToan[1] - 1, b.thoiGianThanhToan[2], b.thoiGianThanhToan[3], b.thoiGianThanhToan[4]);
           return dateB - dateA; // Sắp xếp giảm dần
@@ -93,7 +120,8 @@ export default {
   },
 };
 </script>
-<style src="./assets/styles.css" scoped>
+
+<style scoped>
 .search-input {
   padding: 5px;
   font-size: 14px;
@@ -102,3 +130,4 @@ export default {
   margin-bottom: 10px;
 }
 </style>
+<style src="./assets/styles.css" scoped></style>

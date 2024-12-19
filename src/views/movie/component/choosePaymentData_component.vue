@@ -52,8 +52,7 @@
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
-import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
-import { format } from 'date-fns'; // Định dạng ngày giờ
+import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoicev2"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
 import swal from 'sweetalert';
 export default {
@@ -86,7 +85,8 @@ export default {
     if (user) {
       this.userInfo = { ...user };
     } else {
-      console.log("Không có thông tin người dùng.");
+      window.alert("Vui lòng đăng nhập để sử dụng chức năng này")
+      window.location.href = '/dang-nhap';
     }
     this.loadMovieData();
     this.loadSeats();

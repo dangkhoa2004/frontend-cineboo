@@ -52,7 +52,7 @@ export default {
     },
     logout() {
       logout(); // Thực hiện đăng xuất
-      this.$router.push('/dang-nhap');
+      window.location.href = '/dang-nhap';
     }
   }
 };

@@ -10,9 +10,9 @@
           <i class="fas fa-envelope"></i>
         </div>
         <div class="input-field">
-          <input type="password" placeholder="Mật khẩu" v-model="formData.password"  />
-          <i class="fas fa-lock"></i>
-          <i class="fas fa-eye-slash toggle-password" @click="togglePasswordVisibility"></i>
+          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password"
+            required />
+          <i class="fas" :class="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'" @click="togglePasswordVisibility"></i>
         </div>
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <button type="submit" class="auth-btn">Đăng Nhập</button>
@@ -70,8 +70,9 @@
           <i class="fas fa-user-circle"></i>
         </div>
         <div class="input-field">
-          <input type="password" placeholder="Mật khẩu" v-model="formData.password" required />
-          <i class="fas fa-lock"></i>
+          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password"
+            required />
+          <i class="fas" :class="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'" @click="togglePasswordVisibility"></i>
         </div>
         <div class="input-field">
           <button type="submit" class="auth-btn">Đăng Ký</button>
@@ -82,51 +83,49 @@
   </div>
 </div>
 </template>
+
 <script>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'; // Thêm import này
+import { useRouter } from 'vue-router';
 import { login, signup } from '@/api/authService';
 
 export default {
   name: 'AuthForm',
   setup() {
-    const router = useRouter(); // Khởi tạo router
-    const isLoginActive = ref(true); // Biến xác định trạng thái của form đăng nhập
+    const router = useRouter();
+    const isLoginActive = ref(true);
     const formData = ref({
-      username: '', // Username field
+      username: '',
       password: '',
       ho: '',
       ten: '',
-      tenDem: '', // Middle name
-      ngaySinh: '', // Birth date
-      soDienThoai: '', // Phone number
-      gioiTinh: 0, // Gender (default: 0 - Male)
+      tenDem: '',
+      ngaySinh: '',
+      soDienThoai: '',
+      gioiTinh: 0,
       email: '',
-      danToc: '', // Ethnicity
-      diaChi: '', // Address
+      danToc: '',
+      diaChi: '',
     });
     const errorMessage = ref('');
+    const isPasswordVisible = ref(false);
 
-    // Toggle giữa form đăng nhập và đăng ký
     const toggleForm = () => {
       isLoginActive.value = !isLoginActive.value;
     };
+
     const forgotPassword = () => {
       router.push('/quen-mat-khau');
     };
 
-    // Hàm đăng nhập
     const handleLogin = async () => {
       try {
         await login(formData.value.username, formData.value.password);
-        router.go(-1); // Quay lại trang trước đó sau khi đăng nhập thành công
+        window.location.href = '/';
       } catch (error) {
         errorMessage.value = error.message;
       }
-    };
-
-    // Hàm đăng ký
-    const handleSignUp = async () => {
+    }; const handleSignUp = async () => {
       try {
         await signup(formData.value);
         await handleLogin(); // Tự động đăng nhập sau khi đăng ký
@@ -135,12 +134,8 @@ export default {
       }
     };
 
-    // Chuyển đổi hiển thị mật khẩu
     const togglePasswordVisibility = () => {
-      const passwordField = document.querySelector('input[type="password"]');
-      if (passwordField) {
-        passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
-      }
+      isPasswordVisible.value = !isPasswordVisible.value;
     };
 
     return {
@@ -152,8 +147,10 @@ export default {
       forgotPassword,
       togglePasswordVisibility,
       isLoginActive,
+      isPasswordVisible,
     };
   },
 };
 </script>
+
 <style src="../assets/styles.css"></style>

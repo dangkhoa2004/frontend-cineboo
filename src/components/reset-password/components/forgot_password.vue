@@ -1,53 +1,54 @@
 <template>
-<div class="form-password d-flex justify-content-center align-items-center">
+<div class="recovery-password">
   <!-- Forgot password -->
-  <div v-if="currentStep === 'forgot-password'"
-    class="forgot-password container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
-      <h2 class="mb-4 text-center">Quên mật khẩu</h2>
+  <div v-if="currentStep === 'forgot-password'" class="recovery-password-step-container">
+    <div class="recovery-password-step-card">
+      <h2 class="recovery-password-step-header">Quên mật khẩu</h2>
       <form @submit.prevent="handleSubmit">
-        <div class="form-group mb-3">
+        <div class="form-group">
           <label for="email" class="form-label">Email</label>
           <input type="email" id="email" v-model="email" class="form-control" placeholder="Nhập địa chỉ email của bạn"
             required />
         </div>
-        <button type="submit" class="btn btn-primary w-100">Gửi yêu cầu</button>
+        <button type="submit" class="btn">Gửi yêu cầu</button>
       </form>
-      <p v-if="message" class="mt-3 text-center" :class="isError ? 'text-danger' : 'text-success'">
+      <p v-if="message" class="recovery-password-message" :class="isError ? 'text-danger' : 'text-success'">
         {{ message }}
       </p>
     </div>
   </div>
 
   <!-- Reset password -->
-  <div v-if="currentStep === 'reset-password'" class="reset-password card shadow-sm p-4">
-    <h2 class="mb-4 text-center">Đặt lại mật khẩu</h2>
-    <form @submit.prevent="handleResetPassword">
-      <div class="form-group mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" id="email" v-model="email" class="form-control" placeholder="Nhập email của bạn" required />
-      </div>
-      <div class="form-group mb-3">
-        <label for="otp" class="form-label">Mã OTP</label>
-        <input type="text" id="otp" v-model="otp" class="form-control" placeholder="Nhập mã OTP" required />
-      </div>
-      <div class="form-group mb-3">
-        <label for="newPassword" class="form-label">Mật khẩu mới</label>
-        <input type="password" id="newPassword" v-model="newPassword" class="form-control"
-          placeholder="Nhập mật khẩu mới" required />
-      </div>
-      <div class="form-group mb-4">
-        <label for="retypePassword" class="form-label">Xác nhận mật khẩu</label>
-        <input type="password" id="retypePassword" v-model="retypePassword" class="form-control"
-          placeholder="Nhập lại mật khẩu mới" required />
-      </div>
-      <button type="submit" class="btn btn-primary w-100">Đặt lại mật khẩu</button>
-    </form>
-    <p v-if="message" class="mt-3 text-center" :class="isError ? 'text-danger' : 'text-success'">
-      {{ message }}
-    </p>
+  <div v-if="currentStep === 'reset-password'" class="recovery-password-step-container">
+    <div class="recovery-password-step-card">
+      <h2 class="recovery-password-step-header">Đặt lại mật khẩu</h2>
+      <form @submit.prevent="handleResetPassword">
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" v-model="email" class="form-control" placeholder="Nhập email của bạn"
+            required />
+        </div>
+        <div class="form-group">
+          <label for="otp" class="form-label">Mã OTP</label>
+          <input type="text" id="otp" v-model="otp" class="form-control" placeholder="Nhập mã OTP" required />
+        </div>
+        <div class="form-group">
+          <label for="newPassword" class="form-label">Mật khẩu mới</label>
+          <input type="password" id="newPassword" v-model="newPassword" class="form-control"
+            placeholder="Nhập mật khẩu mới" required />
+        </div>
+        <div class="form-group">
+          <label for="retypePassword" class="form-label">Xác nhận mật khẩu</label>
+          <input type="password" id="retypePassword" v-model="retypePassword" class="form-control"
+            placeholder="Nhập lại mật khẩu mới" required />
+        </div>
+        <button type="submit" class="btn">Đặt lại mật khẩu</button>
+      </form>
+      <p v-if="message" class="recovery-password-message" :class="isError ? 'text-danger' : 'text-success'">
+        {{ message }}
+      </p>
+    </div>
   </div>
-
 </div>
 </template>
 
@@ -122,12 +123,11 @@ export default {
       try {
         await resetPassword(this.email, this.otp, this.newPassword, this.retypePassword);
         this.displayMessage("Mật khẩu đã được đặt lại thành công.", false);
-        this.$router.push('/dang-nhap');
+        window.location.href = '/dang-nhap';
       } catch (error) {
         const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại.";
         this.displayMessage(errorMessage, true);
       }
-
     },
   },
 };

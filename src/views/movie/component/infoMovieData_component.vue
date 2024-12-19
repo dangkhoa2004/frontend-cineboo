@@ -33,7 +33,7 @@
 <script>
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
-import { fetchMovieById } from "@/api/movie";
+import { fetchMovieByIdApiClient } from "@/api/movie";
 
 export default {
   name: "BookingMovieInfo",
@@ -58,7 +58,7 @@ export default {
 
     const fetchMovieData = async (movieId) => {
       try {
-        const data = await fetchMovieById(movieId);
+        const data = await fetchMovieByIdApiClient(movieId);
         movie.value = data;
       } catch (error) {
         console.error("Component [Lỗi khi xử lý dữ liệu]:", error);

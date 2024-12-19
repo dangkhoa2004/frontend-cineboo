@@ -29,8 +29,8 @@
   <div v-for="theater in filteredShowtimes" :key="theater.id || theater.phongChieu?.id || 'unknown'"
     class="date-selector">
     <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
-      <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong || '(chưa có)' }}</div>
-      <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu || '(chưa có)' }}</div>
+      <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong }}</div>
+      <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu }}</div>
       <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
     </button>
   </div>
@@ -40,7 +40,7 @@
 <script>
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchShowtimesByMovieId } from "@/api/movie";
+import { fetchShowtimesByMovieIdApiClient } from "@/api/movie";
 import { requestWithJWT } from "@/api/api";
 import { isLoggedIn } from "@/api/authService";
 
@@ -71,7 +71,7 @@ export default {
 
     const fetchShowtimes = async (movieId) => {
       try {
-        const response = await fetchShowtimesByMovieId(movieId);
+        const response = await fetchShowtimesByMovieIdApiClient(movieId);
         if (Array.isArray(response) && response.length) {
           showtimes.value = response.map(theater => {
             if (typeof theater.thoiGianChieu === 'string') {
@@ -107,7 +107,7 @@ export default {
                 // Fallback values in case of failure
                 theater.phongChieu = {
                   id: -1,
-                  maPhong: "(chưa có)",
+                  maPhong: "",
                   tongSoGhe: 0,
                   trangThaiPhongChieu: 0,
                 };
@@ -142,7 +142,7 @@ export default {
     const logTheaterInfo = (theater) => {
       if (!isLoggedIn()) {
         alert("Bạn cần đăng nhập để xem chi tiết suất chiếu.");
-        router.push("/dang-nhap");  // Navigate to the login page
+        window.location.href = '/dang-nhap';
         return;
       }
 
