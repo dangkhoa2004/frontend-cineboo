@@ -5,15 +5,8 @@ import bookingRoutes from "./modules/booking";
 import movieRoutes from "./modules/movie";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";  // Thư viện NProgress để hiển thị thanh tiến trình khi chuyển trang
-import { isLoggedIn, getUserInfo } from "@/api/authService"; // Hàm kiểm tra đăng nhập và lấy thông tin người dùng
+import { isLoggedIn } from "@/api/authService"; // Hàm kiểm tra đăng nhập và lấy thông tin người dùng
 import notFoundComponent from '@/components/notFoundComponent/index.vue'; // Trang 404 nếu không tìm thấy route
-
-import BarView from "@/views/statistic/BarView.vue";  // Thành phần hiển thị biểu đồ cột
-import ScatterView from "@/views/statistic/ScatterView.vue";  // Thành phần hiển thị biểu đồ phân tán
-import PieView from "@/views/statistic/PieView.vue";  // Thành phần hiển thị biểu đồ bánh
-
-import QRScannerView from "@/views/ticket/QRScannerView.vue";
-import ConfirmPrintTicketView from "@/views/ticket/ConfirmPrintTicketView.vue";
 // Định nghĩa các routes chính cho ứng dụng
 const routes = [
   // Định nghĩa route chính cho trang chủ, tự động chuyển hướng đến "/trang-chu"
@@ -33,35 +26,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     component: notFoundComponent,
     name: 'NotFound',  // Thêm tên cho route 404 để dễ dàng điều hướng
-  },
-
-  // Các route cho các biểu đồ thống kê
-  {
-    path: '/bar',
-    name: 'bar',
-    component: BarView,  // Thành phần hiển thị biểu đồ cột
-  },
-  {
-    path: '/scatter',
-    name: 'scatter',
-    component: ScatterView,  // Thành phần hiển thị biểu đồ phân tán
-  },
-  {
-    path: '/pie',
-    name: 'pie',
-    component: PieView,  // Thành phần hiển thị biểu đồ bánh
-  },
-  {
-    path: '/print-ticket-confirm',
-    name: 'print-ticket-confirm',
-    component: ConfirmPrintTicketView,
-  },
-  {
-    path: '/qr',
-    name: 'qr',
-    component: QRScannerView,
   }
-
 ];
 
 // Tạo và cấu hình router với lịch sử web HTML5
@@ -81,6 +46,16 @@ router.beforeEach((to, from, next) => {
     document.documentElement.style.setProperty('--first-color', savedColor);
   }
 
+  // Kiểm tra và xử lý các đường dẫn thừa dấu `/` ở cuối
+  if (to.path !== '/' && to.path.endsWith('/')) {
+    next({ name: 'NotFound' });  // Chuyển hướng đến trang không tìm thấy
+  } else {
+    next();  // Nếu không thừa dấu `/`, tiếp tục điều hướng
+  }
+});
+
+// Cấu hình middleware để kiểm tra xác thực người dùng
+router.beforeEach((to, from, next) => {
   // Kiểm tra xem route yêu cầu xác thực hay không
   const requiresAuth = to.meta.requiresAuth;
 

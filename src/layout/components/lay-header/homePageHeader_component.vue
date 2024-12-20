@@ -58,4 +58,4 @@ export default {
 };
 </script>
 
-<style src="./assets/styles.css"></style>
+<style src="./assets/styles.css" scoped></style>

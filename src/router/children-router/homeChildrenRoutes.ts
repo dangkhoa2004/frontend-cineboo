@@ -157,6 +157,14 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     components: {
       listComponent: () => import('@/components/statisticsComponents/index.vue')
     }
+  },
+  // Các route liên quan đến việc in và xuất vé
+  {
+    path: "xac-nhan-in-ve",
+    name: "xac-nhan-in-ve",
+    components: {
+      listComponent: () => import('@/components/qr-system/TicketPrintComponent.vue')
+    }
   }
 ];
 

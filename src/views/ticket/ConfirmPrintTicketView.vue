@@ -1,9 +1,7 @@
 <template>
-  <TicketPrintComponent/> 
+<TicketPrintComponent />
 </template>
 
 <script setup>
-import TicketPrintComponent from '@/components/ticketComponents/TicketPrintComponent.vue';
-
-
+import TicketPrintComponent from '@/components/qr-system/TicketPrintComponent.vue';
 </script>

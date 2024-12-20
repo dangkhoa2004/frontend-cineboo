@@ -17,11 +17,9 @@
         <listPerformance />
     </div>
     <div class="setting-for">
-        <h3>{{ $t('message.qr_man') }}:</h3>
         <qrSystem />
     </div>
     <div class="setting-for">
-        <h3>{{ $t('message.qr_man') }}:</h3>
         <hotMovie />
     </div>
 </div>

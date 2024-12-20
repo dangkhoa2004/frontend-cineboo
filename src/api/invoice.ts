@@ -195,3 +195,24 @@ export const deleteVoucherById = async (id: string) => {
         throw error;
     }
 };
+/* Lấy hoá đơn theo id */
+export const fetchInvoiceByMaHoaDon = async (maHoaDon: string) => {
+    try {
+        const response = await requestWithJWT('get', `/hoadon/find/MaHoaDon/${maHoaDon}`);
+        return response.data;
+    } catch (error) {
+        console.error('API: [Lỗi khi xử lý dữ liệu hoá đơn]', error instanceof Error ? error.message : error);
+        throw error;
+    }
+};
+
+/* Gửi yêu cầu in vé */
+export const requestInvoicePrint = async (maHoaDon: string) => {
+    try {
+        const response = await requestWithJWT('put', `/hoadon/print/thermal/bytes/${maHoaDon}`);
+        return response.data;
+    } catch (error) {
+        console.error('API: [Lỗi khi xử lý dữ liệu yêu cầu in vé]', error instanceof Error ? error.message : error);
+        throw error;
+    }
+};
