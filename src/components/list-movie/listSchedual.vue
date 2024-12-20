@@ -74,9 +74,10 @@ export default {
                 console.error("Lỗi khi tải dữ liệu phim:", error);
             }
         },
-        formatDate(timestamp) {
+        formatDate(data) {
             const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-            return new Date(timestamp).toLocaleDateString("vi-VN", options);
+			const date = new Date(data[0], data[1] - 1, data[2], data[3], data[4]);
+            return date.toLocaleString();;
         },
         editMovie(suatchieu) {
             this.$router.push({ name: 'thay-doi-thong-tin-lich-chieu', params: { id: suatchieu.id } });
