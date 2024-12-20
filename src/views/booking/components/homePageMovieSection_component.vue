@@ -21,7 +21,8 @@
           <p>Thời Lượng: <span>{{ movie.duration }}</span></p>
           <p>Xếp Hạng: <span>{{ movie.rating }}</span></p>
           <p>Quốc Gia: <span>{{ movie.country }}</span></p>
-          <button class="btn">Đặt vé ngay</button>
+       <button @click="goToMovieRightFuckingNow(movie.id)" class="btn">Xem thêm</button>
+
         </div>
       </div>
     </div>
@@ -43,10 +44,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
+import { useRoute, useRouter } from "vue-router";
 const moviesList = ref([]);
+const router = useRouter();  
+    const route = useRoute();  
 const defaultMovies = [
   {
+	  id:"-1",
     title: "Fubao: Bảo Bối Của Ông",
     imageUrl: "src/assets/img/fubao.webp",
     duration: "94 phút",
@@ -54,6 +58,7 @@ const defaultMovies = [
     country: "Hàn Quốc"
   },
   {
+	  	  id:"-1",
     title: "Bocchi The Rock! Recap",
     imageUrl: "src/assets/img/bocchi.webp",
     duration: "94 phút",
@@ -61,6 +66,7 @@ const defaultMovies = [
     country: "Mỹ"
   },
   {
+	  	  id:"-1",
     title: "Cô Dâu Hào Môn",
     imageUrl: "src/assets/img/codauhaomon.webp",
     duration: "94 phút",
@@ -80,6 +86,7 @@ const loadMovies = async () => {
         const selectedMovie = movieData[randomIndex];
         if (!uniqueMovies.some(movie => movie.title === selectedMovie.tenPhim)) {
           uniqueMovies.push({
+			  id:selectedMovie.id,
             title: selectedMovie.tenPhim,
             imageUrl: selectedMovie.anhPhim,
             duration: "94 phút", // Placeholder
@@ -124,7 +131,10 @@ const shareToSocialMedia = (platform, movieTitle) => {
   }
   window.open(shareUrl, '_blank');
 };
-
+const goToMovieRightFuckingNow=(phimId)=>{
+	router.push(`/phim/${phimId}`);
+	window.scrollTo(0,0);
+}
 onMounted(() => {
   loadMovies();
 });

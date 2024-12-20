@@ -35,10 +35,10 @@
         <li><a href="/cineboo@info.com">cineboo@info.com</a></li>
       </ul>
       <div class="socials">
-        <a href="/twitter" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-        <a href="/facebook" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-        <a href="/youtube" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
-        <a href="/instagram" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+        <a href="https://x.com/cineboo3017?lang=en" target="_blank" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+        <a href="https://www.facebook.com/CineBoo3017" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+        <a href="https://www.youtube.com/@CineBoo3017" target="_blank" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+        <a href="https://www.instagram.com/CineBoo3017/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
       </div>
     </div>
   </div>
