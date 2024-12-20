@@ -173,10 +173,6 @@ export default {
 </script>
 
 <style scoped>
-.tabs {
-  margin-bottom: 15px;
-}
-
 .search-container {
   display: flex;
   justify-content: flex-start;

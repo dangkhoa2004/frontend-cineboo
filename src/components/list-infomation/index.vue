@@ -129,7 +129,7 @@ export default {
         },
         updateUserInfo() {
             if (this.userInfo) {
-                setUserInfo(this.userInfo); // Lưu thông tin đã cập nhật vào sessionStorage
+                console.log("Thông tin cập nhật:", this.userInfo); // Kiểm tra thông tin cập nhật
                 alert("Thông tin đã được cập nhật!");
             }
         }
