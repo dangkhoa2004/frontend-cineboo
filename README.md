@@ -45,6 +45,7 @@ npm install vue-router
 npm install vue3-leaflet
 npm install vuex
 npm install jsqr
+npm install sweetalert2
 ```
 
 Chạy dự án:
