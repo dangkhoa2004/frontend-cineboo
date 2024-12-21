@@ -21,16 +21,15 @@
     <div class="sidebar__content">
       <div>
         <h3 class="sidebar__title">{{ $t("message.home") }}</h3>
-
         <div class="sidebar__list">
+          <router-link v-if="permissions['phims']" to="/quan-ly/phims" class="sidebar__link" active-class="active-link">
+            <i class="ri-film-fill"></i>
+            <span>{{ $t("message.movie_man") }}</span>
+          </router-link>
           <router-link v-if="permissions['hoaDon']" to="/quan-ly/hoa-don" class="sidebar__link"
             active-class="active-link">
             <i class="ri-table-line"></i>
             <span>{{ $t("message.invoice_man") }}</span>
-          </router-link>
-          <router-link v-if="permissions['phims']" to="/quan-ly/phims" class="sidebar__link" active-class="active-link">
-            <i class="ri-film-fill"></i>
-            <span>{{ $t("message.movie_man") }}</span>
           </router-link>
           <router-link v-if="permissions['vouchers']" to="/quan-ly/vouchers" class="sidebar__link"
             active-class="active-link">

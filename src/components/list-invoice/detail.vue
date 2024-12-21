@@ -214,10 +214,6 @@ export default {
             try {
                 // Fetch data from API
                 const response = await fetchInvoiceById(invoiceId);
-
-                // Log full response for debugging purposes
-                console.log("API response:", response);
-
                 // Kiểm tra sự tồn tại của response.data và response.data.hoadon
                 if (response && response.qr && response.hoadon) {
                     // Gán qr vào hoadon để sử dụng cho ảnh QR

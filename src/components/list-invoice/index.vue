@@ -6,19 +6,36 @@
   <table>
     <thead>
       <tr>
-        <th>Mã hoá đơn</th>
-        <th>Khách hàng</th>
-        <th>Phim</th>
+        <th>
+          Mã hoá đơn
+        </th>
+        <th @click="sortTable('khachHang')">
+          Khách hàng
+          <span v-if="sortKey === 'khachHang'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th @click="sortTable('tenPhim')">
+          Phim
+          <span v-if="sortKey === 'tenPhim'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+        </th>
         <th>Thể loại phim</th>
-        <th>Số lượng</th>
-        <th>Tổng tiền</th>
-        <th>Thời gian thanh toán</th>
+        <th @click="sortTable('soLuong')">
+          Số lượng
+          <span v-if="sortKey === 'soLuong'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th @click="sortTable('tongSoTien')">
+          Tổng tiền
+          <span v-if="sortKey === 'tongSoTien'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th @click="sortTable('thoiGianThanhToan')">
+          Thời gian thanh toán
+          <span v-if="sortKey === 'thoiGianThanhToan'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+        </th>
         <th>Trạng thái</th>
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="invoice in filteredInvoices" :key="invoice.id">
+      <tr v-for="invoice in sortedInvoices" :key="invoice.id">
         <td>{{ invoice.maHoaDon }}</td>
         <td>{{ `${invoice.khachHang.ho} ${invoice.khachHang.tenDem} ${invoice.khachHang.ten}` }}</td>
         <td>{{ invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim }}</td>
@@ -42,25 +59,73 @@
 </template>
 
 <script>
-import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice"; // Thêm import hàm fetchInvoicesByUserID
-import { getUserData } from "@/api/authService"; // Thêm import hàm fetchInvoicesByUserID
+import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice";
+import { getUserData } from "@/api/authService";
 
 export default {
   data() {
     return {
       invoices: [],
-      searchQuery: "", // Từ khoá tìm kiếm
-      user: null, // Dữ liệu người dùng
+      searchQuery: "",
+      user: null,
+      sortKey: "", // Thuộc tính sắp xếp hiện tại
+      sortOrder: "asc", // Hướng sắp xếp: 'asc' hoặc 'desc'
     };
   },
   computed: {
-    filteredInvoices() {
+    sortedInvoices() {
       const query = this.searchQuery.toLowerCase();
-      return this.invoices.filter(invoice =>
+
+      // Lọc hoá đơn theo từ khoá tìm kiếm
+      let filteredInvoices = this.invoices.filter(invoice =>
         invoice.maHoaDon.toLowerCase().includes(query) ||
         `${invoice.khachHang.ho} ${invoice.khachHang.tenDem} ${invoice.khachHang.ten}`.toLowerCase().includes(query) ||
         invoice?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim.toLowerCase().includes(query)
       );
+
+      // Sắp xếp hoá đơn theo cột và hướng sắp xếp
+      if (this.sortKey) {
+        filteredInvoices.sort((a, b) => {
+          let valA, valB;
+
+          switch (this.sortKey) {
+            case "maHoaDon":
+              valA = a.maHoaDon;
+              valB = b.maHoaDon;
+              break;
+            case "khachHang":
+              valA = `${a.khachHang.ho} ${a.khachHang.tenDem} ${a.khachHang.ten}`;
+              valB = `${b.khachHang.ho} ${b.khachHang.tenDem} ${b.khachHang.ten}`;
+              break;
+            case "tenPhim":
+              valA = a?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim || "";
+              valB = b?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim || "";
+              break;
+            case "soLuong":
+              valA = a.soLuong;
+              valB = b.soLuong;
+              break;
+            case "tongSoTien":
+              valA = a.tongSoTien;
+              valB = b.tongSoTien;
+              break;
+            case "thoiGianThanhToan":
+              valA = new Date(...a.thoiGianThanhToan);
+              valB = new Date(...b.thoiGianThanhToan);
+              break;
+            default:
+              return 0;
+          }
+
+          if (this.sortOrder === "asc") {
+            return valA > valB ? 1 : valA < valB ? -1 : 0;
+          } else {
+            return valA < valB ? 1 : valA > valB ? -1 : 0;
+          }
+        });
+      }
+
+      return filteredInvoices;
     },
   },
   async mounted() {
@@ -69,38 +134,25 @@ export default {
   methods: {
     async loadInvoices() {
       try {
-        // Lấy thông tin người dùng từ API hoặc từ state (tùy vào cách bạn quản lý người dùng)
-        const userData = await getUserData(); // Thêm hàm getUserData để lấy dữ liệu người dùng
-
+        const userData = await getUserData();
         this.user = userData;
 
         let invoiceData = [];
 
         if (userData.khachHang) {
-          // Nếu là khách hàng, gọi API lấy hoá đơn theo user ID
-          invoiceData = await fetchInvoicesByUserID(userData.khachHang.id); // API lấy hoá đơn theo user ID
+          invoiceData = await fetchInvoicesByUserID(userData.khachHang.id);
         } else if (userData.nhanVien) {
-          // Nếu là nhân viên, gọi API lấy hoá đơn cho nhân viên
           invoiceData = await fetchInvoices();
         } else {
-          // Trường hợp người dùng không xác định
           console.error("Người dùng không xác định");
         }
 
-        // Kiểm tra dữ liệu trả về có phải là mảng không
         if (Array.isArray(invoiceData)) {
           this.invoices = invoiceData;
         } else {
           console.error("Dữ liệu hóa đơn không hợp lệ:", invoiceData);
-          this.invoices = []; // Đảm bảo luôn có giá trị mặc định là mảng
+          this.invoices = [];
         }
-
-        // Sắp xếp hóa đơn theo thứ tự giảm dần của thời gian thanh toán
-        this.invoices.sort((a, b) => {
-          const dateA = new Date(a.thoiGianThanhToan[0], a.thoiGianThanhToan[1] - 1, a.thoiGianThanhToan[2], a.thoiGianThanhToan[3], a.thoiGianThanhToan[4]);
-          const dateB = new Date(b.thoiGianThanhToan[0], b.thoiGianThanhToan[1] - 1, b.thoiGianThanhToan[2], b.thoiGianThanhToan[3], b.thoiGianThanhToan[4]);
-          return dateB - dateA; // Sắp xếp giảm dần
-        });
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu hoá đơn:", error);
       }
@@ -117,17 +169,16 @@ export default {
     viewInvoiceDetails(invoice) {
       this.$router.push({ name: 'thay-doi-thong-tin-hoa-don', params: { id: invoice.id } });
     },
+    sortTable(key) {
+      if (this.sortKey === key) {
+        this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+      } else {
+        this.sortKey = key;
+        this.sortOrder = "asc";
+      }
+    },
   },
 };
 </script>
 
-<style scoped>
-.search-input {
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-</style>
 <style src="./assets/styles.css" scoped></style>

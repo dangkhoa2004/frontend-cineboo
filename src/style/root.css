@@ -102,3 +102,35 @@ img {
   background-color: var;
   cursor: pointer;
 }
+
+span.sap-chieu {
+  color: white;
+  background-color: rgb(164, 164, 1);
+  border: 1px solid rgb(164, 164, 1);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+span.da-chieu {
+  color: white;
+  background-color: green;
+  border: 1px solid green;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+span.dang-chieu {
+  color: white;
+  background-color: blue;
+  border: 1px solid blue;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+span.loi {
+  color: white;
+  background-color: red;
+  border: 1px solid red;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

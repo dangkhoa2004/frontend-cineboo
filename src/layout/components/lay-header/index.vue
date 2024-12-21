@@ -1,7 +1,7 @@
 <template><!--=============== HEADER ===============-->
 <header class="admin_header" id="header">
   <div class="admin_header__container">
-    <a href="/quan-ly" class="admin_header__logo">
+    <a href="/trang-chu" class="admin_header__logo">
       <button class="admin_header__toggle">
         <h4>{{ $t("message.home") }}</h4>
       </button>

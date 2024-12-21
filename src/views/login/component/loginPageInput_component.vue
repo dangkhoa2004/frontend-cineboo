@@ -6,15 +6,13 @@
       <h2 class="form-title">Đăng Nhập</h2>
       <form @submit.prevent="handleLogin">
         <div class="input-field">
-          <input type="text" placeholder="Email" v-model="formData.username" required />
-          <i class="fas fa-envelope"></i>
+          <input type="text" placeholder="Tài khoản" v-model="formData.username" />
+          <i class="fas fa-user"></i>
         </div>
         <div class="input-field">
-          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password"
-            required />
+          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password" />
           <i class="fas" :class="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'" @click="togglePasswordVisibility"></i>
         </div>
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <button type="submit" class="auth-btn">Đăng Nhập</button>
       </form>
       <p class="toggle-form-link">Chưa có tài khoản? <span @click="toggleForm">Đăng ký ngay</span></p>
@@ -26,11 +24,11 @@
       <h2 class="form-title">Đăng Ký</h2>
       <form @submit.prevent="handleSignUp">
         <div class="input-field">
-          <input type="text" placeholder="Họ" v-model="formData.ho" required />
+          <input type="text" placeholder="Họ" v-model="formData.ho" />
           <i class="fas fa-user"></i>
         </div>
         <div class="input-field">
-          <input type="text" placeholder="Tên" v-model="formData.ten" required />
+          <input type="text" placeholder="Tên" v-model="formData.ten" />
           <i class="fas fa-user"></i>
         </div>
         <div class="input-field">
@@ -54,7 +52,7 @@
           <i class="fas fa-venus-mars"></i>
         </div>
         <div class="input-field">
-          <input type="email" placeholder="Email" v-model="formData.email" required />
+          <input type="email" placeholder="Email" v-model="formData.email" />
           <i class="fas fa-envelope"></i>
         </div>
         <div class="input-field">
@@ -66,12 +64,11 @@
           <i class="fas fa-map-marker-alt"></i>
         </div>
         <div class="input-field">
-          <input type="text" placeholder="Username" v-model="formData.username" required />
+          <input type="text" placeholder="Username" v-model="formData.username" />
           <i class="fas fa-user-circle"></i>
         </div>
         <div class="input-field">
-          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password"
-            required />
+          <input :type="isPasswordVisible ? 'text' : 'password'" placeholder="Mật khẩu" v-model="formData.password" />
           <i class="fas" :class="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'" @click="togglePasswordVisibility"></i>
         </div>
         <div class="input-field">
@@ -88,6 +85,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { login, signup } from '@/api/authService';
+import Swal from 'sweetalert2';
+import {
+  validateUsername,
+  validatePassword,
+  validateEmail,
+  validatePhoneNumber,
+  validateDate,
+  validateRequiredField
+} from '@/utils/validation';
 
 export default {
   name: 'AuthForm',
@@ -107,7 +113,6 @@ export default {
       danToc: '',
       diaChi: '',
     });
-    const errorMessage = ref('');
     const isPasswordVisible = ref(false);
 
     const toggleForm = () => {
@@ -119,18 +124,56 @@ export default {
     };
 
     const handleLogin = async () => {
+      const usernameError = validateUsername(formData.value.username);
+      const passwordError = validatePassword(formData.value.password);
+
+      if (usernameError || passwordError) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi đăng nhập',
+          text: usernameError || passwordError,
+        });
+        return;
+      }
+
       try {
         await login(formData.value.username, formData.value.password);
         window.location.href = '/';
       } catch (error) {
-        errorMessage.value = error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi đăng nhập',
+          text: error.message,
+        });
       }
-    }; const handleSignUp = async () => {
+    };
+
+    const handleSignUp = async () => {
+      const hoError = validateRequiredField(formData.value.ho, "Họ");
+      const tenError = validateRequiredField(formData.value.ten, "Tên");
+      const emailError = validateEmail(formData.value.email);
+      const passwordError = validatePassword(formData.value.password);
+      const ngaySinhError = validateDate(formData.value.ngaySinh);
+      const phoneNumberError = validatePhoneNumber(formData.value.soDienThoai);
+
+      if (hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi đăng ký',
+          text: hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError,
+        });
+        return;
+      }
+
       try {
         await signup(formData.value);
         await handleLogin(); // Tự động đăng nhập sau khi đăng ký
       } catch (error) {
-        errorMessage.value = error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi đăng ký',
+          text: error.message,
+        });
       }
     };
 
@@ -140,7 +183,6 @@ export default {
 
     return {
       formData,
-      errorMessage,
       handleLogin,
       handleSignUp,
       toggleForm,

@@ -1,7 +1,3 @@
-h3 {
-    color: var(--first-color);
-}
-
 button {
     margin: 10px 5px;
     background-color: var(--first-color);
@@ -14,7 +10,8 @@ button {
 }
 
 input,
-textarea {
+textarea,
+select {
     width: 100%;
     padding: 8px;
     margin: 10px 0;

@@ -115,13 +115,4 @@ export default {
   },
 };
 </script>
-<style src="./assets/styles.css" scoped>
-.search-input {
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-}
-</style>
+<style src="./assets/styles.css" scoped></style>

@@ -2,6 +2,7 @@
 <div>
     <div v-if="userInfo">
         <form @submit.prevent="updateUserInfo">
+            <!-- Các trường thông tin cá nhân -->
             <div>
                 <label>Họ:</label>
                 <input type="text" v-model="userInfo.ho" />
@@ -16,7 +17,11 @@
             </div>
             <div>
                 <label>Email:</label>
-                <input type="email" v-model="userInfo.email" />
+                <input type="text" v-model="userInfo.email" />
+            </div>
+            <div>
+                <label>Số điện thoại:</label>
+                <input type="text" v-model="userInfo.soDienThoai" />
             </div>
             <div>
                 <label>Địa chỉ:</label>
@@ -24,7 +29,7 @@
             </div>
             <div>
                 <label>Ngày sinh:</label>
-                <input type="date" v-model="formattedDate" @change="updateDate" />
+                <input type="date" :value="formattedDate" @change="updateDate" />
             </div>
             <div>
                 <label>Dân tộc:</label>
@@ -37,13 +42,6 @@
                     <option value="0">Nữ</option>
                 </select>
             </div>
-
-            <!-- Hiển thị Chức vụ chỉ khi là nhân viên -->
-            <div v-if="userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien' && userInfo.chucVu">
-                <label>Chức vụ:</label>
-                <input type="text" v-model="userInfo.chucVu.tenChucVu" />
-            </div>
-
             <div>
                 <label>Ghi chú:</label>
                 <input type="text" v-model="userInfo.ghiChu" />
@@ -56,9 +54,12 @@
     </div>
 </div>
 </template>
-
 <script lang="ts">
-import { getUserData, setUserInfo } from "@/api/authService"; // Đảm bảo đường dẫn đúng với vị trí của authService
+import { getUserData } from "@/api/authService";
+import { updatekhachhangById } from "@/api/customer";
+import { updatenhanvienById } from "@/api/employee";
+import { validateEmail, validatePhoneNumber, validateDate, validateRequiredField } from '@/utils/validation';
+import Swal from 'sweetalert2';
 
 interface User {
     id: string;
@@ -66,6 +67,7 @@ interface User {
     tenDem: string;
     ho: string;
     email: string;
+    soDienThoai: string;
     diaChi: string;
     ngaySinh: [number, number, number];
     danToc: string;
@@ -87,7 +89,6 @@ export default {
         try {
             const user = await getUserData(); // Sử dụng await để lấy dữ liệu từ Promise
             console.log("Dữ liệu người dùng:", user); // Kiểm tra dữ liệu người dùng
-
             if (user) {
                 if (user.khachHang) { // Kiểm tra nếu là khách hàng
                     this.userInfo = {
@@ -117,26 +118,75 @@ export default {
     },
     methods: {
         formatDate(dateArray: [number, number, number]): string {
+            if (!Array.isArray(dateArray) || dateArray.length !== 3) {
+                throw new Error("Dữ liệu không hợp lệ. Phải là một mảng [năm, tháng, ngày].");
+            }
+
             const [year, month, day] = dateArray;
-            return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`; // Định dạng thành YYYY-MM-DD
+            if (month < 1 || month > 12 || day < 1 || day > 31) {
+                throw new Error("Ngày hoặc tháng không hợp lệ.");
+            }
+
+            const formattedDay = day < 10 ? '0' + day : day.toString();
+            const formattedMonth = month < 10 ? '0' + month : month.toString();
+            return `${year}-${formattedMonth}-${formattedDay}`; // Định dạng thành yyyy-MM-dd để phù hợp với input type="date"
         },
+
         updateDate(event: Event) {
             const input = event.target as HTMLInputElement;
             const date = new Date(input.value);
             if (this.userInfo) {
                 this.userInfo.ngaySinh = [date.getFullYear(), date.getMonth() + 1, date.getDate()]; // Cập nhật ngày sinh
+                this.formattedDate = input.value; // Cập nhật định dạng hiển thị phù hợp với input type="date"
             }
         },
-        updateUserInfo() {
-            if (this.userInfo) {
-                console.log("Thông tin cập nhật:", this.userInfo); // Kiểm tra thông tin cập nhật
-                alert("Thông tin đã được cập nhật!");
+        validateUserInfo() {
+            const { ho, ten, email, diaChi, soDienThoai, danToc } = this.userInfo || {};
+            const hoError = validateRequiredField(ho, "Họ");
+            const tenError = validateRequiredField(ten, "Tên");
+            const soDienThoaiError = validatePhoneNumber(soDienThoai);
+            const emailError = validateEmail(email);
+            const diaChiError = validateRequiredField(diaChi, "Địa chỉ");
+            const ngaySinhError = validateDate(this.formattedDate);
+            const danTocError = validateRequiredField(danToc, "Dân tộc");
+
+            if (hoError || tenError || emailError || diaChiError || soDienThoaiError || ngaySinhError || danTocError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi cập nhật thông tin',
+                    text: hoError || tenError || emailError || diaChiError || soDienThoaiError || ngaySinhError || danTocError,
+                });
+                return false;
+            }
+            return true;
+        },
+        async updateUserInfo() {
+            if (this.userInfo && this.validateUserInfo()) {
+                try {
+                    if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'KhachHang') {
+                        await updatekhachhangById(this.userInfo.id, this.userInfo);
+                    } else if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien') {
+                        await updatenhanvienById(this.userInfo.id, this.userInfo);
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Thông tin đã được cập nhật!',
+                    });
+                    setTimeout(() => { window.location.reload(); }, 2000);  
+                } catch (error) {
+                    console.error("Lỗi khi cập nhật thông tin:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lỗi khi cập nhật thông tin.',
+                    });
+                }
             }
         }
     }
 };
 </script>
-
 <style scoped>
 .search-input {
     padding: 5px;

@@ -1,6 +1,12 @@
-h2,
-h3 {
-  color: #2c3e50;
+.search-input {
+  width: 30%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 15px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
 }
 
 button {
@@ -55,7 +61,7 @@ button {
 
 th,
 td {
-  padding: 12px;
+  padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
 }

@@ -1,59 +1,61 @@
 <template>
-  <div class="movie-manager">
-    <div class="button-group">
-      <button @click="goBack">Trở về</button>
-    </div>
-
-    <div class="form-group">
-      <label for="movie-select">Lựa chọn phim</label>
-      <select id="movie-select" v-model="selectedMovie">
-        <option v-for="movie in movies" :key="movie.id" :value="movie.id">
-          {{ movie.tenPhim }}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="room-select">Lựa chọn phòng chiếu</label>
-      <select id="room-select" v-model="selectedRoom">
-        <option v-for="room in rooms" :key="room.id" :value="room.id">
-          {{ room.maPhong }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Chọn khoảng ngày -->
-    <div class="form-group date-picker-group">
-      <label>Chọn khoảng ngày</label>
-      <div class="date-inputs">
-        <div>
-          <label for="start-date">Ngày bắt đầu</label>
-          <input type="date" id="start-date" v-model="startDate"/>
-        </div>
-        <div>
-          <label for="end-date">Ngày kết thúc</label>
-          <input type="date" id="end-date" v-model="endDate"/>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Lựa chọn giờ chiếu</label>
-      <div class="checkbox-group">
-        <div v-for="time in times" :key="time" class="checkbox-item">
-          <input type="checkbox" :value="time" v-model="selectedTimes" :id="`time-${time}`"/>
-          <label :for="`time-${time}`">{{ time }}</label>
-        </div>
-      </div>
-    </div>
-
-    <button @click="createSchedual">Tạo lịch chiếu</button>
+<div class="movie-manager">
+  <div class="button-group">
+    <button @click="goBack">Trở về</button>
   </div>
+
+  <div class="form-group">
+    <label for="movie-select">Lựa chọn phim</label>
+    <select id="movie-select" v-model="selectedMovie">
+      <option v-for="movie in movies" :key="movie.id" :value="movie.id">
+        {{ movie.tenPhim }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="room-select">Lựa chọn phòng chiếu</label>
+    <select id="room-select" v-model="selectedRoom">
+      <option v-for="room in rooms" :key="room.id" :value="room.id">
+        {{ room.maPhong }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Chọn khoảng ngày -->
+  <div class="form-group date-picker-group">
+    <label>Chọn khoảng ngày</label>
+    <div class="date-inputs">
+      <div>
+        <label for="start-date">Ngày bắt đầu</label>
+        <input type="date" id="start-date" v-model="startDate" />
+      </div>
+      <div>
+        <label for="end-date">Ngày kết thúc</label>
+        <input type="date" id="end-date" v-model="endDate" />
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Lựa chọn giờ chiếu</label>
+    <div class="checkbox-group">
+      <div v-for="time in times" :key="time" class="checkbox-item">
+        <input type="checkbox" :value="time" v-model="selectedTimes" :id="`time-${time}`" />
+        <label :for="`time-${time}`">{{ time }}</label>
+      </div>
+    </div>
+  </div>
+
+  <button @click="createSchedule">Tạo lịch chiếu</button>
+</div>
 </template>
 
 <script>
-import {fetchMovies, fetchPhongChieu} from "@/api/movie";
+import { fetchMovies, fetchPhongChieu } from "@/api/movie";
 import { requestWithJWT } from '@/api/api.ts';
+import Swal from "sweetalert2";
+
 export default {
   data() {
     return {
@@ -64,12 +66,12 @@ export default {
       selectedTimes: [],
       startDate: null,
       endDate: null,
-      times: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"],
+      times: ["08:00", "12:00", "16:00", "20:00"],
     };
   },
   async mounted() {
-    await this.loadMovies(); // Tải danh sách phim
-    await this.loadRooms();  // Tải danh sách phòng chiếu
+    await this.loadMovies();
+    await this.loadRooms();
   },
   methods: {
     async loadMovies() {
@@ -93,135 +95,111 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    async createSchedual() {
+    validateMovieInfo() {
       if (!this.selectedMovie || !this.selectedRoom || !this.startDate || !this.endDate || this.selectedTimes.length === 0) {
-        alert("Vui lòng chọn đầy đủ thông tin!");
+        Swal.fire({
+          icon: 'error',
+          title: 'Thông tin không đầy đủ',
+          text: 'Vui lòng chọn đầy đủ thông tin!',
+        });
+        return false;
+      }
+      return true;
+    },
+    async createSchedule() {
+      if (!this.validateMovieInfo()) {
         return;
       }
 
+      // Tạo danh sách các lịch chiếu
       const thoiGianChieuList = [];
       const start = new Date(this.startDate);
       const end = new Date(this.endDate);
 
-      // Loop through the date range
+      // Lặp qua các ngày và giờ chiếu
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        // For each selected time, set the correct hours and minutes
         this.selectedTimes.forEach((time) => {
-          console.log("LOOPER: TIME IS: "+time)
           const [hours, minutes] = time.split(":");
-
-          // Use Date.UTC to create the date in UTC and set the hours
           const dateTime = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), hours, minutes));
-
-          // Add the time in ISO format (which will be in UTC)
           thoiGianChieuList.push(dateTime.toISOString());
         });
       }
 
-      // Create the payload
       const payload = {
         thoiGianChieuList,
         id_Phim: this.selectedMovie,
         id_PhongChieu: this.selectedRoom,
       };
 
-      console.log("Dữ liệu gửi đến back-end:", payload);
-
-      // Send the payload to the backend
       try {
         await this.postSchedule(payload);
-        alert("Tạo lịch chiếu thành công!");
       } catch (error) {
-        console.error("Lỗi khi gửi dữ liệu:", error);
-        alert("Có lỗi xảy ra. Vui lòng thử lại sau!");
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Lỗi khi tạo lịch chiếu. Vui lòng thử lại.',
+        });
       }
-    }
-,
+    },
+
     async postSchedule(payload) {
-      console.log("BODY IS: "+JSON.stringify(payload));
-      const response = await requestWithJWT("post",'http://localhost:8080/suatchieu/add/multiple',payload);
+      try {
+        // Hiển thị thông báo cho người dùng khi đang tạo lịch chiếu
+        Swal.fire({
+          title: 'Đang tạo lịch chiếu...',
+          text: 'Vui lòng đợi trong giây lát.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
 
-      if (response.status != 200 || response.data == null ) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await requestWithJWT("post", 'http://localhost:8080/suatchieu/add/multiple', payload);
+
+        if (response.status === 200 && response.data) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: 'Lịch chiếu đã được tạo thành công!',
+          });
+          setTimeout(() => {
+            window.location.reload();  // Refresh the page
+          }, 2000);
+        } else {
+          throw new Error('Failed to create schedule');
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Có lỗi khi gửi dữ liệu, vui lòng thử lại sau!',
+        });
+      }
+    }, async postSchedule(payload) {
+      try {
+        const response = await requestWithJWT("post", 'http://localhost:8080/suatchieu/add/multiple', payload);
+
+        if (response.status === 200 && response.data) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: 'Lịch chiếu đã được tạo thành công!',
+          });
+          setTimeout(() => {
+            window.location.reload();  // Refresh the page
+          }, 2000);
+        } else {
+          throw new Error('Failed to create schedule');
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Có lỗi khi gửi dữ liệu, vui lòng thử lại sau!',
+        });
       }
     }
-
   },
 };
 </script>
-<style scoped>
-/* Container */
-.movie-manager {
-  max-width: 600px;
-  border-radius: 10px;
-}
-
-/* Form Group */
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #333;
-}
-
-.form-group select,
-.form-group input[type="date"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input[type="date"]:focus,
-.form-group select:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Date Picker Group */
-.date-picker-group .date-inputs {
-  display: flex;
-  gap: 20px;
-}
-
-.date-inputs div {
-  flex: 1;
-}
-
-.date-inputs label {
-  margin-bottom: 5px;
-  display: block;
-  font-size: 14px;
-  color: #555;
-}
-
-/* Checkbox Group */
-.checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-item input[type="checkbox"] {
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.checkbox-item label {
-  font-size: 14px;
-  color: #555;
-}
-</style>
 <style src="./assets/styles.css" scoped></style>

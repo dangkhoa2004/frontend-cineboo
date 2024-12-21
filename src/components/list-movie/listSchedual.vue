@@ -2,28 +2,28 @@
 <div class="movie-manager">
     <div class="button-group">
         <button @click="goBack">Trở về</button>
-        <button @click="addsuatchieuschedual()">
-            Thêm lịch chiếu
-        </button>
+        <button @click="addsuatchieuschedual()">Thêm lịch chiếu</button>
     </div>
     <table>
         <thead>
             <tr>
-                <th>ID suất chiếu</th>
                 <th>Mã suất chiếu</th>
                 <th>Thời gian chiếu</th>
-                <th>ID_Phim</th>
+                <th>Tên Phim</th>
                 <th>Trạng thái suất chiếu</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="suatchieu in paginatedSuatChieus" :key="suatchieu.id">
-                <td>{{ suatchieu.id }}</td>
+            <tr v-for="suatchieu in suatchieus" :key="suatchieu.id">
                 <td>{{ suatchieu.maSuatChieu }}</td>
                 <td>{{ formatDate(suatchieu.thoiGianChieu) }}</td>
-                <td>{{ suatchieu.idPhim }}</td>
-                <td>{{ suatchieu.TrangThaiSuatChieu }}</td>
+                <td>{{ suatchieu.phim.tenPhim }}</td>
+                <td>
+                    <span :class="getStatusClass(suatchieu.trangThaiSuatChieu)">
+                        {{ getStatusText(suatchieu.trangThaiSuatChieu) }}
+                    </span>
+                </td>
                 <td>
                     <button @click="editMovie(suatchieu)">Sửa</button>
                     <button @click="deleteMovie(suatchieu.id)">Xoá</button>
@@ -31,13 +31,9 @@
             </tr>
         </tbody>
     </table>
-    <div class="pagination">
-        <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Trước</button>
-        <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-        <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Sau</button>
-    </div>
 </div>
 </template>
+
 <script>
 import { fetchSuatChieu } from "@/api/movie";
 
@@ -45,19 +41,7 @@ export default {
     data() {
         return {
             suatchieus: [],
-            currentPage: 1,
-            itemsPerPage: 7, // Số suất chiếu mỗi trang
         };
-    },
-    computed: {
-        totalPages() {
-            return Math.ceil(this.suatchieus.length / this.itemsPerPage);
-        },
-        paginatedSuatChieus() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.suatchieus.slice(start, end);
-        },
     },
     async mounted() {
         await this.loadsuatchieus();
@@ -69,14 +53,19 @@ export default {
         async loadsuatchieus() {
             try {
                 const suatchieuData = await fetchSuatChieu();
-                this.suatchieus = suatchieuData;
+                this.suatchieus = suatchieuData.sort((a, b) => b.id - a.id);
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu phim:", error);
+                console.error("Lỗi khi tải dữ liệu suất chiếu:", error);
             }
         },
         formatDate(timestamp) {
-            const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-            return new Date(timestamp).toLocaleDateString("vi-VN", options);
+            const [year, month, day, hour, minute] = timestamp;
+            const date = new Date(year, month - 1, day, hour, minute);
+            const optionsDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+            const optionsTime = { hour: "2-digit", minute: "2-digit", hour12: false };
+            const formattedDate = date.toLocaleDateString("vi-VN", optionsDate);
+            const formattedTime = date.toLocaleTimeString("vi-VN", optionsTime);
+            return `${formattedDate} ${formattedTime}`;
         },
         editMovie(suatchieu) {
             this.$router.push({ name: 'thay-doi-thong-tin-lich-chieu', params: { id: suatchieu.id } });
@@ -84,13 +73,25 @@ export default {
         goBack() {
             this.$router.go(-1);
         },
-        changePage(page) {
-            if (page > 0 && page <= this.totalPages) {
-                this.currentPage = page;
+        getStatusClass(status) {
+            switch (status) {
+                case 0: return 'sap-chieu';
+                case 1: return 'da-chieu';
+                case 3: return 'dang-chieu';
+                case 4: return 'loi';
+                default: return '';
             }
         },
+        getStatusText(status) {
+            switch (status) {
+                case 0: return 'Sắp chiếu';
+                case 1: return 'Đã chiếu';
+                case 3: return 'Đang chiếu';
+                case 4: return 'Xảy ra lỗi';
+                default: return '';
+            }
+        }
     },
 };
-
 </script>
 <style src="./assets/styles.css" scoped></style>

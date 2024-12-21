@@ -7,7 +7,7 @@
         </div>
         <div>
             <label>Mã Khách Hàng:</label>
-            <input v-model="customer.maKhachHang" />
+            <input v-model="customer.maKhachHang" disabled />
         </div>
         <div>
             <label>Phân Loại Khách Hàng:</label>
@@ -15,46 +15,46 @@
         </div>
         <div>
             <label>Ghi Chú Tài Khoản:</label>
-            <input v-model="customer.taiKhoan.ghiChu" />
+            <input v-model="customer.taiKhoan.ghiChu" disabled />
         </div>
         <div>
             <label>Tên:</label>
-            <input v-model="customer.ten" />
+            <input v-model="customer.ten" disabled />
         </div>
         <div>
             <label>Tên Đệm:</label>
-            <input v-model="customer.tenDem" />
+            <input v-model="customer.tenDem" disabled />
         </div>
         <div>
             <label>Họ:</label>
-            <input v-model="customer.ho" />
+            <input v-model="customer.ho" disabled />
         </div>
         <div>
             <label>Ngày Sinh:</label>
-            <input type="date" v-model="formattedDateOfBirth" />
+            <input type="date" v-model="formattedDateOfBirth" disabled />
         </div>
         <div>
             <label>Số Điện Thoại:</label>
-            <input v-model="customer.soDienThoai" />
+            <input v-model="customer.soDienThoai" disabled />
         </div>
         <div>
-            <label>Giới Tính: 	</label>
-            <select v-model="customer.gioiTinh">
+            <label>Giới Tính: </label>
+            <select v-model="customer.gioiTinh" disabled>
                 <option value="1">Nam</option>
                 <option value="0">Nữ</option>
             </select>
         </div>
         <div>
             <label>Email:</label>
-            <input v-model="customer.taiKhoan.email" />
+            <input v-model="customer.taiKhoan.email" disabled />
         </div>
         <div>
             <label>Dân Tộc:</label>
-            <input v-model="customer.danToc" />
+            <input v-model="customer.danToc" disabled />
         </div>
         <div>
             <label>Địa Chỉ:</label>
-            <input v-model="customer.diaChi" />
+            <input v-model="customer.diaChi" disabled />
         </div>
         <div>
             <label>Điểm:</label>
@@ -62,14 +62,13 @@
         </div>
         <div>
             <label>Trạng Thái Khách Hàng:</label>
-            <select v-model="customer.trangThaiKhachHang">
+            <select v-model="customer.trangThaiKhachHang" disabled>
                 <option value="1">Hoạt động</option>
                 <option value="0">Không hoạt động</option>
             </select>
         </div>
         <div class="button-container">
             <button @click="goBack">Trở về</button>
-            <button @click="saveCustomer">Lưu lại</button>
         </div>
     </div>
     <div v-else>
@@ -79,7 +78,7 @@
 </template>
 
 <script>
-import { fetchkhachhangById, updatekhachhangById } from "@/api/customer";
+import { fetchkhachhangById } from "@/api/customer";
 
 export default {
     data() {
@@ -100,30 +99,6 @@ export default {
                 this.formattedDateOfBirth = this.formatDateForInput(this.customer.ngaySinh);
             } catch (error) {
                 console.error("Lỗi khi tải thông tin khách hàng:", error);
-            }
-        },
-        async saveCustomer() {
-            try {
-                const updatedCustomer = {
-                    "id": this.customer.id,
-                   "ten":this.customer.ten,
-                   "tenDem": this.customer.tenDem,
-                  "ho": this.customer.ho,
-                  "soDienThoai": this.customer.soDienThoai,
-                   "gioiTinh": this.customer.gioiTinh,
-                  "danToc": this.customer.danToc,
-                  "diaChi": this.customer.diaChi,
-                   "email": this.customer.taiKhoan.email,
-				   "ghiChu":this.customer.taiKhoan.ghiChu,
-                   "ngaySinh": this.formattedDateOfBirth, // Convert the formatted date back to the array format
-                };
-                console.log(updatedCustomer);
-                await updatekhachhangById(this.customer.id, updatedCustomer);
-                alert("Thông tin khách hàng đã được cập nhật thành công!");
-                this.$router.go(-1);
-            } catch (error) {
-                console.error("Lỗi khi cập nhật khách hàng:", error);
-                alert("Có lỗi xảy ra khi cập nhật thông tin khách hàng."+error);
             }
         },
         formatDateForInput(dateArray) {
