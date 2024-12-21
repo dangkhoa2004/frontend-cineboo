@@ -11,7 +11,7 @@ export const useAboutSectionStore = defineStore('aboutSection', {
             localStorage.getItem('description') ||
             'Kraven the Hunter là câu chuyện đầy khốc liệt và hoành tráng về sự hình thành của một trong những phản diện biểu tượng nhất của Marvel - kẻ thù truyền kiếp của Spiderman. Aaron Taylor-Johnson đảm nhận vai Kraven, một người đàn ông có người cha mafia vô cùng tàn nhẫn, Nikolai Kravinoff (Russell Crowe) - người đã đưa anh vào con đường báo thù với những hệ quả tàn khốc. Điều này thúc đẩy anh không chỉ trở thành thợ săn vĩ đại nhất thế giới, mà còn là một trong những nhân vật đáng sợ nhất.',
         buttonText: 'Xem Thêm',
-        buttonLink: '/phim/joker-2024',
+        buttonLink: '/phim/46',
         customClass: '',
     }),
 
