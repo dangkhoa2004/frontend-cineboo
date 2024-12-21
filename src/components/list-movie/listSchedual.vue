@@ -1,5 +1,26 @@
 <template>
 <div class="movie-manager">
+    <div class="filter-container">
+        <div>
+            <label for="movie-filter">Phim:</label>
+            <select v-model="filters.phim">
+                <option value="">Tất cả</option>
+                <option v-for="movie in uniqueMovies" :key="movie" :value="movie">
+                    {{ movie }}
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="status-filter">Trạng thái:</label>
+            <select v-model="filters.trangThai">
+                <option value="">Tất cả</option>
+                <option v-for="(text, key) in statusOptions" :key="key" :value="key">
+                    {{ text }}
+                </option>
+            </select>
+        </div>
+    </div>
+
     <div class="button-group">
         <button @click="goBack">Trở về</button>
         <button @click="addsuatchieuschedual()">Thêm lịch chiếu</button>
@@ -15,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="suatchieu in suatchieus" :key="suatchieu.id">
+            <tr v-for="suatchieu in filteredSuatchieus" :key="suatchieu.id">
                 <td>{{ suatchieu.maSuatChieu }}</td>
                 <td>{{ formatDate(suatchieu.thoiGianChieu) }}</td>
                 <td>{{ suatchieu.phim.tenPhim }}</td>
@@ -33,15 +54,42 @@
     </table>
 </div>
 </template>
-
 <script>
 import { fetchSuatChieu } from "@/api/movie";
 
 export default {
     data() {
         return {
-            suatchieus: [],
+            suatchieus: [], // Danh sách suất chiếu
+            filters: {
+                phim: "", // Lọc theo phim
+                trangThai: "", // Lọc theo trạng thái
+            },
         };
+    },
+    computed: {
+        uniqueMovies() {
+            // Lấy danh sách tên phim duy nhất
+            const movies = new Set(this.suatchieus.map(suatchieu => suatchieu.phim.tenPhim));
+            return Array.from(movies);
+        },
+        statusOptions() {
+            // Các tùy chọn trạng thái
+            return {
+                0: "Sắp chiếu",
+                1: "Đã chiếu",
+                3: "Đang chiếu",
+                4: "Xảy ra lỗi",
+            };
+        },
+        filteredSuatchieus() {
+            const { phim, trangThai } = this.filters;
+            return this.suatchieus.filter(suatchieu => {
+                const matchesPhim = !phim || suatchieu.phim.tenPhim === phim;
+                const matchesTrangThai = !trangThai || suatchieu.trangThaiSuatChieu.toString() === trangThai;
+                return matchesPhim && matchesTrangThai;
+            });
+        },
     },
     async mounted() {
         await this.loadsuatchieus();

@@ -174,3 +174,30 @@ tr:hover {
   font-size: 14px;
   color: #555;
 }
+
+.filter-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-container div {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-container label {
+  margin-bottom: 0.5rem;
+}
+
+.filter-container input,
+.filter-container select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.filter-container select:focus {
+  border-color: var(--first-color);
+  outline: none;
+}

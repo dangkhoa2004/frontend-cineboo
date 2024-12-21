@@ -40,7 +40,7 @@ export default {
     voucher_man: "Quản lý Voucher",
     pttt_man: "Quản lý PTTT",
     employee_man: "Quản lý nhân viên",
-    customer_man: "Quản lý khách hàng",
+    customer_man: "Quản lý người dùng",
     report_man: "Báo cáo & Thống kê",
     qr_man: "Sử dụng QR Code",
   },

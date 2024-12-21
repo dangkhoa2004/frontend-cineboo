@@ -40,7 +40,7 @@ export default {
     voucher_man: "Manage voucher",
     pttt_man: "Manage type of payment",
     employee_man: "Manage Employee",
-    customer_man: "Manage Customer",
+    customer_man: "Manage User",
     report_man: "Reports & Statistics",
     qr_man: "Using QR Code",
   },

@@ -1,87 +1,125 @@
 <template>
-<div>
-  <div class="tabs">
-    <button @click="activeTab = 'customers'">Quản lý khách hàng</button>
-    <button @click="activeTab = 'employees'">Quản lý nhân viên</button>
-  </div>
+<div class="tabs">
+  <button @click="activeTab = 'customers'">Quản lý khách hàng</button>
+  <button @click="activeTab = 'employees'">Quản lý nhân viên</button>
+</div>
 
-  <div class="search-container">
-    <input v-model="searchQuery" type="text" placeholder="Tìm kiếm..." class="search-input" />
-  </div>
+<!-- Bộ lọc cho Khách hàng -->
+<div v-if="activeTab === 'customers'" class="filter-container">
+  <select v-model="genderFilter" @change="logFilters" class="filter-select">
+    <option value="">Tất cả giới tính</option>
+    <option value="1">Nam</option>
+    <option value="0">Nữ</option>
+    <option value="Khác">Khác</option>
+  </select>
+  <select v-model="customerTypeFilter" @change="logFilters" class="filter-select">
+    <option value="">Tất cả hạng khách hàng</option>
+    <option v-for="(type, index) in uniqueCustomerTypes" :key="index" :value="type">{{ type }}</option>
+  </select>
+  <select v-model="customerStatusFilter" @change="logFilters" class="filter-select">
+    <option value="">Tất cả trạng thái</option>
+    <option value="1">Hoạt động</option>
+    <option value="0">Vô hiệu hóa</option>
+  </select>
+  <input v-model="searchQuery" type="text" placeholder="Tìm kiếm..." class="search-input" />
+</div>
+<!-- Bộ lọc cho Nhân viên -->
+<div v-if="activeTab === 'employees'" class="filter-container">
+  <select v-model="employeeStatusFilter" @change="logFilters" class="filter-select">
+    <option value="">Tất cả trạng thái</option>
+    <option value="1">Hoạt động</option>
+    <option value="0">Vô hiệu hóa</option>
+  </select>
+  <select v-model="positionFilter" @change="logFilters" class="filter-select">
+    <option value="">Tất cả chức vụ</option>
+    <option v-for="(position, index) in uniquePositions" :key="index" :value="position">{{ position }}</option>
+  </select>
+  <input v-model="searchQuery" type="text" placeholder="Tìm kiếm..." class="search-input" />
+</div>
 
-  <div v-if="activeTab === 'customers'" class="customer-manager">
-    <table>
-      <thead>
-        <tr>
-          <th>ID Khách Hàng</th>
-          <th>Tên Khách Hàng</th>
-          <th>Ngày Sinh</th>
-          <th>Số Điện Thoại</th>
-          <th>Email</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="customer in filteredCustomers" :key="customer.id">
-          <td>{{ customer.id }}</td>
-          <td>{{ customer.ho }} {{ customer.tenDem }} {{ customer.ten }}</td>
-          <td>{{ formatDate(customer.ngaySinh) }}</td>
-          <td>{{ customer.soDienThoai }}</td>
-          <td>{{ customer.taiKhoan.email }}</td>
-          <td>
-            <button @click="editCustomer(customer)">Sửa</button>
-            <button @click="deleteCustomer(customer.id)">Xoá</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Danh sách Khách hàng -->
+<div v-if="activeTab === 'customers'" class="customer-manager">
+  <table>
+    <thead>
+      <tr>
+        <th>ID Khách Hàng</th>
+        <th>Tên Khách Hàng</th>
+        <th>Ngày Sinh</th>
+        <th>Giới tính</th>
+        <th>Số Điện Thoại</th>
+        <th>Email</th>
+        <th>Hạng Khách Hàng</th>
+        <th>Trạng Thái Khách Hàng</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="customer in filteredCustomers" :key="customer.id">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.ho }} {{ customer.tenDem }} {{ customer.ten }}</td>
+        <td>{{ formatDate(customer.ngaySinh) }}</td>
+        <td>{{ customer.gioiTinh == 1 ? 'Nam' : 'Nữ' }}</td>
+        <td>{{ customer.soDienThoai }}</td>
+        <td>{{ customer.taiKhoan.email }}</td>
+        <td>{{ customer.phanLoaiKhachHang.tenPhanLoaiKhachHang }}</td>
+        <td>{{ customer.trangThaiKhachHang == 1 ? 'Hoạt động' : 'Vô hiệu hoá' }}</td>
+        <td>
+          <button @click="editCustomer(customer)">Sửa</button>
+          <button @click="deleteCustomer(customer.id)">Xoá</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-  <div v-if="activeTab === 'employees'" class="employee-manager">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Mã Nhân Viên</th>
-          <th>Tên</th>
-          <th>Tên Đệm</th>
-          <th>Họ</th>
-          <th>Ngày Sinh</th>
-          <th>Giới Tính</th>
-          <th>Email</th>
-          <th>Dân Tộc</th>
-          <th>Địa Chỉ</th>
-          <th>Trạng Thái Nhân Viên</th>
-          <th>Thao Tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="employee in filteredEmployees" :key="employee.id">
-          <td>{{ employee.id }}</td>
-          <td>{{ employee.maNhanVien }}</td>
-          <td>{{ employee.ten }}</td>
-          <td>{{ employee.tenDem }}</td>
-          <td>{{ employee.ho }}</td>
-          <td>{{ formatDate(employee.ngaySinh) }}</td>
-          <td>{{ employee.gioiTinh }}</td>
-          <td>{{ employee.email }}</td>
-          <td>{{ employee.danToc }}</td>
-          <td>{{ employee.diaChi }}</td>
-          <td>{{ employee.trangThaiNhanVien }}</td>
-          <td>
-            <button @click="editEmployee(employee)">Sửa</button>
-            <button @click="deleteEmployee(employee.id)">Xoá</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Danh sách Nhân viên -->
+<div v-if="activeTab === 'employees'" class="employee-manager">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Mã Nhân Viên</th>
+        <th>Tên</th>
+        <th>Tên Đệm</th>
+        <th>Họ</th>
+        <th>Ngày Sinh</th>
+        <th>Giới Tính</th>
+        <th>Email</th>
+        <th>Dân Tộc</th>
+        <th>Địa Chỉ</th>
+        <th>Chức Vụ</th>
+        <th>Trạng Thái Nhân Viên</th>
+        <th>Thao Tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="employee in filteredEmployees" :key="employee.id">
+        <td>{{ employee.id }}</td>
+        <td>{{ employee.maNhanVien }}</td>
+        <td>{{ employee.ten }}</td>
+        <td>{{ employee.tenDem }}</td>
+        <td>{{ employee.ho }}</td>
+        <td>{{ formatDate(employee.ngaySinh) }}</td>
+        <td>{{ employee.gioiTinh == 1 ? 'Nam' : 'Nữ' }}</td>
+        <td>{{ employee.taiKhoan.email }}</td>
+        <td>{{ employee.danToc }}</td>
+        <td>{{ employee.diaChi }}</td>
+        <td>{{ employee.chucVu.tenChucVu }}</td>
+        <td>{{ employee.trangThai == 1 ? 'Hoạt động' : 'Vô hiệu hoá' }}</td>
+        <td>
+          <button @click="editEmployee(employee)">Sửa</button>
+          <button @click="deleteEmployee(employee.id)">Xoá</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </template>
 
 <script>
 import { fetchkhachhangs, deletekhachhangById } from "@/api/customer";
 import { fetchnhanviens, deletenhanvienById } from "@/api/employee";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -90,26 +128,61 @@ export default {
       customers: [],
       employees: [],
       searchQuery: '',
+      genderFilter: '',
+      customerTypeFilter: '',
+      customerStatusFilter: '',
+      employeeStatusFilter: '',
+      positionFilter: '',
     };
   },
   computed: {
+    // Danh sách các loại khách hàng duy nhất
+    uniqueCustomerTypes() {
+      const types = new Set();
+      this.customers.forEach(customer => {
+        if (customer.phanLoaiKhachHang) {
+          types.add(customer.phanLoaiKhachHang.tenPhanLoaiKhachHang);
+        }
+      });
+      return Array.from(types);
+    },
+
+    // Lọc khách hàng
     filteredCustomers() {
       const query = this.searchQuery.toLowerCase();
-      return this.customers.filter(customer =>
-      (`${customer.ho} ${customer.tenDem} ${customer.ten}`.toLowerCase().includes(query) ||
-        customer.email.toLowerCase().includes(query) ||
-        customer.soDienThoai.includes(query) ||
-        customer.id.toString().includes(query))
-      );
+      return this.customers.filter(customer => {
+        const fullName = `${customer.ho} ${customer.tenDem} ${customer.ten}`.toLowerCase();
+        return (
+          (fullName.includes(query) || customer.taiKhoan.email.toLowerCase().includes(query) || customer.soDienThoai.includes(query) || customer.id.toString().includes(query)) &&
+          (this.genderFilter === '' || customer.gioiTinh.toString() === this.genderFilter) &&
+          (this.customerTypeFilter === '' || customer.phanLoaiKhachHang.tenPhanLoaiKhachHang === this.customerTypeFilter) &&
+          (this.customerStatusFilter === '' || customer.trangThaiKhachHang.toString() === this.customerStatusFilter)
+        );
+      });
     },
+
+    // Lọc nhân viên
     filteredEmployees() {
       const query = this.searchQuery.toLowerCase();
-      return this.employees.filter(employee =>
-      (`${employee.ho} ${employee.tenDem} ${employee.ten}`.toLowerCase().includes(query) ||
-        employee.maNhanVien.toLowerCase().includes(query) ||
-        employee.email.toLowerCase().includes(query))
-      );
-    }
+      return this.employees.filter(employee => {
+        const fullName = `${employee.ho} ${employee.tenDem} ${employee.ten}`.toLowerCase();
+        return (
+          (fullName.includes(query) || employee.maNhanVien.toLowerCase().includes(query) || employee.taiKhoan.email.toLowerCase().includes(query)) &&
+          (this.employeeStatusFilter === '' || employee.trangThai.toString() === this.employeeStatusFilter) &&
+          (this.positionFilter === '' || employee.chucVu.tenChucVu === this.positionFilter)
+        );
+      });
+    },
+    // Danh sách các chức vụ nhân viên duy nhất
+    uniquePositions() {
+      const positions = new Set();
+      this.employees.forEach(employee => {
+        if (employee.chucVu) {
+          positions.add(employee.chucVu.tenChucVu);
+        }
+      });
+      return Array.from(positions);
+    },
   },
   async mounted() {
     await this.loadCustomers();
@@ -121,6 +194,11 @@ export default {
         const customerData = await fetchkhachhangs();
         this.customers = customerData;
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi khi tải dữ liệu khách hàng",
+          text: "Vui lòng thử lại sau",
+        });
         console.error("Lỗi khi tải dữ liệu khách hàng:", error);
       }
     },
@@ -129,6 +207,11 @@ export default {
         const employeeData = await fetchnhanviens();
         this.employees = employeeData;
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi khi tải dữ liệu nhân viên",
+          text: "Vui lòng thử lại sau",
+        });
         console.error("Lỗi khi tải dữ liệu nhân viên:", error);
       }
     },
@@ -140,52 +223,63 @@ export default {
       this.$router.push({ name: 'thay-doi-thong-tin-khach-hang', params: { id: customer.id } });
     },
     async deleteCustomer(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá khách hàng này?");
-      if (confirmDelete) {
-        try {
-          await deletekhachhangById(id);
-          this.customers = this.customers.filter(customer => customer.id !== id);
-          alert("Khách hàng đã được xoá thành công.");
-        } catch (error) {
-          console.error("Lỗi khi xoá khách hàng:", error);
-          alert("Có lỗi xảy ra khi xoá khách hàng.");
+      Swal.fire({
+        title: "Xác nhận xoá khách hàng",
+        text: "Bạn có chắc chắn muốn xoá khách hàng này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Xoá",
+        cancelButtonText: "Hủy",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await deletekhachhangById(id);
+            Swal.fire({
+              icon: "success",
+              title: "Xoá khách hàng thành công",
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi khi xoá khách hàng",
+              text: "Vui lòng thử lại sau",
+            });
+            console.error("Lỗi khi xoá khách hàng:", error);
+          }
         }
-      }
+      });
     },
     editEmployee(employee) {
       this.$router.push({ name: 'thay-doi-thong-tin-nhan-vien', params: { id: employee.id } });
     },
     async deleteEmployee(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá nhân viên này?");
-      if (confirmDelete) {
-        try {
-          await deletenhanvienById(id);
-          this.employees = this.employees.filter(employee => employee.id !== id);
-          alert("Nhân viên đã được xoá thành công.");
-        } catch (error) {
-          console.error("Lỗi khi xoá nhân viên:", error);
-          alert("Có lỗi xảy ra khi xoá nhân viên.");
+      Swal.fire({
+        title: "Xác nhận xoá nhân viên",
+        text: "Bạn có chắc chắn muốn xoá nhân viên này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Xoá",
+        cancelButtonText: "Hủy",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await deletenhanvienById(id);
+            Swal.fire({
+              icon: "success",
+              title: "Xoá nhân viên thành công",
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi khi xoá nhân viên",
+              text: "Vui lòng thử lại sau",
+            });
+            console.error("Lỗi khi xoá nhân viên:", error);
+          }
         }
-      }
+      });
     },
   },
 };
 </script>
-
-<style scoped>
-.search-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 15px;
-}
-
-.search-input {
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1;
-}
-</style>
-
 <style src="./assets/styles.css" scoped></style>
