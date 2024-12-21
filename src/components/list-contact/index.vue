@@ -85,10 +85,10 @@
   </div>
 </div>
 </template>
-
 <script>
 import { fetchAgeGroups, deleteAgeGroupById } from "@/api/movie";
 import { fetchPaymentMethods, deletePaymentMethodById, fetchRefunds } from "@/api/invoice";
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -111,6 +111,11 @@ export default {
         this.refunds = refundData;
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu yêu cầu hoàn vé:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không tìm thấy yêu cầu hoàn vé.',
+        });
       }
     },
     async loadAgeGroups() {
@@ -119,6 +124,11 @@ export default {
         this.ageGroups = ageGroupData;
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu độ tuổi:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không tìm thấy danh sách độ tuổi.',
+        });
       }
     },
     async loadPaymentMethods() {
@@ -127,6 +137,11 @@ export default {
         this.paymentMethods = paymentMethodData;
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu phương thức thanh toán:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không tìm thấy danh sách PTTT.',
+        });
       }
     },
     formatDate(timestamp) {
@@ -140,15 +155,31 @@ export default {
       this.$router.push({ name: 'thay-doi-thong-tin-do-tuoi', params: { id: ageGroup.id } });
     },
     async deleteAgeGroup(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá độ tuổi này?");
-      if (confirmDelete) {
+      const result = await Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn có chắc chắn muốn xoá độ tuổi này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xoá',
+        cancelButtonText: 'Hủy',
+      });
+
+      if (result.isConfirmed) {
         try {
           await deleteAgeGroupById(id);
           this.ageGroups = this.ageGroups.filter(ageGroup => ageGroup.id !== id);
-          alert("Độ tuổi đã được xoá thành công.");
+          Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: 'Xoá độ tuổi thành công.',
+          });
         } catch (error) {
           console.error("Lỗi khi xoá độ tuổi:", error);
-          alert("Có lỗi xảy ra khi xoá độ tuổi.");
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Xảy ra lỗi khi xoá độ tuổi.',
+          });
         }
       }
     },
@@ -156,20 +187,35 @@ export default {
       this.$router.push({ name: 'thay-doi-thong-tin-pttt', params: { id: paymentMethod.id } });
     },
     async deletePaymentMethod(id) {
-      const confirmDelete = confirm("Bạn có chắc chắn muốn xoá phương thức thanh toán này?");
-      if (confirmDelete) {
+      const result = await Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn có chắc chắn muốn xoá phương thức thanh toán này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xoá',
+        cancelButtonText: 'Hủy',
+      });
+
+      if (result.isConfirmed) {
         try {
           await deletePaymentMethodById(id);
           this.paymentMethods = this.paymentMethods.filter(paymentMethod => paymentMethod.id !== id);
-          alert("Phương thức thanh toán đã được xoá thành công.");
+          Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: 'Phương thức thanh toán đã được xoá thành công.',
+          });
         } catch (error) {
           console.error("Lỗi khi xoá phương thức thanh toán:", error);
-          alert("Có lỗi xảy ra khi xoá phương thức thanh toán.");
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Xảy ra lỗi khi xoá phương thức thanh toán.',
+          });
         }
       }
     }
   }
 };
 </script>
-
 <style src="./assets/styles.css" scoped></style>

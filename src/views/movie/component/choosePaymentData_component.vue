@@ -54,7 +54,8 @@ import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
 import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
-import swal from 'sweetalert';
+import Swal from "sweetalert2";
+
 export default {
   components: { infoCustomerData_component },
   data() {
@@ -66,12 +67,12 @@ export default {
       userInfo: {}, // Thông tin người dùng
       idPhongChieu: [],
       showtime: {},
-      paymentMethod: 3,//default
+      paymentMethod: 3, // Default
     };
   },
   computed: {
     getSelectedSeats() {
-      return EventBus.selectedSeats
+      return EventBus.selectedSeats;
     },
     totalAmount() {
       return EventBus.totalAmount;
@@ -85,8 +86,13 @@ export default {
     if (user) {
       this.userInfo = { ...user };
     } else {
-      window.alert("Vui lòng đăng nhập để sử dụng chức năng này")
-      window.location.href = '/dang-nhap';
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Vui lòng đăng nhập để sử dụng chức năng này.",
+      }).then(() => {
+        window.location.href = "/dang-nhap";
+      });
     }
     this.loadMovieData();
     this.loadSeats();
@@ -101,25 +107,29 @@ export default {
         this.movieDetails = movieData;
       } catch (error) {
         console.error("Lỗi khi nạp dữ liệu phim:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Lỗi khi nạp dữ liệu phim.",
+        });
       }
     },
-    //Grab paymentMethodID from child component infoCustomerData_component
+    // Grab paymentMethodID from child component infoCustomerData_component
     updatePaymentMethod(newPaymentMethodId) {
       this.paymentMethod = newPaymentMethodId;
     },
-
     // Nạp dữ liệu ghế và giá vé
     async loadSeats() {
       const showtimeId = this.$route.params.idSuatChieu;
-      let token = sessionStorage.getItem('token'); //PLS PORT THIS TO A HELPER METHOD LATER
-      token = token.substring(1, token.length - 1);//PLS PORT THIS TO A HELPER METHOD LATER
+      let token = sessionStorage.getItem("token"); // PLS PORT THIS TO A HELPER METHOD LATER
+      token = token.substring(1, token.length - 1); // PLS PORT THIS TO A HELPER METHOD LATER
 
       try {
         const response = await fetch(`http://localhost:8080/ghe/findWithBooking/${showtimeId}`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Authorization': token, //  the JWT to the Authorization header
-            'Content-Type': 'application/json',
+            Authorization: token, // the JWT to the Authorization header
+            "Content-Type": "application/json",
           },
         });
 
@@ -133,113 +143,122 @@ export default {
         }
       } catch (error) {
         console.error("Lỗi khi nạp dữ liệu ghế:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Lỗi khi nạp dữ liệu ghế.",
+        });
       }
-    }
-    ,
+    },
     // Xử lý thanh toán
-    // Đánh dấu hàm này là async để có thể sử dụng await
     async handlePayment() {
       const selectedSeatsIndex = EventBus.selectedSeats;
 
       if (!selectedSeatsIndex || selectedSeatsIndex.length === 0) {
         Swal.fire({
-          icon: 'error',
-          title: 'Lỗi',
-          text: 'Lỗi khi cập nhật thông tin.',
+          icon: "error",
+          title: "Lỗi",
+          text: "Vui lòng chọn ghế trước khi thanh toán.",
         });
-        swal("Thiếu ghế rồi", "Vui lòng chọn ghế trước khi thanh toán.", "errors");
         return;
       }
 
       const customerInfo = this.userInfo;
       const customerID = customerInfo.khachHang.id;
       if (!customerID) {
-        console.error("Không xác định được ID khách hàng.");
-        swal("Oops", "Vui lòng đăng nhập để mua vé.", "error");
-        window.location.href = "/dang-nhap"; // Chuyển hướng về trang đăng nhập
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Vui lòng đăng nhập để mua vé.",
+        }).then(() => {
+          window.location.href = "/dang-nhap";
+        });
         return;
       }
 
       const movieInfo = this.movieDetails;
       if (!movieInfo || !movieInfo.id) {
-        console.error("Không có thông tin phim");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Hiện chưa có thông tin của phim.",
+        });
         return;
       }
 
       const invoiceData = {
         khachHangId: customerID,
-        suatChieuId: Number(this.$route.params.idSuatChieu),//Yêu cầu ID_SuatChieu vào đây, tạm thời lấy từ routeParam
+        suatChieuId: Number(this.$route.params.idSuatChieu),
         phongChieuId: this.idPhongChieu[0],
-        chiTietHoaDonList: selectedSeatsIndex.map(index => ({
-          maGhe: `${index}`
-        }))
+        chiTietHoaDonList: selectedSeatsIndex.map((index) => ({
+          maGhe: `${index}`,
+        })),
       };
-      try {
-        swal({
-          title: "Xác nhận đặt vé",
-          text: "Bạn có chắc chắn muốn đặt vé",
-          icon: "warning",
-          buttons: ['Không, huỷ đặt vé!', 'Có, tiếp tục!'],
-        }).then(async (isConfirm) => {
-          if (isConfirm) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Thành công',
-              text: 'Bạn đã xác nhận đặt vé thành công!',
-            }).then(async () => {
-              let invoice = await createInvoice(invoiceData);
-              invoice = await setPaymentMethod(invoice.id, this.paymentMethod);
-              const idHoaDon = invoice.id;
-              if (!idHoaDon) {
-                console.error("Không tìm thấy ID hóa đơn.");
+
+      Swal.fire({
+        title: "Xác nhận đặt vé",
+        text: "Bạn có chắc chắn muốn đặt vé?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Có, tiếp tục!",
+        cancelButtonText: "Không, huỷ đặt vé!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let invoice = await createInvoice(invoiceData);
+            invoice = await setPaymentMethod(invoice.id, this.paymentMethod);
+            const idHoaDon = invoice.id;
+
+            if (!idHoaDon) {
+              Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Không tìm thấy ID hóa đơn.",
+              });
+              return;
+            }
+
+            try {
+              const qrData = await createInvoiceQr(idHoaDon);
+              if (qrData && qrData.payment) {
+                window.open(qrData.payment, "_blank");
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Lỗi',
-                  text: 'Không tìm thấy ID hóa đơn.',
+                  icon: "success",
+                  title: "Thành công",
+                  text: "Đặt vé thành công! Vui lòng thanh toán qua QR.",
                 });
-                return;
-              }
-              try {
-                const qrData = await createInvoiceQr(idHoaDon);
-                console.log("Dữ liệu QR trả về:", idHoaDon, qrData);
-                if (qrData && qrData.payment) {
-                  window.open(qrData.payment, '_blank');
-                } else {
-                  console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: 'Không tìm thấy URL thanh toán trong kết quả trả về.',
-                  });
-                }
-              } catch (error) {
-                console.error("Lỗi khi tạo QR thanh toán:", error);
+              } else {
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Lỗi',
-                  text: 'Lỗi khi tạo QR thanh toán.',
+                  icon: "error",
+                  title: "Lỗi",
+                  text: "Không tìm thấy URL thanh toán trong kết quả trả về.",
                 });
               }
-            });
-          } else {
+            } catch (error) {
+              Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Lỗi khi tạo QR thanh toán.",
+              });
+            }
+          } catch (error) {
             Swal.fire({
-              icon: 'cancel',
-              title: 'Huỷ',
-              text: 'Đã huỷ đặt vé.',
+              icon: "error",
+              title: "Lỗi",
+              text: "Lỗi khi tạo hóa đơn hoặc QR thanh toán.",
             });
-            return;
           }
-        });
-      } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi',
-          text: 'Lỗi khi tạo hóa đơn hoặc QR thanh toán.',
-        });
-        console.error("Lỗi khi tạo hóa đơn hoặc QR thanh toán:", error);
-      }
-    }
-  }
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "Đã huỷ",
+            text: "Đặt vé đã bị huỷ.",
+          });
+        }
+      });
+    },
+  },
 };
 </script>
+
 <!-- choosePaymentData_component.vue -->
