@@ -142,7 +142,11 @@ export default {
       const selectedSeatsIndex = EventBus.selectedSeats;
 
       if (!selectedSeatsIndex || selectedSeatsIndex.length === 0) {
-        console.error("Chưa chọn ghế nào");
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Lỗi khi cập nhật thông tin.',
+        });
         swal("Thiếu ghế rồi", "Vui lòng chọn ghế trước khi thanh toán.", "errors");
         return;
       }
@@ -178,17 +182,21 @@ export default {
           buttons: ['Không, huỷ đặt vé!', 'Có, tiếp tục!'],
         }).then(async (isConfirm) => {
           if (isConfirm) {
-            swal({
-              title: 'Xác nhận đặt vé!',
-              text: 'Bạn đã xác nhận đặt vé',
-              icon: 'success'
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công',
+              text: 'Bạn đã xác nhận đặt vé thành công!',
             }).then(async () => {
-
               let invoice = await createInvoice(invoiceData);
               invoice = await setPaymentMethod(invoice.id, this.paymentMethod);
               const idHoaDon = invoice.id;
               if (!idHoaDon) {
                 console.error("Không tìm thấy ID hóa đơn.");
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Lỗi',
+                  text: 'Không tìm thấy ID hóa đơn.',
+                });
                 return;
               }
               try {
@@ -198,20 +206,36 @@ export default {
                   window.open(qrData.payment, '_blank');
                 } else {
                   console.error("Không tìm thấy URL thanh toán trong kết quả trả về.");
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không tìm thấy URL thanh toán trong kết quả trả về.',
+                  });
                 }
               } catch (error) {
                 console.error("Lỗi khi tạo QR thanh toán:", error);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Lỗi',
+                  text: 'Lỗi khi tạo QR thanh toán.',
+                });
               }
             });
           } else {
-            swal("Đã huỷ đặt vé :)", "error");
+            Swal.fire({
+              icon: 'cancel',
+              title: 'Huỷ',
+              text: 'Đã huỷ đặt vé.',
+            });
             return;
           }
         });
-
-
-
       } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Lỗi khi tạo hóa đơn hoặc QR thanh toán.',
+        });
         console.error("Lỗi khi tạo hóa đơn hoặc QR thanh toán:", error);
       }
     }

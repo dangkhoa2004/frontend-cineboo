@@ -170,20 +170,3 @@ onMounted(() => {
   }
 });
 </script>
-
-
-<style scoped>
-.movie_seat-seat {
-  user-select: none;
-  /* Disable text selection */
-  -webkit-user-select: none;
-  /* For WebKit browsers */
-  -ms-user-select: none;
-  /* For older IE versions */
-}
-
-input[type="checkbox"] {
-  display: none;
-  /* Hide the checkbox to make the label the clickable area */
-}
-</style>

@@ -12,7 +12,11 @@
     gap: 4rem 2rem
 }
 
-.footer_col h1{
+.footer_col {
+    margin-bottom: 15px;
+}
+
+.footer_col h1 {
     margin-bottom: 15px;
 }
 
@@ -59,10 +63,12 @@
     opacity: .8;
     transition: .3s
 }
+
 .socials a:hover {
     color: var(--first-color);
     background: black;
 }
+
 .copyright {
     padding: 1rem;
     font-size: .9rem;

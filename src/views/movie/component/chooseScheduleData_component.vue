@@ -4,7 +4,7 @@
     <h2>Lịch Chiếu</h2>
     <div class="date-selector">
       <button v-for="(date, index) in sevenDays" :key="index" @click="updateSelectedDate(date)"
-        :disabled="new Date(date) < new Date(currentDate)">
+        :disabled="new Date(date) < new Date(currentDate)" :class="{ active: date === selectedDate.value }">
         <div>{{ formatDate(date) }}</div>
         <div v-if="date !== currentDate">{{ getDayOfWeek(date) }}</div>
         <div v-else>{{ `Hôm nay` }}</div>
@@ -82,7 +82,7 @@ export default {
             }
             return theater;
           });
-          // Fetch and append specific PhongChieu fields
+
           const phongChieuPromises = showtimes.value.map(async (theater) => {
             const tempSuatChieuId = theater.id;
             if (tempSuatChieuId) {
@@ -194,23 +194,22 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .showTime_button {
-  color: black;
-  background-color: white;
-  margin-top: 20px;
-  gap: 20px;
+  background-color: var(--first-color);
+  color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 20px;
 }
-.showTime_room, .showTime_code, .showTime_time {
-  font-size: 14px;
+.showTime_room,
+.showTime_code,
+.showTime_time {
+  font-size: 13.33px;
   margin-bottom: 10px;
-  color: black;
-}
-.theater-info-button.selected {
-  background-color: purple;
+  color: white;
 }
 </style>
