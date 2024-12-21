@@ -36,9 +36,11 @@
 }
 
 .popular_content {
+    opacity: 0.9;
     grid-column: 2/3;
     padding: 2rem 4rem;
-    background: #fff
+    background: #fff;
+    border-radius: 0 0 18px 18px;
 }
 
 .popular_list {

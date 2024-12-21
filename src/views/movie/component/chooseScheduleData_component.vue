@@ -26,12 +26,11 @@
   <div v-if="filteredShowtimes.length === 0">
     <p>Chưa có dữ liệu suất chiếu.</p>
   </div>
-  <div v-for="theater in filteredShowtimes" :key="theater.id || theater.phongChieu?.id || 'unknown'"
-    class="date-selector">
-    <button class="theater-info-button" style="margin-top: 20px; gap: 20px;" @click="logTheaterInfo(theater)">
-      <div class="theater-name">Phòng Chiếu: {{ theater.phongChieu?.maPhong }}</div>
-      <div class="movie-format">Suất Chiếu: {{ theater.maSuatChieu }}</div>
-      <div class="movie-format">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
+  <div v-for="theater in filteredShowtimes" :key="theater.id || theater.phongChieu?.id || 'unknown'">
+    <button class="showTime_button" @click="logTheaterInfo(theater)">
+      <div class="showTime_room">Phòng Chiếu: {{ theater.phongChieu?.maPhong }}</div>
+      <div class="showTime_code">Suất Chiếu: {{ theater.maSuatChieu }}</div>
+      <div class="showTime_time">Thời gian chiếu: {{ formatTime(theater.thoiGianChieu) }}</div>
     </button>
   </div>
 </div>
@@ -195,3 +194,23 @@ export default {
   },
 };
 </script>
+<style scoped>
+.showTime_button {
+  color: black;
+  background-color: white;
+  margin-top: 20px;
+  gap: 20px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.showTime_room, .showTime_code, .showTime_time {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: black;
+}
+.theater-info-button.selected {
+  background-color: purple;
+}
+</style>
