@@ -8,15 +8,15 @@
 }
 
 .header {
+  h2 {
+    color: var(--text-color);
+  }
+
   height: 550px;
   background: url(src/assets/img/bg.webp);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-}
-
-.header h2 {
-  color: var(--text-color);
 }
 
 .mobile-logout {
@@ -162,13 +162,41 @@ nav {
   transition: background-color .4s;
 }
 
+.admin_header__logo {
+  text-decoration: none;
+}
+
 .admin_header__toggle {
-  font-size: 1.5rem;
-  color: var(--title-color);
+  padding: 10px 20px;
+  background-color: var(--first-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.5s;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.admin_header__toggle h4 {
+  margin: 0;
 }
 
 .admin_header__toggle:hover {
+  background-color: black;
+}
+
+#header-toggle {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+#header-toggle:hover {
   color: var(--first-color);
 }

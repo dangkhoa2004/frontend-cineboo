@@ -388,9 +388,6 @@
 /*=============== BREAKPOINTS ===============*/
 /* For small devices */
 @media screen and (max-width: 360px) {
-    .admin_header__container {
-        padding-inline: 1rem;
-    }
 
     .sidebar {
         width: max-content;
@@ -436,7 +433,6 @@
 
     .admin_header__container {
         height: calc(var(--header-height) + 2rem);
-        padding-inline: 2rem;
     }
 
     .admin_header__logo {
