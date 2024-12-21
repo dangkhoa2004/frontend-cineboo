@@ -162,9 +162,16 @@ export default {
         });
         return;
       }
-
       const customerInfo = this.userInfo;
-      const customerID = customerInfo.khachHang.id;
+      if (customerInfo.nhanVien) {
+        Swal.fire({
+          icon: "warning",
+          title: "Cảnh báo",
+          text: "Nhân viên không được phép đặt vé.",
+        });
+        return;
+      }
+      const customerID = customerInfo.khachHang?.id;
       if (!customerID) {
         Swal.fire({
           icon: "error",
@@ -175,7 +182,6 @@ export default {
         });
         return;
       }
-
       const movieInfo = this.movieDetails;
       if (!movieInfo || !movieInfo.id) {
         Swal.fire({
@@ -260,5 +266,4 @@ export default {
   },
 };
 </script>
-
 <!-- choosePaymentData_component.vue -->

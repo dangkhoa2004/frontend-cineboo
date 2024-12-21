@@ -40,6 +40,7 @@
 <script>
 import { fetchMoviesApiClient } from "@/api/movie";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -86,7 +87,11 @@ export default {
         const movieData = await fetchMoviesApiClient();
         this.movies = movieData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu phim:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không thể tải dữ liệu phim. Vui lòng thử lại sau.",
+        })
       }
     },
     async fetchShowtimes(movieId) {
@@ -94,7 +99,11 @@ export default {
         const response = await axios.get(`http://localhost:8080/suatchieu/find/ID_Phim/${movieId}`);
         this.showtimes = response.data;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu suất chiếu:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Hiện tại chưa có suất chiếu của phim này.",
+        })
         this.showtimes = [];
       }
     },
@@ -106,11 +115,13 @@ export default {
       if (this.selectedMovie && this.selectedShowtime) {
         const movieId = this.selectedMovie;
         const showtimeId = this.selectedShowtime;
-
-        // Chuyển hướng đến trang đặt vé với ID phim và ID suất chiếu
         this.$router.push(`/phim/${movieId}/suat-chieu/${showtimeId}`);
       } else {
-        alert("Vui lòng chọn phim và suất chiếu!");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Vui lòng chọn phim và suất chiếu!",
+        });
       }
     },
   },

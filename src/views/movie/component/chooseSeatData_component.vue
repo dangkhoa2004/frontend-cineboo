@@ -45,7 +45,7 @@
 import { ref, watch, onMounted } from 'vue';
 import EventBus from "@/store/eventBus";
 import { useRoute } from 'vue-router';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { requestWithJWT } from "@/api/api.ts"
 
 const prebookedSeats = ref([]); // Dynamic seat data
@@ -98,6 +98,11 @@ const loadSeats = async (showtimeId) => {
 
     ticketPrice.value = seatsData[0].giaTien;
   } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Lỗi",
+      text: "Lỗi khi tải dữ liệu ghế !",
+    });
     console.error("Error loading seats:", error);
   }
 };
@@ -117,14 +122,22 @@ const validateSeatSelection = () => {
     let numberPart = selectedList[0].replace(/\D/g, '');
     numberPart++;
     if (numberPart % 10 === 0) {
-      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Bạn không thể bỏ trống một ghế ở đầu dãy !",
+      });
       return false;
     }
     numberPart--;
     numberPart--;
     numberPart--;
     if (numberPart % 10 === 0) {
-      swal("Oops", "Bạn không thể bỏ trống một ghế ở đầu dãy", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Bạn không thể bỏ trống một ghế ở đầu dãy !",
+      });
       return false;
     }
   }
@@ -132,7 +145,11 @@ const validateSeatSelection = () => {
     const previous = selectedList[selectedList.length - 1].replace(/\D/g, '');
     const next = selectedList[selectedList.length - 2].replace(/\D/g, '');
     if (Math.abs(previous - next) == 2) {
-      swal("Oops", "Bạn không thể để trống một ghế ở giữa", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Bạn không thể để trống một ghế ở giữa !",
+      });
       return false;
     }
   }

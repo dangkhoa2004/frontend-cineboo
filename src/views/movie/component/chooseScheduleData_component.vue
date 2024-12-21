@@ -100,10 +100,13 @@ export default {
                     trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
                   };
                 } else {
-                  throw new Error("PhongChieu fetch failed");
+                  Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Lỗi khi tải phòng chiếu.",
+                  });
                 }
               } catch (error) {
-                // Fallback values in case of failure
                 theater.phongChieu = {
                   id: -1,
                   maPhong: "",
@@ -119,10 +122,18 @@ export default {
           filterShowtimes();
         } else {
           showtimes.value = [];
-          console.error("Không tìm thấy dữ liệu suất chiếu.");
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Không tìm thấy suất chiếu.",
+          });
         }
       } catch (error) {
-        console.error("Lỗi khi xử lý dữ liệu lịch chiếu:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không thể tải lịch chiếu.",
+        });
       }
     };
 
@@ -140,7 +151,11 @@ export default {
 
     const logTheaterInfo = (theater) => {
       if (!isLoggedIn()) {
-        alert("Bạn cần đăng nhập để xem chi tiết suất chiếu.");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Bạn cần đăng nhập để xem được suất chiếu.",
+        });
         window.location.href = '/dang-nhap';
         return;
       }
@@ -149,6 +164,11 @@ export default {
       if (suatChieuId) {
         router.push(`/phim/${selectedMovieId.value}/suat-chieu/${suatChieuId}`);
       } else {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không tìm thấy suất chiếu.",
+        });
         console.error("Không tìm thấy mã suất chiếu.");
       }
     };
@@ -171,6 +191,11 @@ export default {
       if (selectedMovieId.value) {
         fetchShowtimes(selectedMovieId.value);
       } else {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Lỗi khi tìm thông tin phim.",
+        });
         console.error("Không tìm thấy ID phim.");
       }
     });
@@ -205,6 +230,7 @@ export default {
   cursor: pointer;
   margin-top: 20px;
 }
+
 .showTime_room,
 .showTime_code,
 .showTime_time {

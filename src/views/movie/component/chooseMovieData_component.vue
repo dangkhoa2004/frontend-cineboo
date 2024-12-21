@@ -11,7 +11,6 @@
     <infoMovieData_component />
     <div class="booking-movie-description">
       <chooseScheduleData_component />
-      <!-- Kiểm tra và reload chooseSeatData_component khi route thay đổi -->
       <chooseSeatData_component v-if="isShowTimeRoute" :key="routeKey" />
       <choosePaymentData_component v-if="isShowTimeRoute" :key="routeKey" />
     </div>
