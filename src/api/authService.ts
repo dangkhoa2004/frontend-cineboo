@@ -41,15 +41,11 @@ export async function recoverPassword(email: string): Promise<any> {
                 },
             }
         );
-
         if (response.status === 200) {
-            console.log("Yêu cầu khôi phục mật khẩu thành công:", response.data);
             return response.data;
-        } else {
-            throw new Error("Khôi phục mật khẩu thất bại");
         }
     } catch (error: any) {
-        throw new Error(error.response?.data?.message || "Khôi phục mật khẩu thất bại");
+        throw new Error(error || "Khôi phục mật khẩu thất bại");
     }
 }
 
@@ -197,7 +193,7 @@ export async function canAccessModule(moduleName: string): Promise<boolean> {
         khachHang: ["hoaDon", "ungDung", "thongTin"],
         nhanVien: [
             "ungDung", "thongTin", "hoaDon", "phims", "vouchers",
-            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"
+            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt", "quanly"
         ],
     };
 

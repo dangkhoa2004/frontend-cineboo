@@ -7,8 +7,6 @@ export function validateUsername(username: string): string | null {
     if (!regex.test(username)) return 'Tên người dùng không được chứa ký tự đặc biệt.';
     return null;
 }
-
-
 export function validatePassword(password: string): string | null {
     if (!password) return 'Mật khẩu là bắt buộc.';
     if (password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự.';
@@ -16,9 +14,9 @@ export function validatePassword(password: string): string | null {
 }
 
 export function validateEmail(email: string): string | null {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regex = /^[^\s@]+@gmail\.com$/;
     if (!email) return 'Email là bắt buộc.';
-    if (!regex.test(email)) return 'Email không hợp lệ.';
+    if (!regex.test(email)) return 'Email phải có đuôi @gmail.com.';
     return null;
 }
 

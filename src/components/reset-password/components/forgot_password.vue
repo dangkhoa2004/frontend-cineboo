@@ -76,13 +76,22 @@ export default {
         this.displayMessage(emailError, true);
         return;
       }
-
       try {
         await recoverPassword(this.email);
         this.displayMessage("Yêu cầu đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra email.", false);
         this.currentStep = "reset-password";
       } catch (error) {
-        const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại.";
+        const errorCode = error.response?.status;
+        let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại.";
+
+        if (errorCode === 403) {
+          errorMessage = "Vui lòng chờ 5 phút và thử lại.";
+        } else if (errorCode === 500) {
+          errorMessage = "Vui lòng nhập đúng định dạng email.";
+        } else if (error.response?.data?.message) {
+          errorMessage = error.response.data.message;
+        }
+
         this.displayMessage(errorMessage, true);
       }
     },
