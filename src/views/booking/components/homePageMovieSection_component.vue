@@ -1,42 +1,30 @@
 <template>
-  <div id="movies"></div>
-  <section class="section deal_section hidden">
-    <p class="title">PHIM SẮP CHIẾU</p>
-    <div class="deal_wrapper">
-      <div v-for="(movie, index) in moviesList" :key="index" class="deal_card">
-        <div class="card_img">
-          <img :src="movie.imageUrl" alt="" />
-          <div class="card_icons">
-            <span @click="toggleHeart(index)">
-              <i :class="['fas', 'fa-heart', { 'active': movie.liked }]" />
-            </span>
-            <span><i class="fas fa-bookmark"></i></span>
-            <span @click="openSharePopup(movie.title)">
-              <i class="fas fa-share-nodes"></i>
-            </span>
-          </div>
-        </div>
-        <div class="card_details">
-          <h1>{{ movie.title }}</h1>
-          <p>Thời Lượng: <span>{{ movie.duration }}</span></p>
-          <p>Xếp Hạng: <span>{{ movie.rating }}</span></p>
-          <p>Quốc Gia: <span>{{ movie.country }}</span></p>
-       <button @click="goToMovieRightFuckingNow(movie.id)" class="btn">Xem thêm</button>
-
+<div id="movies"></div>
+<section class="section deal_section hidden">
+  <p class="title">PHIM SẮP CHIẾU</p>
+  <div class="deal_wrapper">
+    <div v-for="(movie, index) in moviesList" :key="index" class="deal_card">
+      <div class="card_img">
+        <img :src="movie.imageUrl" alt="" />
+        <div class="card_icons">
+          <span @click="toggleHeart(index)">
+            <i :class="['fas', 'fa-heart', { 'active': movie.liked }]" />
+          </span>
+          <span><i class="fas fa-bookmark"></i></span>
+          <span @click="openSharePopup(movie.title)">
+            <i class="fas fa-share-nodes"></i>
+          </span>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Share Popup -->
-  <div v-if="isSharePopupVisible" class="share-popup">
-    <div class="popup-content">
-      <h3>Share to Social Media</h3>
-      <button @click="shareToSocialMedia('twitter', currentMovieTitle)">Share on Twitter</button>
-      <button @click="shareToSocialMedia('facebook', currentMovieTitle)">Share on Facebook</button>
-      <button @click="closeSharePopup">Close</button>
+      <div class="card_details">
+        <h1>{{ movie.title }}</h1>
+        <p>Thời Lượng: <span>{{ movie.duration }} phút</span></p>
+        <p>Xếp Hạng: <span>{{ movie.rating }} </span></p>
+        <p>Quốc Gia: <span>{{ movie.country }}</span></p>
+      </div>
     </div>
   </div>
+</section>
 </template>
 
 
@@ -46,11 +34,9 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from "vue-router";
 const moviesList = ref([]);
-const router = useRouter();  
-    const route = useRoute();  
 const defaultMovies = [
   {
-	  id:"-1",
+    id: "-1",
     title: "Fubao: Bảo Bối Của Ông",
     imageUrl: "src/assets/img/fubao.webp",
     duration: "94 phút",
@@ -58,7 +44,7 @@ const defaultMovies = [
     country: "Hàn Quốc"
   },
   {
-	  	  id:"-1",
+    id: "-1",
     title: "Bocchi The Rock! Recap",
     imageUrl: "src/assets/img/bocchi.webp",
     duration: "94 phút",
@@ -66,7 +52,7 @@ const defaultMovies = [
     country: "Mỹ"
   },
   {
-	  	  id:"-1",
+    id: "-1",
     title: "Cô Dâu Hào Môn",
     imageUrl: "src/assets/img/codauhaomon.webp",
     duration: "94 phút",
@@ -86,11 +72,11 @@ const loadMovies = async () => {
         const selectedMovie = movieData[randomIndex];
         if (!uniqueMovies.some(movie => movie.title === selectedMovie.tenPhim)) {
           uniqueMovies.push({
-			  id:selectedMovie.id,
+            id: selectedMovie.id,
             title: selectedMovie.tenPhim,
             imageUrl: selectedMovie.anhPhim,
-            duration: "94 phút", // Placeholder
-            rating: "7.8 (246 votes)", // Placeholder
+            duration: selectedMovie.thoiLuong,
+            rating: selectedMovie.diem,
             country: selectedMovie.quocGia,
           });
         }
@@ -108,33 +94,6 @@ const loadMovies = async () => {
 const toggleHeart = (index) => {
   moviesList.value[index].liked = !moviesList.value[index].liked;
 };
-
-const isSharePopupVisible = ref(false);
-const currentMovieTitle = ref('');
-
-const openSharePopup = (movieTitle) => {
-  currentMovieTitle.value = movieTitle;
-  isSharePopupVisible.value = true;
-};
-
-const closeSharePopup = () => {
-  isSharePopupVisible.value = false;
-};
-
-const shareToSocialMedia = (platform, movieTitle) => {
-  const encodedTitle = encodeURIComponent(movieTitle);
-  let shareUrl = '';
-  if (platform === 'twitter') {
-    shareUrl = `https://twitter.com/intent/tweet?text=Check out this movie on CineBoo.com: ${encodedTitle}\n`;
-  } else if (platform === 'facebook') {
-    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedTitle}`;
-  }
-  window.open(shareUrl, '_blank');
-};
-const goToMovieRightFuckingNow=(phimId)=>{
-	router.push(`/phim/${phimId}`);
-	window.scrollTo(0,0);
-}
 onMounted(() => {
   loadMovies();
 });
@@ -185,6 +144,7 @@ onMounted(() => {
 .popup-content button:hover {
   background-color: #0056b3;
 }
+
 .title {
   position: relative;
   margin-bottom: .5rem;
@@ -192,17 +152,20 @@ onMounted(() => {
   letter-spacing: 2px;
   color: #0c0a09
 }
+
 .deal_wrapper {
   margin-top: 4rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem
 }
+
 .deal_card {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 }
+
 .card_img {
   position: relative;
   isolation: isolate
@@ -211,6 +174,7 @@ onMounted(() => {
 .card_img img {
   width: 750px;
 }
+
 .card_icons {
   position: absolute;
   right: 1rem;
@@ -236,6 +200,7 @@ onMounted(() => {
   font-size: 1.2rem;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2)
 }
+
 .card_details {
   color: var(--black);
   padding: 1rem
@@ -267,7 +232,4 @@ onMounted(() => {
   font-size: 1.1rem;
   color: #0c0a09
 }
-
-
-
 </style>

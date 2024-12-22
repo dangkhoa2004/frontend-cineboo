@@ -8,72 +8,66 @@
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-hammer"></i>
+                    <i class="fas fa-film"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Phim Mới Nhất</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Cập nhật các bộ phim bom tấn mới nhất, mang đến trải nghiệm điện ảnh sống động.
                 </p>
             </div>
         </div>
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-brush"></i>
+                    <i class="fas fa-ticket-alt"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Đặt Vé Nhanh</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Dễ dàng đặt vé trực tuyến, chọn ghế ngồi yêu thích chỉ trong vài bước.
                 </p>
             </div>
         </div>
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-wrench"></i>
+                    <i class="fas fa-utensils"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Combo Ưu Đãi</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Thưởng thức bỏng ngô, nước ngọt với các combo hấp dẫn cho mọi bộ phim.
                 </p>
             </div>
         </div>
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-truck-pickup"></i>
+                    <i class="fas fa-chair"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Ghế Thoải Mái</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Hệ thống ghế ngồi êm ái, mang lại sự thoải mái tối đa khi xem phim.
                 </p>
             </div>
         </div>
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-broom"></i>
+                    <i class="fas fa-video"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Công Nghệ Hiện Đại</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Trải nghiệm âm thanh và hình ảnh chất lượng cao với công nghệ tiên tiến.
                 </p>
             </div>
         </div>
         <div class="column">
             <div class="card">
                 <div class="icon-wrapper">
-                    <i class="fas fa-plug"></i>
+                    <i class="fas fa-star"></i>
                 </div>
-                <h3>Service Heading</h3>
+                <h3>Thành Viên VIP</h3>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam
-                    consequatur necessitatibus eaque.
+                    Nhận ưu đãi đặc biệt và tích điểm thưởng khi trở thành thành viên thân thiết.
                 </p>
             </div>
         </div>
