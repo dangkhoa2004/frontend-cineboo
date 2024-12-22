@@ -101,10 +101,6 @@ onMounted(() => {
 
 
 <style scoped>
-.card_icons span {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
 
 .card_icons span:active {
   transform: scale(0.9);

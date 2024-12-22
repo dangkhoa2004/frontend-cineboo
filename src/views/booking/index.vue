@@ -152,33 +152,6 @@ export default defineComponent({
 .explore_card img {
   width: 500px;
 }
-
-.card_icons {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 1rem;
-  z-index: 1;
-}
-
-.card_icons span {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2)
-}
-
 .card_details {
   color: var(--black);
   padding: 1rem
