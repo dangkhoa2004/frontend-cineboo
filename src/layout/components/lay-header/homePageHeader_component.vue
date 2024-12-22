@@ -16,7 +16,7 @@
       <li><a href="/phim">PHIM</a></li>
       <li><a href="#rap-phim">RẠP</a></li>
       <li><a href="/kham-pha">KHÁM PHÁ</a></li>
-      <li><a href="#lien-he">HỖ TRỢ</a></li>
+      <li><a href="/ho-tro">HỖ TRỢ</a></li>
       <li v-if="isLoggedIn()"><a href="/quan-ly">QUẢN LÝ</a></li>
       <li class="mobile-login" v-if="!isLoggedIn()"><a href="/dang-nhap">ĐĂNG NHẬP</a></li>
       <li class="mobile-login" v-if="isLoggedIn()"><a href="/dang-xuat" @click.prevent="logout">ĐĂNG XUẤT</a></li>

@@ -35,6 +35,9 @@
     <option v-for="(position, index) in uniquePositions" :key="index" :value="position">{{ position }}</option>
   </select>
   <input v-model="searchQuery" type="text" placeholder="Tìm kiếm..." class="search-input" />
+  <div class="button-container">
+    <button>Thêm mới</button>
+  </div>
 </div>
 
 <!-- Danh sách Khách hàng -->

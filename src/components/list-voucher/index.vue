@@ -3,6 +3,10 @@
   <div class="button-container">
     <input v-model="startDate" type="date" placeholder="Từ ngày" class="search-input" @input="filterByDateRange" />
   </div>
+  <div class="button-container">
+    <button >Thêm mới</button>
+    <!-- <button >Quản lý lịch chiếu</button> -->
+  </div>
   <table>
     <thead>
       <tr>

@@ -52,7 +52,7 @@
           <i class="fas fa-venus-mars"></i>
         </div>
         <div class="input-field">
-          <input type="email" placeholder="Email" v-model="formData.email" />
+          <input type="text" placeholder="Email" v-model="formData.email" />
           <i class="fas fa-envelope"></i>
         </div>
         <div class="input-field">
@@ -160,21 +160,22 @@ export default {
       const emailError = validateEmail(formData.value.email);
       const ngaySinhError = validateDate(formData.value.ngaySinh);
       const phoneNumberError = validatePhoneNumber(formData.value.soDienThoai);
+      const danTocError = validatePhoneNumber(formData.value.danToc);
       const addressError = validateRequiredField(formData.value.diaChi, "Địa chỉ");
       const passwordError = validatePassword(formData.value.password);
 
-      if (hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError) {
+      if (hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError || danTocError) {
         Swal.fire({
           icon: 'error',
           title: 'Lỗi đăng ký',
-          text: hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError,
+          text: hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError || danTocError,
         });
         return;
       }
 
       try {
         await signup(formData.value);
-        await handleLogin(); // Tự động đăng nhập sau khi đăng ký
+        await handleLogin();
       } catch (error) {
         Swal.fire({
           icon: 'error',

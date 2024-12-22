@@ -3,6 +3,10 @@
   <div v-if="movie">
     <img :src="movie.anhPhim" alt="Poster" class="movie-poster" />
     <div>
+      <label>Ảnh phim:</label>
+      <input v-model="movie.anhPhim" />
+    </div>
+    <div>
       <label>Tên phim:</label>
       <input v-model="movie.tenPhim" />
     </div>
