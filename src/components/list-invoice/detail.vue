@@ -138,7 +138,7 @@
 </div>
 </template>
 <script>
-import { fetchInvoiceById } from "@/api/invoice";
+import { fetchInvoiceById, approvePayment, changeInvoiceStatus } from "@/api/invoice";
 import Swal from "sweetalert2";
 
 export default {
@@ -170,8 +170,46 @@ export default {
     },
     async mounted() {
         await this.loadInvoice();
+        this.approveAllPayments();
     },
     methods: {
+        async approveAllPayments() {
+            try {
+                const invoiceId = this.$route.params.id;
+                const response = await approvePayment(invoiceId);
+                console.log(response);
+                // Kiểm tra trạng thái từ phản hồi
+                if (response.status === "EXPIRED") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: `Hóa đơn đã hết hạn thanh toán`,
+                    }).then(() => {
+                        changeInvoiceStatus(invoiceId, 0);
+                    });
+                } else if (response.status === "PAID") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: `Đã thanh toán hóa đơn thành công`,
+                    }).then(() => {
+                        changeInvoiceStatus(invoiceId, 1);
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: `Đã xảy ra lỗi khi phê duyệt hóa đơn`,
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: `Đã xảy ra lỗi khi phê duyệt hóa đơn`,
+                });
+            }
+        },
         formatDate(timeArray) {
             const date = new Date(timeArray[0], timeArray[1] - 1, timeArray[2]);
             return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;

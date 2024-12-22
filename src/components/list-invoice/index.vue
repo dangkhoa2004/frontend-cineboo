@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice";
+import { fetchInvoices, fetchInvoicesByUserID, approvePayment } from "@/api/invoice";
 import { getUserData } from "@/api/authService";
 import Swal from "sweetalert2";
 
@@ -154,7 +154,6 @@ export default {
       if (this.sortKey) {
         filteredInvoices.sort((a, b) => {
           let valA, valB;
-
           switch (this.sortKey) {
             case "khachHang":
               valA = `${a.khachHang.ho} ${a.khachHang.tenDem} ${a.khachHang.ten}`;
@@ -204,8 +203,9 @@ export default {
       switch (status) {
         case 0: return 'Chưa thanh toán';
         case 1: return 'Đã thanh toán';
-        case 3: return 'Lỗi';
-        case 4: return 'Xảy ra lỗi';
+        case 2: return 'Đã huỷ';
+        case 3: return 'Đã thanh toán và in vé';
+        case 4: return 'Đang chờ hoàn tiền';
         default: return '';
       }
     },
@@ -214,18 +214,26 @@ export default {
         const userData = await getUserData();
         this.user = userData;
         let invoiceData = [];
+
+        // Kiểm tra nếu người dùng là khách hàng
         if (userData.khachHang) {
           invoiceData = await fetchInvoicesByUserID(userData.khachHang.id);
-          if (invoiceData = null) {
+
+          // Kiểm tra nếu không có hóa đơn nào
+          if (invoiceData === null || invoiceData.length === 0) {
             Swal.fire({
               icon: "error",
               title: "Tài khoản chưa có hoá đơn",
               text: "Tài khoản của bạn chưa có hoá đơn nào. Vui lòng thử lại sau.",
             });
           }
-        } else if (userData.nhanVien) {
+        }
+        // Kiểm tra nếu người dùng là nhân viên
+        else if (userData.nhanVien) {
           invoiceData = await fetchInvoices();
         }
+
+        // Gán dữ liệu hóa đơn vào biến invoices
         this.invoices = Array.isArray(invoiceData) ? invoiceData : [];
       } catch (error) {
         Swal.fire({

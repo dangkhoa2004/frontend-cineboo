@@ -52,9 +52,9 @@
 <script>
 import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
-import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
+import { createInvoice, createInvoiceQr, setPaymentMethod, changeInvoiceStatus } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
-
+import Swal from "sweetalert2";
 
 export default {
   components: { infoCustomerData_component },
@@ -212,7 +212,6 @@ export default {
             let invoice = await createInvoice(invoiceData);
             invoice = await setPaymentMethod(invoice.id, this.paymentMethod);
             const idHoaDon = invoice.id;
-
             if (!idHoaDon) {
               Swal.fire({
                 icon: "error",
@@ -221,7 +220,6 @@ export default {
               });
               return;
             }
-
             try {
               const qrData = await createInvoiceQr(idHoaDon);
               if (qrData && qrData.payment) {
@@ -231,6 +229,9 @@ export default {
                   title: "Thành công",
                   text: "Đặt vé thành công! Vui lòng thanh toán qua QR.",
                 });
+                setTimeout(() => {
+                  window.location.href = "/quan-ly/hoa-don";
+                }, 2000);
               } else {
                 Swal.fire({
                   icon: "error",

@@ -97,26 +97,45 @@ export default {
         },
         async submitVoucher() {
             if (this.voucher && this.validateVoucher()) {
-                try {
-                    const newVoucher = {
-                        ...this.voucher,
-                        ngayBatDau: this.formatDateForBackend(this.voucher.ngayBatDau),
-                        ngayKetThuc: this.formatDateForBackend(this.voucher.ngayKetThuc),
-                    };
-                    await createVoucher(newVoucher);
+                // Hiển thị hộp thoại xác nhận
+                const result = await Swal.fire({
+                    title: 'Xác nhận tạo voucher',
+                    text: "Bạn có chắc chắn muốn tạo voucher này?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                });
+
+                // Kiểm tra xem người dùng đã xác nhận không
+                if (result.isConfirmed) {
+                    try {
+                        const newVoucher = {
+                            ...this.voucher,
+                            ngayBatDau: this.formatDateForBackend(this.voucher.ngayBatDau),
+                            ngayKetThuc: this.formatDateForBackend(this.voucher.ngayKetThuc),
+                        };
+                        await createVoucher(newVoucher);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Tạo voucher thành công",
+                            text: "Voucher mới đã được tạo.",
+                        });
+                        setTimeout(() => {
+                            window.location.href = "/quan-ly/vouchers";
+                        }, 2000);
+                    } catch (error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi tạo voucher",
+                            text: "Đã có lỗi xảy ra khi tạo voucher. Vui lòng thử lại sau.",
+                        });
+                    }
+                } else {
                     Swal.fire({
-                        icon: "success",
-                        title: "Tạo voucher thành công",
-                        text: "Voucher mới đã được tạo.",
-                    });
-                    setTimeout(() => {
-                        window.location.href = "/quan-ly/vouchers";
-                    }, 2000);
-                } catch (error) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Lỗi tạo voucher",
-                        text: "Đã có lỗi xảy ra khi tạo voucher. Vui lòng thử lại sau.",
+                        icon: 'info',
+                        title: 'Hủy bỏ',
+                        text: 'Tạo voucher đã bị hủy.',
                     });
                 }
             }
