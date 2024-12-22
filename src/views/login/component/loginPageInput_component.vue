@@ -160,7 +160,7 @@ export default {
       const emailError = validateEmail(formData.value.email);
       const ngaySinhError = validateDate(formData.value.ngaySinh);
       const phoneNumberError = validatePhoneNumber(formData.value.soDienThoai);
-      const danTocError = validatePhoneNumber(formData.value.danToc);
+      const danTocError = validateRequiredField(formData.value.danToc);
       const addressError = validateRequiredField(formData.value.diaChi, "Địa chỉ");
       const passwordError = validatePassword(formData.value.password);
 
