@@ -89,6 +89,7 @@
 import { fetchAgeGroups, deleteAgeGroupById } from "@/api/movie";
 import { fetchPaymentMethods, deletePaymentMethodById, fetchRefunds } from "@/api/invoice";
 import Swal from 'sweetalert2';
+import { getUserData, canAccessModule } from "@/api/authService";
 
 export default {
   data() {
@@ -137,7 +138,7 @@ export default {
   methods: {
     async checkPermissions() {
       const permissions = {};
-      const modules = ["hoaDon", "phims", "vouchers", "hoTro", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"];
+      const modules = ["hoaDon", "phims", "vouchers", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"];
       for (let module of modules) {
         permissions[module] = await canAccessModule(module);
       }
@@ -148,11 +149,11 @@ export default {
         const refundData = await fetchRefunds();
         this.refunds = refundData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu yêu cầu hoàn vé:", error);
+        console.error("Lỗi khi tải dữ liệu yêu cầu hỗ trợ:", error);
         Swal.fire({
           icon: 'error',
           title: 'Lỗi',
-          text: 'Không tìm thấy yêu cầu hoàn vé.',
+          text: 'Không tìm thấy yêu cầu hỗ trợ.',
         });
       }
     },

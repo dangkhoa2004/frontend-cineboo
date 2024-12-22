@@ -194,10 +194,10 @@ export async function canAccessModule(moduleName: string): Promise<boolean> {
 
     // Quyền truy cập cơ bản cho khách hàng và nhân viên
     const permissions: Record<string, string[]> = {
-        khachHang: ["hoaDon", "ungDung", "thongTin", "hoTro"],
+        khachHang: ["hoaDon", "ungDung", "thongTin"],
         nhanVien: [
             "ungDung", "thongTin", "hoaDon", "phims", "vouchers",
-            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "hoTro", "dotuoi", "pttt"
+            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"
         ],
     };
 

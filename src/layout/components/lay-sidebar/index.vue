@@ -42,8 +42,7 @@
       <div>
         <h3 class="sidebar__title">{{ $t("message.contact_man") }}</h3>
         <div class="sidebar__list">
-          <router-link v-if="permissions['hoTro']" to="/quan-ly/ho-tro" class="sidebar__link"
-            active-class="active-link">
+          <router-link to="/quan-ly/ho-tro" class="sidebar__link" active-class="active-link">
             <i class="ri-chat-3-fill"></i>
             <span>{{ $t("message.contact_man") }}</span>
           </router-link>
