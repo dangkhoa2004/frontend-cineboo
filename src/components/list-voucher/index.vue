@@ -40,7 +40,7 @@
         </td>
         <td>
           <button @click="viewVoucherDetails(voucher)">Xem chi tiết</button>
-          <button @click="deleteVoucher(voucher.id)">Xoá</button>
+          <button @click="deleteVoucher(voucher.id)">cập nhập</button>
         </td>
       </tr>
     </tbody>
@@ -117,10 +117,10 @@ export default {
     async deleteVoucher(id) {
       Swal.fire({
         icon: 'warning',
-        title: 'Xác nhận xoá voucher',
-        text: 'Bạn có chắc chắn muốn xoá voucher này?',
+        title: 'Xác nhận cập nhập voucher',
+        text: 'Bạn có chắc chắn muốn cập nhập voucher này?',
         showCancelButton: true,
-        confirmButtonText: 'Xoá',
+        confirmButtonText: 'cập nhập',
         cancelButtonText: 'Hủy',
       }).then(async (confirmDelete) => {
         if (confirmDelete.isConfirmed) {
@@ -128,15 +128,15 @@ export default {
             await deleteVoucherById(id);
             Swal.fire({
               icon: 'success',
-              title: 'Xoá voucher thành công',
-              text: 'Voucher đã được xoá thành công.',
+              title: 'cập nhập voucher thành công',
+              text: 'Voucher đã được cập nhập thành công.',
             });
           } catch (error) {
-            console.error("Lỗi khi xoá voucher:", error);
+            console.error("Lỗi khi cập nhập voucher:", error);
             Swal.fire({
               icon: 'error',
-              title: 'Lỗi xoá voucher',
-              text: 'Đã có lỗi xảy ra khi xoá voucher. Vui lòng thử lại sau.',
+              title: 'Lỗi cập nhập voucher',
+              text: 'Đã có lỗi xảy ra khi cập nhập voucher. Vui lòng thử lại sau.',
             });
           }
         }

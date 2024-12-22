@@ -72,7 +72,7 @@
             <div><strong>Điểm:</strong>
                 <input v-model="hoadon.diem" type="number" disabled />
             </div>
-            <div><strong>Thời gian thanh toán:</strong>
+            <div><strong>Thời gian tạo hoá đơn:</strong>
                 <input v-model="formattedTime" type="datetime-local" disabled />
             </div>
             <div><strong>Trạng thái hoá đơn:</strong>
@@ -99,7 +99,7 @@
                             <p><span>Ngày:</span> {{
                                 formatDate(hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
                             </p>
-                            <p><span>Giờ:</span> {{
+                            <p><span>Suất chiếu:</span> {{
                                 formatTime(hoadon.chiTietHoaDonList[0].id_GheAndSuatChieu.id_SuatChieu.thoiGianChieu) }}
                             </p>
                             <p><span>Rạp:</span> {{
@@ -181,11 +181,11 @@ export default {
         },
         getTrangThaiHoaDonText(status) {
             const statusTexts = {
-                0: "Hoá đơn chưa thanh toán",
-                1: "Hoá đơn đã thanh toán",
-                2: "Hoá đơn đã huỷ thanh toán",
-                3: "Hoá đơn đã lấy vé thành công",
-                4: "Đang có yêu cầu hoàn tiền",
+                0: "HOÁ ĐƠN CHƯA THANH TOÁN",
+                1: "HOÁ ĐƠN ĐÃ THANH TOÁN",
+                2: "HOÁ ĐƠN ĐÃ HUỶ",
+                3: "LẤY VÉ THÀNH CÔNG",
+                4: "YÊU CẦU HOÀN VÉ",
             };
             return statusTexts[status] || "Hoá đơn không xác định";
         },

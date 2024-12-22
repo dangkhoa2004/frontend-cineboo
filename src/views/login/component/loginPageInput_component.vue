@@ -28,11 +28,11 @@
           <i class="fas fa-user"></i>
         </div>
         <div class="input-field">
-          <input type="text" placeholder="Tên" v-model="formData.ten" />
+          <input type="text" placeholder="Tên đệm" v-model="formData.tenDem" />
           <i class="fas fa-user"></i>
         </div>
         <div class="input-field">
-          <input type="text" placeholder="Tên đệm" v-model="formData.tenDem" />
+          <input type="text" placeholder="Tên" v-model="formData.ten" />
           <i class="fas fa-user"></i>
         </div>
         <div class="input-field">

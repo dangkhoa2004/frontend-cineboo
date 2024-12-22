@@ -132,14 +132,16 @@ export default {
         });
       }
     };
-
     const filterShowtimes = () => {
-      filteredShowtimes.value = showtimes.value.filter(theater => {
-        const showtimeDate = new Date(theater.thoiGianChieu).toISOString().split("T")[0];
-        return showtimeDate === selectedDate.value;
-      });
+      const currentTime = new Date();
+      filteredShowtimes.value = showtimes.value
+        .filter(theater => {
+          const showtimeDate = new Date(theater.thoiGianChieu);
+          // Kiểm tra xem suất chiếu có sau thời gian hiện tại không
+          return showtimeDate > currentTime && showtimeDate.toISOString().split("T")[0] === selectedDate.value;
+        })
+        .sort((a, b) => new Date(a.thoiGianChieu) - new Date(b.thoiGianChieu)); // Sắp xếp theo thời gian tăng dần
     };
-
     const updateSelectedDate = (date) => {
       selectedDate.value = date;
       filterShowtimes();
