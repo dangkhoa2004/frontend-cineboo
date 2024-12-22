@@ -54,7 +54,7 @@
 <script>
 import { fetchMovies, fetchPhongChieu } from "@/api/movie";
 import { requestWithJWT } from '@/api/api.ts';
-import Swal from "sweetalert2";
+
 
 export default {
   data() {

@@ -53,7 +53,7 @@ import { fetchMoviesApiClient } from "@/api/movie";
 import movieCardData_component from "./component/movieCardData_component.vue";
 import onlyPageHeader_component from "@/layout/components/lay-header/onlyPageHeader_component.vue";
 import onlyPageFooter_component from "@/layout/components/lay-footer/onlyPageFooter_component.vue";
-import Swal from "sweetalert2";
+
 
 interface Movie {
   id: number;

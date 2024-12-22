@@ -37,7 +37,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { fetchMovieByIdApiClient } from "@/api/movie";
-import Swal from "sweetalert2";
+
 
 export default {
   name: "BookingMovieInfo",

@@ -56,7 +56,7 @@
 </template>
 <script>
 import { fetchSuatChieu } from "@/api/movie";
-import Swal from "sweetalert2";
+
 
 export default {
     data() {

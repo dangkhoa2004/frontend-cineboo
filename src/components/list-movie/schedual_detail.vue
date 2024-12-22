@@ -82,7 +82,7 @@
 
 <script>
 import { fetchSuatChieuById, updateSuatChieuById } from "@/api/schedual.ts";
-import Swal from "sweetalert2";
+
 
 export default {
     data() {

@@ -79,7 +79,7 @@
 
 <script>
 import { fetchkhachhangById } from "@/api/customer";
-import Swal from "sweetalert2";
+
 
 export default {
     data() {

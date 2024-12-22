@@ -74,7 +74,7 @@
 <script>
 import { createMovie } from "@/api/movie";
 import axios from "axios";
-import Swal from "sweetalert2";
+
 import {
     validateMovieTitle,
     validateMovieImage,

@@ -72,7 +72,7 @@
 
 <script>
 import { fetchnhanvienById, updatenhanvienById } from "@/api/employee";
-import Swal from "sweetalert2";
+
 import {
     validateEmail,
     validatePhoneNumber,

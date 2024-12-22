@@ -54,7 +54,7 @@ import infoCustomerData_component from "./infoCustomerData_component.vue";
 import EventBus from "@/store/eventBus.ts"; // Nếu cần dùng EventBus để lưu trữ thông tin
 import { createInvoice, createInvoiceQr, setPaymentMethod } from "@/api/invoice"; // Giả sử bạn đã có hàm tạo hóa đơn từ API
 import { getUserInfo } from "@/api/authService"; // Import hàm lấy thông tin người dùng
-import Swal from "sweetalert2";
+
 
 export default {
   components: { infoCustomerData_component },

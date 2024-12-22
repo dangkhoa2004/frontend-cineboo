@@ -42,7 +42,7 @@ import { useRoute, useRouter } from "vue-router";
 import { fetchShowtimesByMovieIdApiClient } from "@/api/movie";
 import { requestWithJWT } from "@/api/api";
 import { isLoggedIn } from "@/api/authService";
-import Swal from "sweetalert2";
+
 
 export default {
   setup() {

@@ -53,7 +53,7 @@
 
 <script>
 import { createVoucher } from "@/api/invoice";
-import Swal from "sweetalert2";
+
 import { validateRequiredField } from '@/utils/validation';
 export default {
     data() {

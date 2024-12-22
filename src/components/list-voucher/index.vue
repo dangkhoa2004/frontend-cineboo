@@ -50,7 +50,7 @@
 </template>
 <script>
 import { fetchVouchers, deleteVoucherById } from "@/api/invoice";
-import Swal from "sweetalert2";
+
 export default {
   data() {
     return {

@@ -3,11 +3,11 @@ import App from './App.vue';
 import router from './router';
 import { createPinia } from 'pinia'; // Thêm Pinia
 import './style/main.css';
-
 import 'leaflet/dist/leaflet.css';
 
 import { i18nPlugin } from './plugins/i18nPlugin';
 import * as directives from '@/directives';
+import swalPlugin from '@/plugins/swalPlugin'; // Import plugin SweetAlert2
 
 const app = createApp(App);
 
@@ -21,10 +21,11 @@ Object.keys(directives).forEach(key => {
   app.directive(directiveName, directive);
 });
 
-// Sử dụng Pinia, router, và i18n
+// Sử dụng Pinia, router, i18n và plugin SweetAlert2
 app.use(pinia); // Đăng ký Pinia
 app.use(router);
 app.use(i18nPlugin);
+app.use(swalPlugin); // Đăng ký plugin SweetAlert2
 
 // Mount ứng dụng
 app.mount('#app');
