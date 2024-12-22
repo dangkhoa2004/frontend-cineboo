@@ -40,7 +40,8 @@
         </td>
         <td>
           <button @click="viewVoucherDetails(voucher)">Xem chi tiết</button>
-          <button @click="deleteVoucher(voucher.id)">cập nhập</button>
+          <button>Cập nhập</button>
+          <!-- <button @click="deleteVoucher(voucher.id)">Cập nhập</button> -->
         </td>
       </tr>
     </tbody>

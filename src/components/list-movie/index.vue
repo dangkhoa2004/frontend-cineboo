@@ -140,7 +140,7 @@ export default {
         try {
           // await deleteMovieById(id);
           this.movies = this.movies.filter(movie => movie.id !== id);
-          alert("Phim đã được xoá thành công.");
+          Swal.fire("Thành công", "Phim đã được xoá thành công.", "success");
         } catch (error) {
           Swal.fire({
             icon: 'error',

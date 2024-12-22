@@ -128,7 +128,11 @@ export default {
             if (this.voucher) {
                 try {
                     await updateVoucherById(this.voucher.id, this.voucher);
-                    alert("Voucher đã được cập nhật thành công!");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Voucher đã được cập nhật thành công!',
+                    });
                     this.$router.go(-1);
                 } catch (error) {
                     Swal.fire({
