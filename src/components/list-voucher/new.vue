@@ -108,7 +108,9 @@ export default {
                         title: "Tạo voucher thành công",
                         text: "Voucher mới đã được tạo.",
                     });
-                    this.$router.push({ name: "voucher-manager" });
+                    setTimeout(() => {
+                        window.location.href = "/quan-ly/vouchers";
+                    }, 2000);
                 } catch (error) {
                     console.error("Lỗi khi tạo voucher:", error);
                     Swal.fire({

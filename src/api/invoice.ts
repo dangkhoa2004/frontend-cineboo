@@ -218,12 +218,16 @@ export const requestInvoicePrint = async (maHoaDon: string) => {
 };
 
 /* Tạo hoá đơn mới có qr */
-export const createVoucher = async (id: string) => {
+export const createVoucher = async (voucherData: any) => {
     try {
-        const response = await requestWithJWT('post', `/voucher/add`);
+        const response = await requestWithJWT('post', `/voucher/add`, voucherData);
         return response.data;
     } catch (error) {
-        console.error('API: [Lỗi khi xử lý dữ liệu voucher]', error instanceof Error ? error.message : error);
+        if (axios.isAxiosError(error)) {
+            console.error('API: [Lỗi khi thêm voucher]', error.response ? error.response.data : error.message);
+        } else {
+            console.error('API: [Lỗi không xác định]', error);
+        }
         throw error;
     }
 };
