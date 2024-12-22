@@ -9,7 +9,7 @@ import { requestWithJWT } from "@/api/api.ts";
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { ref, onMounted, watch } from 'vue';
-
+import Swal from "sweetalert2";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 

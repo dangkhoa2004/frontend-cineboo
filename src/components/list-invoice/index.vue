@@ -95,7 +95,7 @@
 <script>
 import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice";
 import { getUserData } from "@/api/authService";
-
+import Swal from "sweetalert2";
 
 export default {
   data() {

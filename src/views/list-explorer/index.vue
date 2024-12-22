@@ -31,7 +31,7 @@
 <script>
 import onlyPageHeader_component from "@/layout/components/lay-header/onlyPageHeader_component.vue";
 import onlyPageFooter_component from "@/layout/components/lay-footer/onlyPageFooter_component.vue";
-
+import Swal from "sweetalert2";
 export default {
     components: {
         onlyPageHeader_component,

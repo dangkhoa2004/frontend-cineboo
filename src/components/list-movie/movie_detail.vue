@@ -74,7 +74,7 @@
 </template>
 <script>
 import axios from "axios";
-
+import Swal from "sweetalert2";
 import { fetchMovieById, updateMovieById } from "@/api/movie";
 import {
   validateMovieTitle,

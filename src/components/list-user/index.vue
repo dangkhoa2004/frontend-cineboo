@@ -120,7 +120,7 @@
 <script>
 import { fetchkhachhangs, deletekhachhangById } from "@/api/customer";
 import { fetchnhanviens, deletenhanvienById } from "@/api/employee";
-
+import Swal from "sweetalert2";
 
 export default {
   data() {

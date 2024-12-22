@@ -87,7 +87,7 @@
 
 <script>
 import { logout as authLogout, getUserData, canAccessModule } from "@/api/authService";
-
+import Swal from "sweetalert2";
 
 export default {
   data() {

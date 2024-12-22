@@ -59,7 +59,7 @@
 
 <script>
 import { fetchVoucherById, updateVoucherById } from "@/api/invoice"; // Assuming a function to fetch and update voucher by ID
-
+import Swal from "sweetalert2";
 
 export default {
     data() {
