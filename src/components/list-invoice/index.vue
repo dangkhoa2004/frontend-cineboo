@@ -91,9 +91,11 @@
   </table>
 </div>
 </template>
+
 <script>
 import { fetchInvoices, fetchInvoicesByUserID } from "@/api/invoice";
 import { getUserData } from "@/api/authService";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -211,16 +213,26 @@ export default {
       try {
         const userData = await getUserData();
         this.user = userData;
-
         let invoiceData = [];
         if (userData.khachHang) {
           invoiceData = await fetchInvoicesByUserID(userData.khachHang.id);
+          if (invoiceData = null) {
+            Swal.fire({
+              icon: "error",
+              title: "Tài khoản chưa có hoá đơn",
+              text: "Tài khoản của bạn chưa có hoá đơn nào. Vui lòng thử lại sau.",
+            });
+          }
         } else if (userData.nhanVien) {
           invoiceData = await fetchInvoices();
         }
         this.invoices = Array.isArray(invoiceData) ? invoiceData : [];
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu hoá đơn:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi khi tải dữ liệu hoá đơn",
+          text: "Đã xảy ra lỗi khi tải dữ liệu hoá đơn. Vui lòng thử lại sau.",
+        });
       }
     },
     formatCurrency(amount) {
@@ -235,14 +247,10 @@ export default {
       this.$router.push({ name: "thay-doi-thong-tin-hoa-don", params: { id: invoice.id } });
     },
     sortTable(key) {
-      if (this.sortKey === key) {
-        this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-      } else {
-        this.sortKey = key;
-        this.sortOrder = "asc";
-      }
+      this.sortKey = key;
+      this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc"; // Đảo ngược thứ tự sắp xếp
     },
-  },
+  }
 };
 </script>
 <style src="./assets/styles.css" scoped></style>
