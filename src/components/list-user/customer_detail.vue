@@ -14,20 +14,16 @@
             <input v-model="customer.phanLoaiKhachHang.tenPhanLoaiKhachHang" disabled />
         </div>
         <div>
-            <label>Ghi Chú Tài Khoản:</label>
-            <input v-model="customer.taiKhoan.ghiChu" disabled />
-        </div>
-        <div>
-            <label>Tên:</label>
-            <input v-model="customer.ten" disabled />
+            <label>Họ:</label>
+            <input v-model="customer.ho" disabled />
         </div>
         <div>
             <label>Tên Đệm:</label>
             <input v-model="customer.tenDem" disabled />
         </div>
         <div>
-            <label>Họ:</label>
-            <input v-model="customer.ho" disabled />
+            <label>Tên:</label>
+            <input v-model="customer.ten" disabled />
         </div>
         <div>
             <label>Ngày Sinh:</label>
@@ -61,6 +57,10 @@
             <input v-model="customer.diem" type="number" disabled />
         </div>
         <div>
+            <label>Ghi Chú Tài Khoản:</label>
+            <input v-model="customer.taiKhoan.ghiChu" disabled />
+        </div>
+        <div>
             <label>Trạng Thái Khách Hàng:</label>
             <select v-model="customer.trangThaiKhachHang" disabled>
                 <option value="1">Hoạt động</option>
@@ -79,6 +79,7 @@
 
 <script>
 import { fetchkhachhangById } from "@/api/customer";
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -98,12 +99,17 @@ export default {
                 this.customer = customerData;
                 this.formattedDateOfBirth = this.formatDateForInput(this.customer.ngaySinh);
             } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi khi tải thông tin khách hàng",
+                    text: "Đã có lỗi xảy ra khi tải thông tin khách hàng. Vui lòng thử lại sau."
+                });
                 console.error("Lỗi khi tải thông tin khách hàng:", error);
             }
         },
         formatDateForInput(dateArray) {
             const [year, month, day] = dateArray;
-            const date = new Date(year, month - 1, day);
+            const date = new Date(year, month - 1, day + 1);
             return date.toISOString().split('T')[0];
         },
         goBack() {

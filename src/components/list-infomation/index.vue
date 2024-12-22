@@ -173,7 +173,7 @@ export default {
                         title: 'Thành công',
                         text: 'Thông tin đã được cập nhật!',
                     });
-                    setTimeout(() => { window.location.reload(); }, 2000);  
+                    setTimeout(() => { window.location.reload(); }, 1500);
                 } catch (error) {
                     console.error("Lỗi khi cập nhật thông tin:", error);
                     Swal.fire({

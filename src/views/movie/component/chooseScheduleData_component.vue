@@ -219,7 +219,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .showTime_button {
   background-color: var(--first-color);

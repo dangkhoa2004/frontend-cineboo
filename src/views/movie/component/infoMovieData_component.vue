@@ -3,9 +3,6 @@
   <div class="booking-container" v-if="movie">
     <div class="booking-movie-poster">
       <img :src="movie.anhPhim" alt="Movie Poster" />
-      <button class="btn draw-border">
-        <a>ĐẶT NGAY</a>
-      </button>
     </div>
     <div class="booking-movie-info">
       <h1 class="booking-movie-title">
@@ -22,10 +19,16 @@
         <p><strong>Rating : &#8203; </strong> <span>{{ movie.diem }}</span></p>
         <p><strong>Diễn viên:</strong> <span>{{ movie.dienVien }}</span></p>
       </div>
+      <div class="booking-movie-desc" v-if="movie">
+        <p>{{ movie.noiDung }}</p>
+      </div>
     </div>
   </div>
-  <div class="booking-movie-desc" v-if="movie">
-    <p>{{ movie.noiDung }}</p>
+  <div class="movie-trailer" v-if="movie && movie.trailer">
+    <iframe width="100%" height="600" :src="getEmbedUrl(movie.trailer)" title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
   </div>
 </div>
 </template>
@@ -40,6 +43,13 @@ export default {
   setup() {
     const route = useRoute();
     const movie = ref(null);
+
+    // Hàm chuyển đổi URL từ dạng xem sang dạng nhúng
+    const getEmbedUrl = (url) => {
+      const videoId = url.split('v=')[1]?.split('&')[0]; // Lấy video ID
+      return `https://www.youtube.com/embed/${videoId}`; // Trả về URL nhúng
+    };
+
     const genres = computed(() => {
       if (movie.value) {
         return movie.value.danhSachTLPhims
@@ -48,6 +58,7 @@ export default {
       }
       return "";
     });
+
     const formattedReleaseDate = computed(() => {
       if (movie.value && movie.value.ngayRaMat) {
         return new Date(movie.value.ngayRaMat).toLocaleDateString();
@@ -77,6 +88,7 @@ export default {
       movie,
       genres,
       formattedReleaseDate,
+      getEmbedUrl, // Đảm bảo hàm này được trả về để có thể sử dụng trong template
     };
   },
 };

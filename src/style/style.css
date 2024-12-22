@@ -145,7 +145,6 @@
 }
 
 .booking-movie-poster img {
-    width: 300px;
     border-radius: 10px;
 }
 
@@ -197,18 +196,6 @@
 .booking-movie-desc {
     padding: 10px;
     background-color: none;
-    width: 100%;
-}
-
-.booking-movie-description {
-    padding: 10px;
-    background-color: none;
-    width: 100%;
-}
-
-.booking-movie-description h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
 }
 
 .schedule-container {

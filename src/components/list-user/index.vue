@@ -42,7 +42,6 @@
   <table>
     <thead>
       <tr>
-        <th>ID Khách Hàng</th>
         <th>Tên Khách Hàng</th>
         <th>Ngày Sinh</th>
         <th>Giới tính</th>
@@ -55,14 +54,17 @@
     </thead>
     <tbody>
       <tr v-for="customer in filteredCustomers" :key="customer.id">
-        <td>{{ customer.id }}</td>
         <td>{{ customer.ho }} {{ customer.tenDem }} {{ customer.ten }}</td>
         <td>{{ formatDate(customer.ngaySinh) }}</td>
         <td>{{ customer.gioiTinh == 1 ? 'Nam' : 'Nữ' }}</td>
         <td>{{ customer.soDienThoai }}</td>
         <td>{{ customer.taiKhoan.email }}</td>
         <td>{{ customer.phanLoaiKhachHang.tenPhanLoaiKhachHang }}</td>
-        <td>{{ customer.trangThaiKhachHang == 1 ? 'Hoạt động' : 'Vô hiệu hoá' }}</td>
+        <td>
+          <span :class="getStatusClass(customer.trangThaiKhachHang)">
+            {{ getStatusText(customer.trangThaiKhachHang) }}
+          </span>
+        </td>
         <td>
           <button @click="editCustomer(customer)">Sửa</button>
           <button @click="deleteCustomer(customer.id)">Xoá</button>
@@ -77,16 +79,11 @@
   <table>
     <thead>
       <tr>
-        <th>ID</th>
         <th>Mã Nhân Viên</th>
-        <th>Tên</th>
-        <th>Tên Đệm</th>
-        <th>Họ</th>
+        <th>Tên Nhân Viên</th>
         <th>Ngày Sinh</th>
         <th>Giới Tính</th>
         <th>Email</th>
-        <th>Dân Tộc</th>
-        <th>Địa Chỉ</th>
         <th>Chức Vụ</th>
         <th>Trạng Thái Nhân Viên</th>
         <th>Thao Tác</th>
@@ -94,18 +91,17 @@
     </thead>
     <tbody>
       <tr v-for="employee in filteredEmployees" :key="employee.id">
-        <td>{{ employee.id }}</td>
         <td>{{ employee.maNhanVien }}</td>
-        <td>{{ employee.ten }}</td>
-        <td>{{ employee.tenDem }}</td>
-        <td>{{ employee.ho }}</td>
+        <td>{{ employee.ho }} {{ employee.tenDem }} {{ employee.ten }}</td>
         <td>{{ formatDate(employee.ngaySinh) }}</td>
         <td>{{ employee.gioiTinh == 1 ? 'Nam' : 'Nữ' }}</td>
         <td>{{ employee.taiKhoan.email }}</td>
-        <td>{{ employee.danToc }}</td>
-        <td>{{ employee.diaChi }}</td>
         <td>{{ employee.chucVu.tenChucVu }}</td>
-        <td>{{ employee.trangThai == 1 ? 'Hoạt động' : 'Vô hiệu hoá' }}</td>
+        <td>
+          <span :class="getStatusClass(employee.trangThai)">
+            {{ getStatusText(employee.trangThai) }}
+          </span>
+        </td>
         <td>
           <button @click="editEmployee(employee)">Sửa</button>
           <button @click="deleteEmployee(employee.id)">Xoá</button>
@@ -136,6 +132,15 @@ export default {
     };
   },
   computed: {
+    statusOptions() {
+      // Các tùy chọn trạng thái
+      return {
+        0: "Vô hiệu hoá",
+        1: "Hoạt động",
+        3: "Lỗi",
+        4: "Xảy ra lỗi",
+      };
+    },
     // Danh sách các loại khách hàng duy nhất
     uniqueCustomerTypes() {
       const types = new Set();
@@ -278,7 +283,24 @@ export default {
           }
         }
       });
+    }, getStatusClass(status) {
+      switch (status) {
+        case 0: return 'sap-chieu';
+        case 1: return 'da-chieu';
+        case 3: return 'dang-chieu';
+        case 4: return 'loi';
+        default: return '';
+      }
     },
+    getStatusText(status) {
+      switch (status) {
+        case 0: return 'Vô hiệu hoá';
+        case 1: return 'Đang hoạt động';
+        case 3: return 'Lỗi';
+        case 4: return 'Xảy ra lỗi';
+        default: return '';
+      }
+    }
   },
 };
 </script>

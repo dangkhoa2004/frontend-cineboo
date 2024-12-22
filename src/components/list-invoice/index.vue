@@ -79,7 +79,11 @@
         <td>{{ formatCurrency(invoice.tongSoTien) }}</td>
         <td>{{ formatPaymentTime(invoice.thoiGianThanhToan) }}</td>
         <td>
-          <span>{{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán" : "Chưa thanh toán" }}</span>
+          <span>{{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán"
+            : invoice.trangThaiHoaDon === 3 ? "Đã in vé"
+              : invoice.trangThaiHoaDon === 2 ? "Đã huỷ"
+                : invoice.trangThaiHoaDon === 0 ? "Chưa thanh toán" : "Không xác định"
+            }}</span>
         </td>
         <td>
           <button @click="viewInvoiceDetails(invoice)">Xem</button>

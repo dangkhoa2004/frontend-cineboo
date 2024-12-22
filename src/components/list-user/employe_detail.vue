@@ -14,20 +14,16 @@
             <input v-model="employee.chucVu.tenChucVu" disabled />
         </div>
         <div>
-            <label>Ghi Chú Tài Khoản:</label>
-            <input v-model="employee.taiKhoan.ghiChu" />
-        </div>
-        <div>
-            <label>Tên:</label>
-            <input v-model="employee.ten" />
+            <label>Họ:</label>
+            <input v-model="employee.ho" />
         </div>
         <div>
             <label>Tên Đệm:</label>
             <input v-model="employee.tenDem" />
         </div>
         <div>
-            <label>Họ:</label>
-            <input v-model="employee.ho" />
+            <label>Tên:</label>
+            <input v-model="employee.ten" />
         </div>
         <div>
             <label>Ngày Sinh:</label>
@@ -53,8 +49,12 @@
             <input v-model="employee.diaChi" />
         </div>
         <div>
+            <label>Ghi Chú Tài Khoản:</label>
+            <input v-model="employee.taiKhoan.ghiChu" />
+        </div>
+        <div>
             <label>Trạng Thái Nhân Viên:</label>
-            <select v-model="employee.trangThai">
+            <select v-model="employee.trangThai" disabled>
                 <option value="1">Hoạt động</option>
                 <option value="0">Không hoạt động</option>
             </select>
@@ -71,7 +71,14 @@
 </template>
 
 <script>
-import { fetchnhanvienById, updatenhanvienById } from "@/api/employee"; // Assuming you have these API functions
+import { fetchnhanvienById, updatenhanvienById } from "@/api/employee";
+import Swal from "sweetalert2";
+import {
+    validateEmail,
+    validatePhoneNumber,
+    validateRequiredField,
+    validateDate,
+} from "@/utils/validation.ts";
 
 export default {
     data() {
@@ -94,33 +101,71 @@ export default {
                 console.error("Lỗi khi tải thông tin nhân viên:", error);
             }
         },
+        validateUserInfo() {
+            const { ho, ten, email, diaChi, soDienThoai, danToc } = this.employee || {};
+            const hoError = validateRequiredField(ho, "Họ");
+            const tenError = validateRequiredField(ten, "Tên");
+            const soDienThoaiError = validatePhoneNumber(soDienThoai);
+            const emailError = validateEmail(this.employee.taiKhoan.email.trim());
+            const diaChiError = validateRequiredField(diaChi, "Địa chỉ");
+            const ngaySinhError = validateDate(this.formattedDateOfBirth);
+            const danTocError = validateRequiredField(danToc, "Dân tộc");
+
+            if (hoError || tenError || emailError || diaChiError || soDienThoaiError || ngaySinhError || danTocError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi cập nhật thông tin',
+                    text: hoError || tenError || emailError || diaChiError || soDienThoaiError || ngaySinhError || danTocError,
+                });
+                return false;
+            }
+            return true;
+        },
         async saveEmployee() {
-            try {
+            if (!this.employee) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không tìm thấy thông tin nhân viên.',
+                });
+                return;
+            }
+            if (this.validateUserInfo()) {
                 const updatedEmployee = {
-                "id": this.employee.id,
-  "ten": this.employee.ten,
-  "tenDem": this.employee.tenDem,
-  "ho": this.employee.ho,
-  "gioiTinh": this.employee.gioiTinh,
-  "danToc": this.employee.danToc,
-  "diaChi": this.employee.diaChi,
-  "email": this.employee.taiKhoan.email,
-  "ghiChu": this.employee.taiKhoan.ghiChu,
-  "soDienThoai": this.employee.soDienThoai,
-                    "ngaySinh": this.formattedDateOfBirth // Convert the formatted date back to the array format
+                    id: this.employee.id,
+                    ten: this.employee.ten,
+                    tenDem: this.employee.tenDem,
+                    ho: this.employee.ho,
+                    gioiTinh: this.employee.gioiTinh,
+                    danToc: this.employee.danToc,
+                    diaChi: this.employee.diaChi,
+                    email: this.employee.taiKhoan.email,
+                    ghiChu: this.employee.taiKhoan.ghiChu,
+                    soDienThoai: this.employee.soDienThoai,
+                    ngaySinh: this.formattedDateOfBirth
                 };
 
-                await updatenhanvienById(this.employee.id, updatedEmployee);
-                alert("Thông tin nhân viên đã được cập nhật thành công!");
-                this.$router.go(-1);
-            } catch (error) {
-                console.error("Lỗi khi cập nhật nhân viên:", error);
-                alert("Có lỗi xảy ra khi cập nhật thông tin nhân viên.");
+                try {
+                    await updatenhanvienById(this.employee.id, updatedEmployee);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Thông tin đã được cập nhật!',
+                    });
+                    setTimeout(() => { window.location.reload(); }, 2000);
+                } catch (error) {
+                    console.error("Lỗi khi cập nhật thông tin:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lỗi khi cập nhật thông tin.',
+                    });
+                }
             }
         },
         formatDateForInput(dateArray) {
             const [year, month, day] = dateArray;
-            const date = new Date(year, month - 1, day + 1);
+            const date = new Date(year, month - 1, day);
             return date.toISOString().split('T')[0];
         },
         goBack() {
