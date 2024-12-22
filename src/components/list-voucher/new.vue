@@ -68,6 +68,7 @@ export default {
                 ngayBatDau: "",
                 ngayKetThuc: "",
                 soLuong: "",
+                trangThaiVoucher: 1,
             },
         };
     },
@@ -120,7 +121,6 @@ export default {
                     });
                 }
             }
-
         },
         formatDateForBackend(date) {
             const d = new Date(date);

@@ -126,8 +126,6 @@ export default {
         if (confirmDelete.isConfirmed) {
           try {
             await deleteVoucherById(id);
-            this.vouchers = this.vouchers.filter(voucher => voucher.id !== id);
-            this.filteredVouchers = this.filteredVouchers.filter(voucher => voucher.id !== id);
             Swal.fire({
               icon: 'success',
               title: 'Xoá voucher thành công',
