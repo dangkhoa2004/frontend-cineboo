@@ -88,7 +88,7 @@ tr:hover {
 
 .movie-detail div label {
   font-weight: bold;
-  color: #2c3e50;
+  color: black;
 }
 
 .movie-detail .button-container {
@@ -116,7 +116,7 @@ tr:hover {
   display: block;
   font-weight: bold;
   margin-bottom: 8px;
-  color: #333;
+  color: black;
 }
 
 .form-group select,
@@ -131,9 +131,9 @@ tr:hover {
 
 .form-group input[type="date"]:focus,
 .form-group select:focus {
-  border-color: #007bff;
+  border-color: var(--first-color);
   outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 5px var(--first-color);
 }
 
 /* Date Picker Group */
@@ -150,7 +150,7 @@ tr:hover {
   margin-bottom: 5px;
   display: block;
   font-size: 14px;
-  color: #555;
+  color: black;
 }
 
 /* Checkbox Group */
@@ -166,13 +166,16 @@ tr:hover {
 }
 
 .checkbox-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   cursor: pointer;
+  accent-color: var(--first-color);
 }
 
 .checkbox-item label {
-  font-size: 14px;
-  color: #555;
+  font-size: 16px;
+  color: black;
 }
 
 .filter-container {

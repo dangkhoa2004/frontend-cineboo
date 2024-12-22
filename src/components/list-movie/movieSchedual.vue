@@ -24,7 +24,6 @@
 
   <!-- Chọn khoảng ngày -->
   <div class="form-group date-picker-group">
-    <label>Chọn khoảng ngày</label>
     <div class="date-inputs">
       <div>
         <label for="start-date">Ngày bắt đầu</label>
@@ -224,4 +223,5 @@ export default {
   },
 };
 </script>
-<style src="./assets/styles.css" scoped></style>
+<style src="./assets/styles.css" scoped>
+</style>

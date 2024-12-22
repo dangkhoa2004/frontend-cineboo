@@ -151,40 +151,15 @@ export default {
         );
       });
 
-      if (this.sortKey) {
-        filteredInvoices.sort((a, b) => {
-          let valA, valB;
-          switch (this.sortKey) {
-            case "khachHang":
-              valA = `${a.khachHang.ho} ${a.khachHang.tenDem} ${a.khachHang.ten}`;
-              valB = `${b.khachHang.ho} ${b.khachHang.tenDem} ${b.khachHang.ten}`;
-              break;
-            case "tenPhim":
-              valA = a?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim || "";
-              valB = b?.chiTietHoaDonList[0]?.id_GheAndSuatChieu.id_SuatChieu.phim.tenPhim || "";
-              break;
-            case "soLuong":
-              valA = a.soLuong;
-              valB = b.soLuong;
-              break;
-            case "tongSoTien":
-              valA = a.tongSoTien;
-              valB = b.tongSoTien;
-              break;
-            case "thoiGianThanhToan":
-              valA = new Date(...a.thoiGianThanhToan);
-              valB = new Date(...b.thoiGianThanhToan);
-              break;
-            default:
-              return 0;
-          }
-
-          return this.sortOrder === "asc" ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-        });
-      }
+      // Sắp xếp hóa đơn theo thời gian thanh toán từ mới nhất đến cũ nhất
+      filteredInvoices.sort((a, b) => {
+        const dateA = new Date(...a.thoiGianThanhToan);
+        const dateB = new Date(...b.thoiGianThanhToan);
+        return dateB - dateA; // Sắp xếp giảm dần
+      });
 
       return filteredInvoices;
-    },
+    }
   },
   async mounted() {
     await this.loadInvoices();
@@ -256,10 +231,10 @@ export default {
       this.$router.push({ name: "thay-doi-thong-tin-hoa-don", params: { id: invoice.id } });
     },
     sortTable(key) {
+      this.sortOrder = this.sortKey === key && this.sortOrder === "asc" ? "desc" : "asc";
       this.sortKey = key;
-      this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc"; // Đảo ngược thứ tự sắp xếp
     },
-  }
+  },
 };
 </script>
 <style src="./assets/styles.css" scoped></style>

@@ -139,7 +139,6 @@
 </template>
 <script>
 import { fetchInvoiceById, approvePayment, changeInvoiceStatus } from "@/api/invoice";
-import { set } from "date-fns";
 import Swal from "sweetalert2";
 
 export default {
@@ -178,7 +177,6 @@ export default {
             try {
                 const invoiceId = this.$route.params.id;
                 const response = await approvePayment(invoiceId);
-
                 if (response.status === "EXPIRED") {
                     Swal.fire({
                         icon: 'error',
@@ -186,7 +184,6 @@ export default {
                         text: `Hóa đơn đã hết hạn`,
                     }).then(() => {
                         changeInvoiceStatus(invoiceId, 0);
-                        this.loadInvoice();
                     });
                 } else if (response.status === "PAID") {
                     Swal.fire({
@@ -195,7 +192,6 @@ export default {
                         text: `Hóa đơn đã được thanh toán`,
                     }).then(() => {
                         changeInvoiceStatus(invoiceId, 1);
-                        this.loadInvoice();
                     });
                 } else if (response.status === "CANCELLED") {
                     Swal.fire({
@@ -204,7 +200,6 @@ export default {
                         text: `Hóa đơn đã bị hủy`,
                     }).then(() => {
                         changeInvoiceStatus(invoiceId, 2);
-                        this.loadInvoice();
                     });
                 } else {
                     Swal.fire({
