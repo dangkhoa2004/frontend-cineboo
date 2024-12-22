@@ -81,11 +81,8 @@ import {
     validateActors,
     validateReleaseYear,
     validateDescription,
-    validateTrailer,
-    validateReleaseDate,
     validateDuration,
     validateCountry,
-    validateContent,
     validateRating,
     validateGenres,
     validateAgeLimit
@@ -146,13 +143,12 @@ export default {
             return value ? new Date(value).toISOString() : "";
         },
         validateMovieInfo() {
-            const { tenPhim, anhPhim, dienVien, nam, ngayRaMat, thoiLuong, quocGia, noiDung, diem } = this.movie || {};
+            const { tenPhim, anhPhim, dienVien, nam, thoiLuong, quocGia, noiDung, diem } = this.movie || {};
 
             const tenPhimError = validateMovieTitle(tenPhim);
             const anhPhimError = validateMovieImage(anhPhim);
             const dienVienError = validateActors(dienVien);
             const namError = validateReleaseYear(nam);
-            const ngayRaMatError = validateReleaseDate(ngayRaMat);
             const thoiLuongError = validateDuration(thoiLuong);
             const quocGiaError = validateCountry(quocGia);
             const noiDungError = validateDescription(noiDung);
@@ -162,7 +158,7 @@ export default {
 
             // Lọc các lỗi không phải null
             const errors = [
-                tenPhimError || anhPhimError || dienVienError || namError || ngayRaMatError || thoiLuongError || quocGiaError || noiDungError || diemError || genresError || ageLimitError
+                tenPhimError || anhPhimError || dienVienError || namError || thoiLuongError || quocGiaError || noiDungError || diemError || genresError || ageLimitError
             ].filter(error => error !== null);  // Chỉ lấy các lỗi không phải null
 
             // Nếu có lỗi, hiển thị tất cả các lỗi cùng một lúc
