@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import { useAboutSectionStore } from '@/store/aboutSectionStore';
+import Swal from 'sweetalert2';
 import { ref } from 'vue';
 
 // Initialize the store

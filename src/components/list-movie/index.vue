@@ -59,6 +59,7 @@
 
 <script>
 import { fetchMovies, deleteMovieById } from "@/api/movie";
+import Swal from "sweetalert2";
 
 export default {
   data() {
