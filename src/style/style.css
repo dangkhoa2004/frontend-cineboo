@@ -154,9 +154,13 @@
     bottom: 15px;
 }
 
+.booking-movie-infomation {
+    max-width: 50%;
+}
+
 .booking-movie-info h1 {
     color: white;
-    font-size: 34px;
+    font-size: 54px;
     font-weight: 700;
     letter-spacing: calc(1em / 8);
     padding: calc(--stroke-width / 2);
@@ -174,7 +178,7 @@
 .booking-movie-meta span {
     padding: 3.5px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .booking-movie-details {
@@ -182,6 +186,7 @@
 }
 
 .booking-movie-details p {
+    font-size: 18px;
     padding: 15px;
 }
 
@@ -194,6 +199,7 @@
 }
 
 .booking-movie-desc {
+    font-size: 18px;
     padding: 10px;
     background-color: none;
 }
@@ -210,10 +216,10 @@
     padding-bottom: 10px;
 }
 
-.booking-movie-description h2 {
-    padding-bottom: 10px;
-    font-size: 26px;
-    margin: 0;
+.movie-trailer {
+    width: 100%;
+    height: 750px;
+    margin-top: 20px;
 }
 
 .date-selector {

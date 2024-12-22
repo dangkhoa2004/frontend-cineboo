@@ -4,7 +4,7 @@
     <div class="booking-movie-poster">
       <img :src="movie.anhPhim" alt="Movie Poster" />
     </div>
-    <div class="booking-movie-info">
+    <div class="booking-movie-infomation">
       <h1 class="booking-movie-title">
         <span>&#8203;{{ movie.tenPhim }}</span>
       </h1>
@@ -25,7 +25,7 @@
     </div>
   </div>
   <div class="movie-trailer" v-if="movie && movie.trailer">
-    <iframe width="100%" height="600" :src="getEmbedUrl(movie.trailer)" title="YouTube video player" frameborder="0"
+    <iframe width="100%" height="750px" :src="getEmbedUrl(movie.trailer)" title="YouTube video player" frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
     </iframe>
