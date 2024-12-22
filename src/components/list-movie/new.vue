@@ -180,7 +180,7 @@ export default {
             if (this.movie && this.validateMovieInfo()) {
                 const result = await Swal.fire({
                     title: 'Xác nhận',
-                    text: 'Bạn có chắc chắn muốn lưu thông tin phim không?',
+                    text: 'Bạn có chắc chắn muốn thêm phim này không?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -202,20 +202,18 @@ export default {
                         if (response) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Thành công',
-                                text: 'Thông tin đã được cập nhật!',
+                                title: 'Thêm phim thành công',
+                                text: 'Đang chuyển hướng về trang quản lý phim...',
                             });
-
                             setTimeout(() => {
-                                window.location.reload();  // reload lại trang sau 2 giây
+                                this.$router.go('/quan-ly/phims');
                             }, 2000);
                         }
                     } catch (error) {
-                        console.error("Lỗi khi cập nhật thông tin:", error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Lỗi',
-                            text: 'Lỗi khi cập nhật thông tin.',
+                            title: 'Lỗi khi thêm phim',
+                            text: 'Vui lòng thử lại sau',
                         });
                     }
                 }
