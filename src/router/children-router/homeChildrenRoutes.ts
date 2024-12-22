@@ -76,6 +76,13 @@ const homeChildrenRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: "them-moi-voucher",
+    name: "them-moi-voucher",
+    components: {
+      listComponent: () => import('@/components/list-voucher/new.vue')
+    }
+  },
+  {
     path: "voucher/:id",
     name: "thay-doi-thong-tin-voucher",
     components: {

@@ -47,8 +47,7 @@
             </div>
             <div>
                 <label>Trạng thái voucher:</label>
-                <input v-model="voucher.trangThaiVoucher" disabled
-                    :placeholder="voucher.trangThaiVoucher ? '' : '<trống>'" />
+                <input v-model="voucher.trangThaiVoucher" disabled :placeholder="voucher.trangThaiVoucher" />
             </div>
         </div>
     </div>

@@ -216,3 +216,14 @@ export const requestInvoicePrint = async (maHoaDon: string) => {
         throw error;
     }
 };
+
+/* Tạo hoá đơn mới có qr */
+export const createVoucher = async (id: string) => {
+    try {
+        const response = await requestWithJWT('post', `/voucher/add`);
+        return response.data;
+    } catch (error) {
+        console.error('API: [Lỗi khi xử lý dữ liệu voucher]', error instanceof Error ? error.message : error);
+        throw error;
+    }
+};

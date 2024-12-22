@@ -4,8 +4,7 @@
     <input v-model="startDate" type="date" placeholder="Từ ngày" class="search-input" @input="filterByDateRange" />
   </div>
   <div class="button-container">
-    <button>Thêm mới</button>
-    <!-- <button >Quản lý lịch chiếu</button> -->
+    <button @click="addVoucher()">Thêm mới</button>
   </div>
   <table>
     <thead>
@@ -63,6 +62,9 @@ export default {
     await this.loadVouchers();
   },
   methods: {
+    async addVoucher() {
+      this.$router.push({ name: "them-moi-voucher" });
+    },
     getStatusClass(status) {
       switch (status) {
         case 0: return 'sap-chieu';
