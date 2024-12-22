@@ -38,8 +38,8 @@
             <div class="gender-selection">
                 <label>Giới tính:</label>
                 <select v-model="userInfo.gioiTinh">
-                    <option value="1">Nam</option>
-                    <option value="0">Nữ</option>
+                    <option value="0">Nam</option>
+                    <option value="1">Nữ</option>
                 </select>
             </div>
             <div>
