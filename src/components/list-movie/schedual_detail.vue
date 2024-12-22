@@ -104,7 +104,7 @@ export default {
                 // Format thời gian chiếu
                 if (data.thoiGianChieu) {
                     const date = new Date(data.thoiGianChieu[0], data.thoiGianChieu[1] - 1, data.thoiGianChieu[2], data.thoiGianChieu[3], data.thoiGianChieu[4]);
-                    this.formattedThoiGianChieu = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+                    this.formattedThoiGianChieu = date.toISOString().slice(0, 16);
                 }
             } catch (error) {
                 Swal.fire({

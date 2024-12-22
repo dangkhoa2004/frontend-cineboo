@@ -113,7 +113,7 @@ export default {
         },
         formatDate(timestamp) {
             const [year, month, day, hour, minute] = timestamp;
-            const date = new Date(year, month - 1, day, hour, minute);
+            const date = new Date(year, month, day, hour, minute);
             const optionsDate = { year: "numeric", month: "2-digit", day: "2-digit" };
             const optionsTime = { hour: "2-digit", minute: "2-digit", hour12: false };
             const formattedDate = date.toLocaleDateString("vi-VN", optionsDate);

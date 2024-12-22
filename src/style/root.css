@@ -133,3 +133,10 @@ span.loi {
   padding: 4px 8px;
   border-radius: 4px;
 }
+span.ra-mat {
+  color: white;
+  background-color: rgb(255, 68, 0);
+  border: 1px solid rgb(255, 68, 0);
+  padding: 4px 8px;
+  border-radius: 4px;
+}

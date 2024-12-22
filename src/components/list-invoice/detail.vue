@@ -139,6 +139,7 @@
 </template>
 <script>
 import { fetchInvoiceById, approvePayment, changeInvoiceStatus } from "@/api/invoice";
+import { set } from "date-fns";
 import Swal from "sweetalert2";
 
 export default {
@@ -177,23 +178,38 @@ export default {
             try {
                 const invoiceId = this.$route.params.id;
                 const response = await approvePayment(invoiceId);
-                console.log(response);
-                // Kiểm tra trạng thái từ phản hồi
                 if (response.status === "EXPIRED") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi',
-                        text: `Hóa đơn đã hết hạn thanh toán`,
+                        text: `Hóa đơn đã hết hạn`,
                     }).then(() => {
                         changeInvoiceStatus(invoiceId, 0);
+                        setTimeout(() => {
+                            location.reload
+                        }, 2000);
                     });
                 } else if (response.status === "PAID") {
                     Swal.fire({
                         icon: 'success',
                         title: 'Thành công',
-                        text: `Đã thanh toán hóa đơn thành công`,
+                        text: `Hóa đơn đã được thanh toán`,
                     }).then(() => {
                         changeInvoiceStatus(invoiceId, 1);
+                        setTimeout(() => {
+                            location.reload
+                        }, 2000);
+                    });
+                } else if (response.status === "CANCELLED") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: `Hóa đơn đã bị hủy`,
+                    }).then(() => {
+                        changeInvoiceStatus(invoiceId, 2);
+                        setTimeout(() => {
+                            location.reload
+                        }, 2000);
                     });
                 } else {
                     Swal.fire({

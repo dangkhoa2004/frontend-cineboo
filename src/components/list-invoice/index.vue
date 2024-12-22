@@ -194,8 +194,9 @@ export default {
       switch (status) {
         case 0: return 'sap-chieu';
         case 1: return 'da-chieu';
-        case 3: return 'dang-chieu';
-        case 4: return 'loi';
+        case 2: return 'loi';
+        case 3: return 'ra-mat';
+        case 4: return 'dang-chieu';
         default: return '';
       }
     },

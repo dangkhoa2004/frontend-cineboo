@@ -235,7 +235,6 @@ export const changeInvoiceStatus = async (id_hoadon: string, trangthai: string) 
     try {
         // Gửi yêu cầu PUT với URL được định dạng đúng
         const response = await requestWithJWT('put', `/hoadon/status/${id_hoadon}?trangThai=${trangthai}`);
-        console.log(response);
         return response.data;
     } catch (error) {
         console.error('API: [Lỗi khi thay đổi trạng thái hoá đơn]', error instanceof Error ? error.message : error);
