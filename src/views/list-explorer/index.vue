@@ -1,28 +1,31 @@
 <template>
-<onlyPageHeader_component />
-<div class="carousel">
-    <div class="list">
-        <div class="item" v-for="(slide, index) in slides" :key="index" v-show="currentIndex === index">
-            <img :src="slide.image" alt="Slide Image">
-            <div class="content">
-                <div class="author">{{ slide.author }}</div>
-                <div class="title">{{ slide.title }}</div>
-                <div class="topic">{{ slide.topic }}</div>
-                <div class="des">{{ slide.description }}</div>
-                <div class="buttons">
-                    <button @click="seeMore(slide)">XEM THÊM</button>
-                    <button @click="subscribe(slide)">ĐẶT VÉ</button>
+<div style="overflow: hidden">
+    <div id="stars"></div>
+    <onlyPageHeader_component />
+    <div class="carousel">
+        <div class="list">
+            <div class="item" v-for="(slide, index) in slides" :key="index" v-show="currentIndex === index">
+                <img :src="slide.image" alt="Slide Image">
+                <div class="content">
+                    <div class="author">{{ slide.author }}</div>
+                    <div class="title">{{ slide.title }}</div>
+                    <div class="topic">{{ slide.topic }}</div>
+                    <div class="des">{{ slide.description }}</div>
+                    <div class="buttons">
+                        <button @click="seeMore(slide)">XEM THÊM</button>
+                        <button @click="subscribe(slide)">ĐẶT VÉ</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="arrows">
+            <button @click="showSlider('prev')">
+                < </button>
+                    <button @click="showSlider('next')">></button>
+        </div>
     </div>
-    <div class="arrows">
-        <button @click="showSlider('prev')">
-            < </button>
-                <button @click="showSlider('next')">></button>
-    </div>
+    <onlyPageFooter_component />
 </div>
-<onlyPageFooter_component />
 </template>
 
 <script>

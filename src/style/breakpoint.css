@@ -229,15 +229,20 @@
         color: #fff
     }
 
+    .footer_col {
+        padding: 30px;
+    }
+
     .footer_links {
         margin-top: 1rem;
         list-style: none;
         display: grid;
-        gap: 1rem
+        gap: 1rem;
+
     }
 
     .footer_links a {
-        color: var(--text);
+        color: white;
         transition: .3s
     }
 

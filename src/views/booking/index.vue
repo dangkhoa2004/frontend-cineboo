@@ -152,6 +152,7 @@ export default defineComponent({
 .explore_card img {
   width: 500px;
 }
+
 .card_details {
   color: var(--black);
   padding: 1rem
