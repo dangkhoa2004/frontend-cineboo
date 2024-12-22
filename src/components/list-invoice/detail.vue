@@ -14,21 +14,14 @@
                 <input v-model="hoadon.khachHang.tenDem" placeholder="Tên đệm" disabled />
                 <input v-model="hoadon.khachHang.ten" placeholder="Tên" disabled />
             </div>
-            <div>
-                <strong>Ngày sinh:</strong>
-                <input v-model="hoadon.khachHang.ngaySinh" type="date" disabled />
-            </div>
             <div><strong>Số điện thoại:</strong>
                 <input v-model="hoadon.khachHang.soDienThoai" disabled />
             </div>
             <div><strong>Email:</strong>
-                <input v-model="hoadon.khachHang.email" disabled />
+                <input v-model="hoadon.khachHang.taiKhoan.email" disabled />
             </div>
             <div><strong>Địa chỉ:</strong>
                 <input v-model="hoadon.khachHang.diaChi" disabled />
-            </div>
-            <div><strong>Điểm:</strong>
-                <input v-model="hoadon.khachHang.diem" type="number" disabled />
             </div>
         </div>
 
@@ -74,7 +67,7 @@
                 <input v-model="hoadon.soLuong" type="number" disabled />
             </div>
             <div><strong>Tổng tiền:</strong>
-                <input v-model="hoadon.tongSoTien" type="number" disabled />
+                <input v-model="hoadon.tongSoTien" type="number" disabled>
             </div>
             <div><strong>Điểm:</strong>
                 <input v-model="hoadon.diem" type="number" disabled />
@@ -221,6 +214,7 @@ export default {
                         ...response.hoadon,
                         qr: response.qr
                     };
+                    console.log(response)
                 } else {
                     console.error("Phản hồi từ API không có dữ liệu hoadon!");
                     this.hoadon = null;  // Gán null nếu không có dữ liệu trong response.data

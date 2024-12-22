@@ -74,7 +74,9 @@
         <tr v-for="paymentMethod in paymentMethods" :key="paymentMethod.id">
           <td>{{ paymentMethod.maPTTT }}</td>
           <td>{{ paymentMethod.tenPTTT }}</td>
-          <td>{{ paymentMethod.trangThaiPTTT === 0 ? "Không hoạt động" : "Hoạt động" }}</td>
+          <td><span :class="getStatusClass(paymentMethod.trangThaiPTTT)">
+              {{ getStatusText(paymentMethod.trangThaiPTTT) }}
+            </span></td>
           <td>
             <button @click="editPaymentMethod(paymentMethod)">Sửa</button>
             <button @click="deletePaymentMethod(paymentMethod.id)">Xoá</button>
@@ -136,6 +138,24 @@ export default {
     await this.loadPaymentMethods();
   },
   methods: {
+    getStatusClass(status) {
+      switch (status) {
+        case 0: return 'sap-chieu';
+        case 1: return 'da-chieu';
+        case 3: return 'dang-chieu';
+        case 4: return 'loi';
+        default: return '';
+      }
+    },
+    getStatusText(status) {
+      switch (status) {
+        case 0: return 'Hoạt động';
+        case 1: return 'Chưa hoạt động';
+        case 3: return 'Lỗi';
+        case 4: return 'Xảy ra lỗi';
+        default: return '';
+      }
+    },
     async checkPermissions() {
       const permissions = {};
       const modules = ["hoaDon", "phims", "vouchers", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"];

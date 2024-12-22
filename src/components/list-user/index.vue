@@ -286,7 +286,8 @@ export default {
           }
         }
       });
-    }, getStatusClass(status) {
+    },
+    getStatusClass(status) {
       switch (status) {
         case 0: return 'sap-chieu';
         case 1: return 'da-chieu';

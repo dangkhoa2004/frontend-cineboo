@@ -4,7 +4,7 @@
     <input v-model="startDate" type="date" placeholder="Từ ngày" class="search-input" @input="filterByDateRange" />
   </div>
   <div class="button-container">
-    <button >Thêm mới</button>
+    <button>Thêm mới</button>
     <!-- <button >Quản lý lịch chiếu</button> -->
   </div>
   <table>
@@ -35,7 +35,9 @@
         <td>{{ formatDate(voucher.ngayKetThuc) }}</td>
         <td>{{ voucher.soLuong }}</td>
         <td>
-          <span>{{ voucher.trangThaiVoucher === 1 ? "Đang áp dụng" : "Hết hạn" }}</span>
+          <span :class="getStatusClass(voucher.trangThaiVoucher)">
+            {{ getStatusText(voucher.trangThaiVoucher) }}
+          </span>
         </td>
         <td>
           <button @click="viewVoucherDetails(voucher)">Xem chi tiết</button>
@@ -61,6 +63,24 @@ export default {
     await this.loadVouchers();
   },
   methods: {
+    getStatusClass(status) {
+      switch (status) {
+        case 0: return 'sap-chieu';
+        case 1: return 'da-chieu';
+        case 3: return 'dang-chieu';
+        case 4: return 'loi';
+        default: return '';
+      }
+    },
+    getStatusText(status) {
+      switch (status) {
+        case 0: return 'Đang áp dụng';
+        case 1: return 'Đã áp dụng';
+        case 3: return 'Lỗi';
+        case 4: return 'Xảy ra lỗi';
+        default: return '';
+      }
+    },
     async loadVouchers() {
       try {
         const voucherData = await fetchVouchers();

@@ -79,11 +79,9 @@
         <td>{{ formatCurrency(invoice.tongSoTien) }}</td>
         <td>{{ formatPaymentTime(invoice.thoiGianThanhToan) }}</td>
         <td>
-          <span>{{ invoice.trangThaiHoaDon === 1 ? "Đã thanh toán"
-            : invoice.trangThaiHoaDon === 3 ? "Đã in vé"
-              : invoice.trangThaiHoaDon === 2 ? "Đã huỷ"
-                : invoice.trangThaiHoaDon === 0 ? "Chưa thanh toán" : "Không xác định"
-            }}</span>
+          <span :class="getStatusClass(invoice.trangThaiHoaDon)">
+            {{ getStatusText(invoice.trangThaiHoaDon) }}
+          </span>
         </td>
         <td>
           <button @click="viewInvoiceDetails(invoice)">Xem</button>
@@ -191,6 +189,24 @@ export default {
     await this.loadInvoices();
   },
   methods: {
+    getStatusClass(status) {
+      switch (status) {
+        case 0: return 'sap-chieu';
+        case 1: return 'da-chieu';
+        case 3: return 'dang-chieu';
+        case 4: return 'loi';
+        default: return '';
+      }
+    },
+    getStatusText(status) {
+      switch (status) {
+        case 0: return 'Chưa thanh toán';
+        case 1: return 'Đã thanh toán';
+        case 3: return 'Lỗi';
+        case 4: return 'Xảy ra lỗi';
+        default: return '';
+      }
+    },
     async loadInvoices() {
       try {
         const userData = await getUserData();
