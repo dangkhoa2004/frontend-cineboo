@@ -171,7 +171,6 @@ export default {
           title: "Lỗi",
           text: "Không tìm thấy suất chiếu.",
         });
-        console.error("Không tìm thấy mã suất chiếu.");
       }
     };
 
@@ -198,7 +197,6 @@ export default {
           title: "Lỗi",
           text: "Lỗi khi tìm thông tin phim.",
         });
-        console.error("Không tìm thấy ID phim.");
       }
     });
 

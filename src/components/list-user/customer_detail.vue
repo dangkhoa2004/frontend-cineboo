@@ -104,7 +104,6 @@ export default {
                     title: "Lỗi khi tải thông tin khách hàng",
                     text: "Đã có lỗi xảy ra khi tải thông tin khách hàng. Vui lòng thử lại sau."
                 });
-                console.error("Lỗi khi tải thông tin khách hàng:", error);
             }
         },
         formatDateForInput(dateArray) {

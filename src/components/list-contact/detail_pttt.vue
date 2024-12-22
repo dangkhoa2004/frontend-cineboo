@@ -49,7 +49,11 @@ export default {
                 const paymentMethodData = await fetchPTTTById(paymentMethodId);
                 this.paymentMethod = paymentMethodData;
             } catch (error) {
-                console.error("Lỗi khi tải thông tin phương thức thanh toán:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin phương thức thanh toán',
+                });
             }
         },
         async savePaymentMethod() {
@@ -76,7 +80,6 @@ export default {
                         });
                         this.$router.go(-1);
                     } catch (error) {
-                        console.error("Lỗi khi cập nhật phương thức thanh toán:", error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Lỗi',

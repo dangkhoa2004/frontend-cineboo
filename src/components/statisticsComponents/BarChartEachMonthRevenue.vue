@@ -9,6 +9,7 @@ import { requestWithJWT } from "@/api/api.ts";
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { ref, onMounted, watch } from 'vue';
+import Swal from "sweetalert2";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -83,7 +84,11 @@ const fetchData = async () => {
 
     data.value = newDataSet;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không thể tải dữ liệu thống kê. Vui lòng thử lại sau.',
+    });;
   }
 };
 

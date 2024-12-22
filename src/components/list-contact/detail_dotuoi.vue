@@ -42,7 +42,11 @@ export default {
                 const ageGroupData = await fetchDoTuoiById(ageGroupId);
                 this.ageGroup = ageGroupData;
             } catch (error) {
-                console.error("Lỗi khi tải thông tin độ tuổi:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin độ tuổi',
+                });
             }
         },
         async saveAgeGroup() {
@@ -69,7 +73,6 @@ export default {
                         });
                         this.$router.go(-1);
                     } catch (error) {
-                        console.error("Lỗi khi cập nhật độ tuổi:", error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Lỗi',

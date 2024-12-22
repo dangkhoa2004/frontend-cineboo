@@ -98,7 +98,11 @@ export default {
                 this.employee = employeeData;
                 this.formattedDateOfBirth = this.formatDateForInput(this.employee.ngaySinh);
             } catch (error) {
-                console.error("Lỗi khi tải thông tin nhân viên:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin nhân viên',
+                });
             }
         },
         validateUserInfo() {
@@ -165,7 +169,6 @@ export default {
                         }
                     });
                 } catch (error) {
-                    console.error("Lỗi khi cập nhật thông tin:", error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi',

@@ -82,6 +82,7 @@
 
 <script>
 import { fetchSuatChieuById, updateSuatChieuById } from "@/api/schedual.ts";
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -106,7 +107,11 @@ export default {
                     this.formattedThoiGianChieu = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
                 }
             } catch (error) {
-                console.error("Lỗi khi tải thông tin suất chiếu:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể tải thông tin suất chiếu",
+                });
             }
         },
         async saveSuatChieu() {
@@ -122,16 +127,33 @@ export default {
                         thoiGianChieuDate.getMinutes(),
                     ],
                 };
-
-                console.log("Dữ liệu sẽ gửi:", updatedSuatChieu);
-                const response = await updateSuatChieuById(this.suatChieu.id, updatedSuatChieu);
+                Swal.fire({
+                    title: "Xác nhận",
+                    text: "Bạn có chắc chắn muốn cập nhật thông tin suất chiếu này không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Cập nhật",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.updateSuatChieu(updatedSuatChieu);
+                    }
+                });
                 if (response) {
-                    alert("Cập nhật thông tin suất chiếu thành công.");
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thành công",
+                        text: "Cập nhật thông tin suất chiếu thành công.",
+                    });
                     this.$router.go(-1);
                 }
             } catch (error) {
-                console.error("Lỗi khi cập nhật suất chiếu:", error);
-                alert("Cập nhật thông tin suất chiếu thất bại.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể cập nhật thông tin suất chiếu",
+                });
             }
         },
         goBack() {

@@ -209,7 +209,6 @@ export default {
           title: "Lỗi khi tải dữ liệu khách hàng",
           text: "Vui lòng thử lại sau",
         });
-        console.error("Lỗi khi tải dữ liệu khách hàng:", error);
       }
     },
     async loadNhanViens() {
@@ -222,7 +221,6 @@ export default {
           title: "Lỗi khi tải dữ liệu nhân viên",
           text: "Vui lòng thử lại sau",
         });
-        console.error("Lỗi khi tải dữ liệu nhân viên:", error);
       }
     },
     formatDate(timestamp) {
@@ -254,7 +252,6 @@ export default {
               title: "Lỗi khi xoá khách hàng",
               text: "Vui lòng thử lại sau",
             });
-            console.error("Lỗi khi xoá khách hàng:", error);
           }
         }
       });
@@ -284,7 +281,6 @@ export default {
               title: "Lỗi khi xoá nhân viên",
               text: "Vui lòng thử lại sau",
             });
-            console.error("Lỗi khi xoá nhân viên:", error);
           }
         }
       });

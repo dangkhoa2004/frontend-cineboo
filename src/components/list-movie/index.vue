@@ -124,7 +124,6 @@ export default {
           title: 'Lỗi',
           text: 'Lỗi khi tải dữ liệu phim',
         });
-        console.error("Lỗi khi tải dữ liệu phim:", error);
       }
     },
     formatDate(timestamp) {
@@ -142,7 +141,6 @@ export default {
           this.movies = this.movies.filter(movie => movie.id !== id);
           alert("Phim đã được xoá thành công.");
         } catch (error) {
-          console.error("Lỗi khi xoá phim:", error);
           Swal.fire({
             icon: 'error',
             title: 'Lỗi',

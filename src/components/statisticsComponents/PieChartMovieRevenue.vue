@@ -9,6 +9,7 @@ import { requestWithJWT } from "@/api/api.ts";
 import { ref, onMounted } from 'vue';
 import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import Swal from "sweetalert2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -71,7 +72,11 @@ const fetchData = async () => {
 
     chartData.value = newDataSet;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không thể tải dữ liệu biểu đồ.',
+    });
   }
 };
 

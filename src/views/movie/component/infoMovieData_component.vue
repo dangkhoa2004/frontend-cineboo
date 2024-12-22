@@ -37,6 +37,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { fetchMovieByIdApiClient } from "@/api/movie";
+import Swal from "sweetalert2";
 
 export default {
   name: "BookingMovieInfo",
@@ -71,7 +72,11 @@ export default {
         const data = await fetchMovieByIdApiClient(movieId);
         movie.value = data;
       } catch (error) {
-        console.error("Component [Lỗi khi xử lý dữ liệu]:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không thể tải thông tin phim.",
+        });
       }
     };
 
@@ -80,7 +85,11 @@ export default {
       if (movieId) {
         fetchMovieData(movieId);
       } else {
-        console.error("No movie ID found in route parameters.");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Không tìm thấy ID phim trong tham số đường dẫn.",
+        });
       }
     });
 

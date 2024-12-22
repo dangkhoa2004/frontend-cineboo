@@ -46,6 +46,7 @@
 
 <script>
 import { fetchRefundById } from "@/api/refund";
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -90,7 +91,11 @@ export default {
                 const refundData = await fetchRefundById(refundId);
                 this.refund = refundData;
             } catch (error) {
-                console.error("Lỗi khi tải thông tin hoàn vé:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể tải thông tin hoàn vé",
+                });
             }
         },
         formatDateForInput(dateArray) {

@@ -92,7 +92,6 @@ export default {
     mounted: async function () {
         try {
             const user = await getUserData(); // Sử dụng await để lấy dữ liệu từ Promise
-            console.log("Dữ liệu người dùng:", user); // Kiểm tra dữ liệu người dùng
             if (user) {
                 if (user.khachHang) { // Kiểm tra nếu là khách hàng
                     this.userInfo = {
@@ -111,13 +110,25 @@ export default {
                     };
                     this.formattedDate = this.formatDate(user.nhanVien.ngaySinh); // Chuyển đổi ngày sinh sang định dạng dễ sử dụng
                 } else {
-                    console.error("Không có thông tin người dùng hợp lệ.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Không có thông tin người dùng hợp lệ.',
+                    });
                 }
             } else {
-                console.error("Không có thông tin người dùng.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không có thông tin người dùng.',
+                });
             }
         } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu người dùng:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể lấy dữ liệu người dùng.',
+            });
         }
     },
     methods: {
@@ -191,7 +202,6 @@ export default {
                         });
                         setTimeout(() => { window.location.reload(); }, 1500);
                     } catch (error) {
-                        console.error("Lỗi khi cập nhật thông tin:", error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Lỗi',

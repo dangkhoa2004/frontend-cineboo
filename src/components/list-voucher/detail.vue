@@ -59,6 +59,7 @@
 
 <script>
 import { fetchVoucherById, updateVoucherById } from "@/api/invoice"; // Assuming a function to fetch and update voucher by ID
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -94,7 +95,11 @@ export default {
                 const voucherData = await fetchVoucherById(voucherId);
                 this.voucher = voucherData;
             } catch (error) {
-                console.error("Lỗi khi tải thông tin voucher:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin voucher',
+                });
             }
         },
         formatDateForInput(dateString) {
@@ -126,8 +131,11 @@ export default {
                     alert("Voucher đã được cập nhật thành công!");
                     this.$router.go(-1);
                 } catch (error) {
-                    console.error("Lỗi khi cập nhật voucher:", error);
-                    alert("Có lỗi xảy ra khi cập nhật voucher.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra khi cập nhật voucher.',
+                    });
                 }
             }
         }

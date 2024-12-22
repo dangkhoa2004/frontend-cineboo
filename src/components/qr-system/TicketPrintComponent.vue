@@ -53,6 +53,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import swal from 'sweetalert';
 import { fetchInvoiceByMaHoaDon, requestInvoicePrint } from '@/api/invoice.ts';
+import Swal from 'sweetalert2';
 
 const thongTinVe = ref(null);
 const tieuDe = ref('');
@@ -81,14 +82,17 @@ const xacNhanIn = async () => {
   if (isConfirm) {
     try {
       await requestInvoicePrint(thongTinVe.value.maHoaDon);
-      swal({ title: 'Thành công!', text: 'Vé đã được in.', icon: 'success' });
+      Swal.fire('Thành công!', 'Vé đã được in.', 'success');
       router.push('/quan-ly/ung-dung');
     } catch (error) {
-      console.error('Lỗi khi in vé:', error);
-      swal('Lỗi!', 'Không thể in vé. Vui lòng thử lại sau.', 'error');
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Không thể in vé. Vui lòng thử lại sau.',
+      });
     }
   } else {
-    swal('Đã huỷ in vé :)', { icon: 'error' });
+    Swal.fire('Đã huỷ in vé :)', { icon: 'error' });
   }
 };
 

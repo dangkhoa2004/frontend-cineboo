@@ -15,6 +15,7 @@
 import { ref, onMounted } from 'vue';
 import jsQR from 'jsqr';
 import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 export default {
     setup() {
@@ -80,7 +81,11 @@ export default {
                     tick();
                 })
                 .catch((err) => {
-                    console.error('Lỗi khi truy cập luồng video:', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Không thể truy cập vào luồng video (vui lòng đảm bảo rằng webcam đã được bật)',
+                    });
                 });
         };
 

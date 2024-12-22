@@ -9,6 +9,7 @@ import { ref, onMounted } from 'vue';
 import { requestWithJWT } from "@/api/api.ts";
 import { Scatter } from 'vue-chartjs';
 import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
+import Swal from 'sweetalert2';
 
 // Register Chart.js components
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
@@ -114,7 +115,11 @@ const fetchData = async () => {
 
     data.value = newDataSet;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không thể tải dữ liệu.',
+    });
   }
 };
 

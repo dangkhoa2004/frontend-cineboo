@@ -33,6 +33,7 @@ import listSetting from '../list-settings/index.vue';
 import qrSystem from '../qr-system/index.vue';
 import hotMovie from '../hot-movie/index.vue';
 import { getUserData, canAccessModule } from "@/api/authService";
+import Swal from 'sweetalert2';
 
 export default {
     name: "ChatApp",
@@ -69,7 +70,11 @@ export default {
             const userPermissions = await this.checkPermissions();
             this.permissions = userPermissions;
         } catch (error) {
-            console.error("Không thể lấy dữ liệu người dùng:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể lấy dữ liệu người dùng',
+            });
         }
     },
     methods: {

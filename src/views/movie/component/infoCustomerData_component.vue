@@ -75,6 +75,7 @@
 import { ref, onMounted, defineEmits } from 'vue';
 import { getUserInfo } from '@/api/authService';
 import { requestWithJWT } from '@/api/api.ts';
+import Swal from 'sweetalert2';
 
 // Biến reactive chứa thông tin khách hàng
 let userInfo = ref({});
@@ -103,7 +104,11 @@ const loadPaymentMethod = async () => {
       emit('update-payment-method', myList.value[2]?.id);
     }
   } catch (error) {
-    console.error('Lỗi khi tải phương thức thanh toán:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không thể tải danh sách phương thức thanh toán.',
+    });
   }
 };
 
@@ -123,7 +128,11 @@ const loadUserInfo = () => {
       soDienThoai: isKhachHang ? user.khachHang.soDienThoai : isNhanVien ? user.nhanVien.soDienThoai : '',
     };
   } else {
-    console.log('Không có thông tin người dùng.');
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không có thông tin người dùng.',
+    });
   }
 };
 

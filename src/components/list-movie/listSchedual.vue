@@ -56,6 +56,7 @@
 </template>
 <script>
 import { fetchSuatChieu } from "@/api/movie";
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -103,7 +104,11 @@ export default {
                 const suatchieuData = await fetchSuatChieu();
                 this.suatchieus = suatchieuData.sort((a, b) => b.id - a.id);
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu suất chiếu:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể tải dữ liệu suất chiếu",
+                });
             }
         },
         formatDate(timestamp) {

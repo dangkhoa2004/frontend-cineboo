@@ -87,6 +87,7 @@
 
 <script>
 import { logout as authLogout, getUserData, canAccessModule } from "@/api/authService";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -127,7 +128,11 @@ export default {
       const userPermissions = await this.checkPermissions();
       this.permissions = userPermissions;
     } catch (error) {
-      console.error("Không thể lấy dữ liệu người dùng:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Không thể lấy dữ liệu người dùng',
+      });
     }
   },
   methods: {

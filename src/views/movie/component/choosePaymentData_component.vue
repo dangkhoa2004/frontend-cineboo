@@ -106,7 +106,6 @@ export default {
         const movieData = await response.json();
         this.movieDetails = movieData;
       } catch (error) {
-        console.error("Lỗi khi nạp dữ liệu phim:", error);
         Swal.fire({
           icon: "error",
           title: "Lỗi",
@@ -142,7 +141,6 @@ export default {
           });
         }
       } catch (error) {
-        console.error("Lỗi khi nạp dữ liệu ghế:", error);
         Swal.fire({
           icon: "error",
           title: "Lỗi",

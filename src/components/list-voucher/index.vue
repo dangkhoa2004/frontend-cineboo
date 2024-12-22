@@ -89,7 +89,11 @@ export default {
         this.vouchers = voucherData;
         this.filteredVouchers = voucherData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu voucher:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải dữ liệu voucher',
+        });
       }
     },
     formatCurrency(amount) {
@@ -132,7 +136,6 @@ export default {
               text: 'Voucher đã được cập nhập thành công.',
             });
           } catch (error) {
-            console.error("Lỗi khi cập nhập voucher:", error);
             Swal.fire({
               icon: 'error',
               title: 'Lỗi cập nhập voucher',

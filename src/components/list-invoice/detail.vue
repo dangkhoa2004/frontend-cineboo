@@ -139,6 +139,7 @@
 </template>
 <script>
 import { fetchInvoiceById } from "@/api/invoice";
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -215,12 +216,20 @@ export default {
                         qr: response.qr
                     };
                 } else {
-                    console.error("Phản hồi từ API không có dữ liệu hoadon!");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi",
+                        text: "Phản hồi từ API không có dữ liệu hoadon!",
+                    });
                     this.hoadon = null;  // Gán null nếu không có dữ liệu trong response.data
                 }
             } catch (error) {
                 // Xử lý lỗi nếu có
-                console.error("Lỗi khi tải thông tin hoá đơn:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể tải thông tin hoá đơn",
+                });
                 this.hoadon = null;  // Gán null nếu có lỗi
             }
         },

@@ -103,7 +103,6 @@ const loadSeats = async (showtimeId) => {
       title: "Lỗi",
       text: "Lỗi khi tải dữ liệu ghế !",
     });
-    console.error("Error loading seats:", error);
   }
 };
 

@@ -33,6 +33,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from "vue-router";
+import Swal from 'sweetalert2';
 const moviesList = ref([]);
 const defaultMovies = [
   {
@@ -86,7 +87,11 @@ const loadMovies = async () => {
       moviesList.value = defaultMovies;
     }
   } catch (error) {
-    console.error("Error fetching movies. Using default movies.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi',
+      text: 'Không thể tải danh sách phim.',
+    });
     moviesList.value = defaultMovies;
   }
 };

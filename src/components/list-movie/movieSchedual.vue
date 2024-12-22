@@ -79,8 +79,11 @@ export default {
         const movieData = await fetchMovies();
         this.movies = movieData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu phim:", error);
-        alert("Không thể tải danh sách phim. Vui lòng thử lại sau!");
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải danh sách phim',
+        });
       }
     },
     async loadRooms() {
@@ -88,8 +91,11 @@ export default {
         const roomData = await fetchPhongChieu();
         this.rooms = roomData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu phòng chiếu:", error);
-        alert("Không thể tải danh sách phòng chiếu. Vui lòng thử lại sau!");
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải danh sách phòng chiếu',
+        });
       }
     },
     goBack() {

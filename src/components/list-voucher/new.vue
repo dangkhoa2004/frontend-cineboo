@@ -113,7 +113,6 @@ export default {
                         window.location.href = "/quan-ly/vouchers";
                     }, 2000);
                 } catch (error) {
-                    console.error("Lỗi khi tạo voucher:", error);
                     Swal.fire({
                         icon: "error",
                         title: "Lỗi tạo voucher",

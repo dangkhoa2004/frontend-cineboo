@@ -131,7 +131,11 @@ export default {
       const userPermissions = await this.checkPermissions();
       this.permissions = userPermissions;
     } catch (error) {
-      console.error("Không thể lấy dữ liệu người dùng:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Không thể lấy dữ liệu người dùng',
+      });
     }
     await this.loadRefunds();
     await this.loadAgeGroups();
@@ -169,7 +173,6 @@ export default {
         const refundData = await fetchRefunds();
         this.refunds = refundData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu yêu cầu hỗ trợ:", error);
         Swal.fire({
           icon: 'error',
           title: 'Lỗi',
@@ -182,7 +185,6 @@ export default {
         const ageGroupData = await fetchAgeGroups();
         this.ageGroups = ageGroupData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu độ tuổi:", error);
         Swal.fire({
           icon: 'error',
           title: 'Lỗi',
@@ -195,7 +197,6 @@ export default {
         const paymentMethodData = await fetchPaymentMethods();
         this.paymentMethods = paymentMethodData;
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu phương thức thanh toán:", error);
         Swal.fire({
           icon: 'error',
           title: 'Lỗi',
@@ -233,7 +234,6 @@ export default {
             text: 'Xoá độ tuổi thành công.',
           });
         } catch (error) {
-          console.error("Lỗi khi xoá độ tuổi:", error);
           Swal.fire({
             icon: 'error',
             title: 'Lỗi',
@@ -265,7 +265,6 @@ export default {
             text: 'Phương thức thanh toán đã được xoá thành công.',
           });
         } catch (error) {
-          console.error("Lỗi khi xoá phương thức thanh toán:", error);
           Swal.fire({
             icon: 'error',
             title: 'Lỗi',

@@ -146,7 +146,11 @@ export default {
           this.danhSachTheLoai = response.data;
         }
       } catch (error) {
-        console.error("Lỗi khi tải danh sách thể loại phim:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải danh sách thể loại phim.',
+        });
       }
     },
     async fetchDoTuoi() {
@@ -156,7 +160,11 @@ export default {
           this.danhSachDoTuoi = response.data;
         }
       } catch (error) {
-        console.error("Lỗi khi tải danh sách độ tuổi phim:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải danh sách độ tuổi phim.',
+        });
       }
     },
     formatDate(timestamp) {
@@ -195,7 +203,11 @@ export default {
         // Gán độ tuổi nếu có
         this.selectedDoTuoiIds = movieData.gioiHanDoTuoi?.id || null;
       } catch (error) {
-        console.error("Lỗi khi tải thông tin phim:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể tải thông tin phim.',
+        });
       }
     },
     async saveMovie() {
