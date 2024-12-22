@@ -2,8 +2,8 @@
 <div>
   <div class="tabs">
     <button @click="activeTab = 'refunds'">Quản lý yêu cầu</button>
-    <button @click="activeTab = 'ageGroups'">Quản lý độ tuổi</button>
-    <button @click="activeTab = 'paymentMethods'">Quản lý phương thức thanh toán</button>
+    <button @click="activeTab = 'ageGroups'" v-if="permissions['dotuoi']">Quản lý độ tuổi</button>
+    <button @click="activeTab = 'paymentMethods'" v-if="permissions['pttt']">Quản lý phương thức thanh toán</button>
   </div>
 
   <div v-if="activeTab === 'refunds'" class="refund-manager">
@@ -93,6 +93,7 @@ import Swal from 'sweetalert2';
 export default {
   data() {
     return {
+      permissions: {},
       activeTab: 'refunds', // Default tab
       refunds: [], // Refund data
       ageGroups: [], // Age group data
@@ -100,11 +101,48 @@ export default {
     };
   },
   async mounted() {
+    try {
+      // Lấy dữ liệu người dùng từ API
+      const userData = await getUserData();
+      this.user = userData;
+
+      // Phân loại tài khoản: Nhân viên hoặc Khách hàng
+      const accountType = userData.phanLoaiTaiKhoan?.id; // 1: Nhân viên, 2: Khách hàng
+
+      if (accountType === 1 && userData.nhanVien) {
+        // Người dùng là nhân viên
+        this.fullname = `${userData.nhanVien.ho || ''} ${userData.nhanVien.tenDem || ''} ${userData.nhanVien.ten || ''}`.trim();
+        this.userPosition = userData.nhanVien.chucVu?.tenChucVu || 'Chức vụ không xác định';
+        this.userRole = userData.phanLoaiTaiKhoan.tenLoaiTaiKhoan;
+      } else if (accountType === 2 && userData.khachHang) {
+        // Người dùng là khách hàng
+        this.fullname = `${userData.khachHang.ho || ''} ${userData.khachHang.tenDem || ''} ${userData.khachHang.ten || ''}`.trim();
+        this.userPosition = userData.khachHang.phanLoaiKhachHang?.tenPhanLoaiKhachHang || 'Loại khách hàng không xác định';
+        this.userRole = userData.phanLoaiTaiKhoan.tenLoaiTaiKhoan;
+      } else {
+        this.fullname = "Người dùng không xác định";
+        this.userPosition = null;
+        this.userRole = null;
+      }
+      // Kiểm tra quyền truy cập cho các module
+      const userPermissions = await this.checkPermissions();
+      this.permissions = userPermissions;
+    } catch (error) {
+      console.error("Không thể lấy dữ liệu người dùng:", error);
+    }
     await this.loadRefunds();
     await this.loadAgeGroups();
     await this.loadPaymentMethods();
   },
   methods: {
+    async checkPermissions() {
+      const permissions = {};
+      const modules = ["hoaDon", "phims", "vouchers", "hoTro", "thongTinNguoiDung", "baoCaoThongKe", "dotuoi", "pttt"];
+      for (let module of modules) {
+        permissions[module] = await canAccessModule(module);
+      }
+      return permissions;
+    },
     async loadRefunds() {
       try {
         const refundData = await fetchRefunds();

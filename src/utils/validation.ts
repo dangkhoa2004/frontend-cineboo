@@ -2,8 +2,12 @@
 export function validateUsername(username: string): string | null {
     if (!username) return 'Tên người dùng là bắt buộc.';
     if (username.length < 3) return 'Tên người dùng phải có ít nhất 3 ký tự.';
+    if (username.length > 10) return 'Tên người dùng không được dài quá 10 ký tự.';
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!regex.test(username)) return 'Tên người dùng không được chứa ký tự đặc biệt.';
     return null;
 }
+
 
 export function validatePassword(password: string): string | null {
     if (!password) return 'Mật khẩu là bắt buộc.';

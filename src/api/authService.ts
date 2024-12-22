@@ -197,7 +197,7 @@ export async function canAccessModule(moduleName: string): Promise<boolean> {
         khachHang: ["hoaDon", "ungDung", "thongTin", "hoTro"],
         nhanVien: [
             "ungDung", "thongTin", "hoaDon", "phims", "vouchers",
-            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "hoTro"
+            "tinNhan", "thongTinKhachHang", "thongTinNhanVien", "phuongThucThanhToan", "thongTinNguoiDung", "baoCaoThongKe", "hoTro", "dotuoi", "pttt"
         ],
     };
 
