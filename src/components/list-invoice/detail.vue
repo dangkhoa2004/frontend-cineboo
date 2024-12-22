@@ -214,7 +214,6 @@ export default {
                         ...response.hoadon,
                         qr: response.qr
                     };
-                    console.log(response)
                 } else {
                     console.error("Phản hồi từ API không có dữ liệu hoadon!");
                     this.hoadon = null;  // Gán null nếu không có dữ liệu trong response.data

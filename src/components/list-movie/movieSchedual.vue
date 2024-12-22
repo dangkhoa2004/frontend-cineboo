@@ -175,30 +175,46 @@ export default {
           text: 'Có lỗi khi gửi dữ liệu, vui lòng thử lại sau!',
         });
       }
-    }, async postSchedule(payload) {
-      try {
-        const response = await requestWithJWT("post", 'http://localhost:8080/suatchieu/add/multiple', payload);
+    },
+    async postSchedule(payload) {
+      // Hiển thị hộp thoại xác nhận trước khi gửi dữ liệu
+      const result = await Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn có chắc chắn muốn tạo lịch chiếu không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Không'
+      });
 
-        if (response.status === 200 && response.data) {
+      if (result.isConfirmed) {
+        try {
+          const response = await requestWithJWT("post", 'http://localhost:8080/suatchieu/add/multiple', payload);
+
+          if (response.status === 200 && response.data) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công',
+              text: 'Lịch chiếu đã được tạo thành công!',
+            });
+            setTimeout(() => {
+              window.location.reload();  // Refresh the page
+            }, 2000);
+          } else {
+            throw new Error('Failed to create schedule');
+          }
+        } catch (error) {
           Swal.fire({
-            icon: 'success',
-            title: 'Thành công',
-            text: 'Lịch chiếu đã được tạo thành công!',
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Có lỗi khi gửi dữ liệu, vui lòng thử lại sau!',
           });
-          setTimeout(() => {
-            window.location.reload();  // Refresh the page
-          }, 2000);
-        } else {
-          throw new Error('Failed to create schedule');
         }
-      } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi',
-          text: 'Có lỗi khi gửi dữ liệu, vui lòng thử lại sau!',
-        });
       }
     }
+
   },
 };
 </script>

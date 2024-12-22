@@ -70,7 +70,8 @@
         </td>
         <td>
           <button @click="editCustomer(customer)">Sửa</button>
-          <button @click="deleteCustomer(customer.id)">Xoá</button>
+          <!-- <button @click="deleteCustomer(customer.id)">Xoá</button> -->
+          <button>Xoá</button>
         </td>
       </tr>
     </tbody>
@@ -107,7 +108,8 @@
         </td>
         <td>
           <button @click="editEmployee(employee)">Sửa</button>
-          <button @click="deleteEmployee(employee.id)">Xoá</button>
+          <!-- <button @click="deleteEmployee(employee.id)">Xoá</button> -->
+          <button>Xoá</button>
         </td>
       </tr>
     </tbody>

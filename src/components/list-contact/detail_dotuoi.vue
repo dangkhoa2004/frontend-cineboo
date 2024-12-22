@@ -24,6 +24,7 @@
 
 <script>
 import { fetchDoTuoiById, updateDoTuoiById } from "@/api/dotuoi"; // Assumes you have these API functions
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -46,13 +47,35 @@ export default {
         },
         async saveAgeGroup() {
             if (this.ageGroup) {
-                try {
-                    await updateDoTuoiById(this.ageGroup.id, this.ageGroup);
-                    alert("Độ tuổi đã được cập nhật thành công!");
-                    this.$router.go(-1);
-                } catch (error) {
-                    console.error("Lỗi khi cập nhật độ tuổi:", error);
-                    alert("Có lỗi xảy ra khi cập nhật độ tuổi.");
+                // Hiển thị hộp thoại xác nhận trước khi cập nhật độ tuổi
+                const result = await Swal.fire({
+                    title: 'Xác nhận',
+                    text: 'Bạn có chắc chắn muốn cập nhật độ tuổi này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        await updateDoTuoiById(this.ageGroup.id, this.ageGroup);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: 'Độ tuổi đã được cập nhật thành công!',
+                        });
+                        this.$router.go(-1);
+                    } catch (error) {
+                        console.error("Lỗi khi cập nhật độ tuổi:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Có lỗi xảy ra khi cập nhật độ tuổi.',
+                        });
+                    }
                 }
             }
         },

@@ -5,48 +5,50 @@
             <!-- Các trường thông tin cá nhân -->
             <div>
                 <label>Họ:</label>
-                <input type="text" v-model="userInfo.ho" />
+                <input type="text" v-model="userInfo.ho" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Tên đệm:</label>
-                <input type="text" v-model="userInfo.tenDem" />
+                <input type="text" v-model="userInfo.tenDem" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Tên:</label>
-                <input type="text" v-model="userInfo.ten" />
+                <input type="text" v-model="userInfo.ten" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Email:</label>
-                <input type="text" v-model="userInfo.email" />
+                <input type="text" v-model="userInfo.email" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Số điện thoại:</label>
-                <input type="text" v-model="userInfo.soDienThoai" />
+                <input type="text" v-model="userInfo.soDienThoai" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Địa chỉ:</label>
-                <input type="text" v-model="userInfo.diaChi" />
+                <input type="text" v-model="userInfo.diaChi" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Ngày sinh:</label>
-                <input type="date" :value="formattedDate" @change="updateDate" />
+                <input type="date" :value="formattedDate" @change="updateDate" :disabled="!isEditing" />
             </div>
             <div>
                 <label>Dân tộc:</label>
-                <input type="text" v-model="userInfo.danToc" />
+                <input type="text" v-model="userInfo.danToc" :disabled="!isEditing" />
             </div>
             <div class="gender-selection">
                 <label>Giới tính:</label>
-                <select v-model="userInfo.gioiTinh">
+                <select v-model="userInfo.gioiTinh" :disabled="!isEditing">
                     <option value="0">Nam</option>
                     <option value="1">Nữ</option>
                 </select>
             </div>
             <div>
                 <label>Ghi chú:</label>
-                <input type="text" v-model="userInfo.ghiChu" />
+                <input type="text" v-model="userInfo.ghiChu" :disabled="!isEditing" />
             </div>
-            <button type="submit">Cập nhật thông tin</button>
+            <button type="submit" v-if="isEditing">Cập nhật thông tin</button>
+            <button type="button" @click="toggleEdit" style="margin-left: 15px;">{{ isEditing ? 'Hủy' : 'Chỉnh sửa'
+                }}</button>
         </form>
     </div>
     <div v-else>
@@ -54,6 +56,7 @@
     </div>
 </div>
 </template>
+
 <script lang="ts">
 import { getUserData } from "@/api/authService";
 import { updatekhachhangById } from "@/api/customer";
@@ -83,6 +86,7 @@ export default {
         return {
             userInfo: null as User | null,
             formattedDate: "", // Để lưu trữ ngày sinh ở định dạng dễ sử dụng
+            isEditing: false // Biến trạng thái để theo dõi chế độ chỉnh sửa
         };
     },
     mounted: async function () {
@@ -162,39 +166,46 @@ export default {
         },
         async updateUserInfo() {
             if (this.userInfo && this.validateUserInfo()) {
-                try {
-                    if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'KhachHang') {
-                        await updatekhachhangById(this.userInfo.id, this.userInfo);
-                    } else if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien') {
-                        await updatenhanvienById(this.userInfo.id, this.userInfo);
+                const result = await Swal.fire({
+                    title: 'Xác nhận',
+                    text: 'Bạn có chắc chắn muốn lưu thông tin không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'KhachHang') {
+                            await updatekhachhangById(this.userInfo.id, this.userInfo);
+                        } else if (this.userInfo.phanLoaiTaiKhoan.tenLoaiTaiKhoan === 'NhanVien') {
+                            await updatenhanvienById(this.userInfo.id, this.userInfo);
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: 'Thông tin đã được cập nhật!',
+                        });
+                        setTimeout(() => { window.location.reload(); }, 1500);
+                    } catch (error) {
+                        console.error("Lỗi khi cập nhật thông tin:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Lỗi khi cập nhật thông tin.',
+                        });
                     }
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công',
-                        text: 'Thông tin đã được cập nhật!',
-                    });
-                    setTimeout(() => { window.location.reload(); }, 1500);
-                } catch (error) {
-                    console.error("Lỗi khi cập nhật thông tin:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Lỗi khi cập nhật thông tin.',
-                    });
                 }
             }
+        },
+        toggleEdit() {
+            this.isEditing = !this.isEditing;
         }
     }
 };
 </script>
-<style scoped>
-.search-input {
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-</style>
 
 <style src="./assets/styles.css" scoped></style>

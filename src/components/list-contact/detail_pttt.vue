@@ -31,6 +31,7 @@
 
 <script>
 import { fetchPTTTById, updatePTTTById } from "@/api/pttt"; // Assumes you have these API functions
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -53,13 +54,35 @@ export default {
         },
         async savePaymentMethod() {
             if (this.paymentMethod) {
-                try {
-                    await updatePTTTById(this.paymentMethod.id, this.paymentMethod);
-                    alert("Phương thức thanh toán đã được cập nhật thành công!");
-                    this.$router.go(-1);
-                } catch (error) {
-                    console.error("Lỗi khi cập nhật phương thức thanh toán:", error);
-                    alert("Có lỗi xảy ra khi cập nhật phương thức thanh toán.");
+                // Hiển thị hộp thoại xác nhận trước khi cập nhật phương thức thanh toán
+                const result = await Swal.fire({
+                    title: 'Xác nhận',
+                    text: 'Bạn có chắc chắn muốn cập nhật phương thức thanh toán này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        await updatePTTTById(this.paymentMethod.id, this.paymentMethod);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: 'Phương thức thanh toán đã được cập nhật thành công!',
+                        });
+                        this.$router.go(-1);
+                    } catch (error) {
+                        console.error("Lỗi khi cập nhật phương thức thanh toán:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Có lỗi xảy ra khi cập nhật phương thức thanh toán.',
+                        });
+                    }
                 }
             }
         },

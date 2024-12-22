@@ -88,3 +88,11 @@ tr:hover {
     box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
     outline: none;
 }
+
+.search-input {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}

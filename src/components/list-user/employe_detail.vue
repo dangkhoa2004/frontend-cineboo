@@ -146,13 +146,24 @@ export default {
                 };
 
                 try {
-                    await updatenhanvienById(this.employee.id, updatedEmployee);
                     Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công',
-                        text: 'Thông tin đã được cập nhật!',
+                        title: "Xác nhận cập nhật thông tin",
+                        text: "Bạn có chắc chắn cập nhật thông tin nhân viên này?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Đồng ý",
+                        cancelButtonText: "Hủy",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            await updatenhanvienById(this.employee.id, updatedEmployee);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: 'Thông tin đã được cập nhật!',
+                            });
+                            setTimeout(() => { window.location.reload(); }, 2000);
+                        }
                     });
-                    setTimeout(() => { window.location.reload(); }, 2000);
                 } catch (error) {
                     console.error("Lỗi khi cập nhật thông tin:", error);
                     Swal.fire({
