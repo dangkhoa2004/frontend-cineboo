@@ -101,11 +101,6 @@ export default {
                     trangThaiPhongChieu: data.trangThaiPhongChieu || 0,
                   };
                 } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Lỗi",
-                    text: "Lỗi khi tải phòng chiếu.",
-                  });
                 }
               } catch (error) {
                 theater.phongChieu = {
@@ -156,12 +151,16 @@ export default {
           icon: "error",
           title: "Lỗi",
           text: "Bạn cần đăng nhập để xem được suất chiếu.",
+          showCancelButton: true,
+          confirmButtonText: "Đăng nhập",
+          cancelButtonText: "Hủy",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/dang-nhap';
+          }
         });
-        window.location.href = '/dang-nhap';
         return;
-      }
-
-      const suatChieuId = theater.id;
+      } const suatChieuId = theater.id;
       if (suatChieuId) {
         router.push(`/phim/${selectedMovieId.value}/suat-chieu/${suatChieuId}`);
       } else {

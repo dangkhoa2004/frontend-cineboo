@@ -113,7 +113,7 @@ nav {
   content: "";
   height: 2px;
   width: 0;
-  background: var(--text-color);
+  background: var(--first-color);
   left: 0;
   bottom: 0;
   transition: .3s;
