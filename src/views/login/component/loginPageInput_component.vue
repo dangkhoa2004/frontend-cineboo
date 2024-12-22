@@ -158,15 +158,16 @@ export default {
       const hoError = validateRequiredField(formData.value.ho, "Họ");
       const tenError = validateRequiredField(formData.value.ten, "Tên");
       const emailError = validateEmail(formData.value.email);
-      const passwordError = validatePassword(formData.value.password);
       const ngaySinhError = validateDate(formData.value.ngaySinh);
       const phoneNumberError = validatePhoneNumber(formData.value.soDienThoai);
+      const addressError = validateRequiredField(formData.value.diaChi, "Địa chỉ");
+      const passwordError = validatePassword(formData.value.password);
 
-      if (hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError) {
+      if (hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError) {
         Swal.fire({
           icon: 'error',
           title: 'Lỗi đăng ký',
-          text: hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError,
+          text: hoError || tenError || emailError || passwordError || ngaySinhError || phoneNumberError || addressError,
         });
         return;
       }

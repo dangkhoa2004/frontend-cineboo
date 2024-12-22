@@ -30,22 +30,20 @@ function sessionStorageUtil() {
 
 // API gửi yêu cầu khôi phục mật khẩu
 export async function recoverPassword(email: string): Promise<any> {
-    try {
-        const response = await axios.put(
-            `http://localhost:8080/taikhoan/recovery/send?email=${encodeURIComponent(email)}`,
-            null,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer`,
-                },
-            }
-        );
-        if (response.status === 200) {
-            return response.data;
+    // try {
+    const response = await axios.put(
+        `http://localhost:8080/taikhoan/recovery/send?email=${encodeURIComponent(email)}`,
+        null,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer`,
+            },
         }
-    } catch (error: any) {
-        throw new Error(error || "Khôi phục mật khẩu thất bại");
+    );
+    if (response.status === 200) {
+        console.log("Gửi yêu cầu khôi phục mật khẩu thành công:", response.data);
+        return response.data;
     }
 }
 

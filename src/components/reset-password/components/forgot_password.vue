@@ -60,39 +60,43 @@ export default {
     };
   },
   methods: {
-    // Hiển thị thông báo
-    displayMessage(msg, isError) {
-      Swal.fire({
-        icon: isError ? 'error' : 'success',
-        title: isError ? 'Lỗi' : 'Thành công',
-        text: msg,
-      });
-    },
-    // Xử lý yêu cầu khôi phục mật khẩu
     async handleSubmit() {
       const emailError = validateEmail(this.email);
-
       if (emailError) {
-        this.displayMessage(emailError, true);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: emailError,
+        }).then(() => {
+          location.reload(); // Reload trang sau khi người dùng bấm "OK"
+        });
         return;
       }
       try {
         await recoverPassword(this.email);
-        this.displayMessage("Yêu cầu đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra email.", false);
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công',
+          text: "Yêu cầu đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra email.",
+        });
         this.currentStep = "reset-password";
       } catch (error) {
         const errorCode = error.response?.status;
         let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại.";
-
         if (errorCode === 403) {
           errorMessage = "Vui lòng chờ 5 phút và thử lại.";
         } else if (errorCode === 500) {
-          errorMessage = "Vui lòng nhập đúng định dạng email.";
+          errorMessage = "Email không tồn tại.";
         } else if (error.response?.data?.message) {
           errorMessage = error.response.data.message;
         }
-
-        this.displayMessage(errorMessage, true);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: errorMessage,
+        }).then(() => {
+          location.reload(); // Reload trang sau khi người dùng bấm "OK"
+        });
       }
     },
     // Xử lý đặt lại mật khẩu
