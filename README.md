@@ -32,7 +32,7 @@
 Clone dự án từ GitHub:
 
 ```bash
-(https://github.com/dangkhoa2004/frontend-cineboo.git
+git clone https://github.com/dangkhoa2004/frontend-cineboo.git
 cd frontend-cineboo
 npm install
 npm install axios
