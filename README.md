@@ -51,7 +51,7 @@ npm install sweetalert2
 Chạy dự án:
 
 ```bash
-npm run serve
+npm run dev
 ```
 
 ## 🔐 Xác thực và phân quyền
